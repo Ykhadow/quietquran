@@ -311,15 +311,8 @@ class RecitationOptions extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // One heading: the reciter list is the section's first choice.
         Eyebrow(l.recitation),
-        // Read aloud when shown: the translation's own switch (in Aa and
-        // Settings) decides both.
-        if (voice != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 4),
-            child: Text(l.translationAudioHint, style: AppType.caption(t.mut)),
-          ),
-        Eyebrow(l.reciter),
         ChoiceCard(
           rows: [
             for (final r in Reciter.all)
@@ -331,6 +324,13 @@ class RecitationOptions extends ConsumerWidget {
               ),
           ],
         ),
+        // Read aloud when shown: the translation's own switch (in Aa and
+        // Settings) decides both.
+        if (voice != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+            child: Text(l.translationAudioHint, style: AppType.caption(t.mut)),
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 8),
           child: Text(l.repeatAyah, style: AppType.body(t.ink)),

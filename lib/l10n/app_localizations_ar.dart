@@ -89,7 +89,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get modePages => 'صفحات مطبوعة';
 
   @override
-  String get modePagesTagline => 'صور ممسوحة لمصحف مطبوع حقيقي';
+  String get modePagesTagline => 'صفحات مصحف مطبوع حقيقي';
 
   @override
   String get modePagesCaption => 'الصفحة كما طُبعت تمامًا';
@@ -618,7 +618,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get srcPrintedNote =>
-      'صور ممسوحة أو مُعادة لمصاحف مطبوعة، فدقتها تتبع الطبعة نفسها. تُنزَّل من هذه المصادر أثناء القراءة.';
+      'صفحات المصحف من مجمع الملك فهد نفسه، مأخوذة من ملفاته دون أي تغيير، فدقتها تتبع الطبعة نفسها. تُنزَّل من استضافتنا أثناء القراءة.';
 
   @override
   String imageThanks(String name) {
@@ -777,7 +777,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get printedFollowThemeHint =>
-      'تأخذ الصفحات المطبوعة ألوان الورق والنص التي اخترتها. أوقفه لتراها كما مُسحت تمامًا، أسود على أبيض. صفحات التجويد الملوّنة تحتفظ بألوانها وتُخفَّت فقط في الليل.';
+      'تأخذ الصفحات المطبوعة ألوان الورق والنص التي اخترتها. أوقفه لتراها كما طُبعت تمامًا، بألوانها الأصلية.';
 
   @override
   String get remindMe => 'التذكير';

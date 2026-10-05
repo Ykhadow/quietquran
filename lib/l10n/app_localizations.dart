@@ -253,7 +253,7 @@ abstract class AppLocalizations {
   /// No description provided for @modePagesTagline.
   ///
   /// In en, this message translates to:
-  /// **'Scans of a real printed Mushaf'**
+  /// **'Pages of a real printed Mushaf'**
   String get modePagesTagline;
 
   /// No description provided for @modePagesCaption.
@@ -1177,7 +1177,7 @@ abstract class AppLocalizations {
   /// No description provided for @srcPrintedNote.
   ///
   /// In en, this message translates to:
-  /// **'Scans or renders of physical printed Mushafs, so their accuracy rests on the print. They are downloaded from these sources as you read.'**
+  /// **'The King Fahd Complex\'s own Mushaf pages, taken unchanged from its files, so their accuracy rests on the print itself. They download from our own hosting as you read.'**
   String get srcPrintedNote;
 
   /// No description provided for @imageThanks.
@@ -1459,7 +1459,7 @@ abstract class AppLocalizations {
   /// No description provided for @printedFollowThemeHint.
   ///
   /// In en, this message translates to:
-  /// **'Printed pages take your paper and text colours. Turn off to see them exactly as scanned, black on white. Colour-coded tajweed pages keep their colours and are only dimmed at night.'**
+  /// **'Printed pages take your paper and text colours. Turn off to see them exactly as printed, in their own colours.'**
   String get printedFollowThemeHint;
 
   /// No description provided for @remindMe.

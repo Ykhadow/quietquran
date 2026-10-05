@@ -31,10 +31,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   _Browse _tab = _Browse.surahs;
   String _query = '';
 
+  /// Opens [screen] over home. The search box lets go of focus first:
+  /// otherwise it gets it back on return and brings up the keyboard.
+  void _push(Widget screen) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  }
+
   /// A free read ("Browsing"): moves no session.
-  void _open(int page) => Navigator.of(
-    context,
-  ).push(MaterialPageRoute(builder: (_) => ReaderScreen(initialPage: page)));
+  void _open(int page) => _push(ReaderScreen(initialPage: page));
 
   /// Opens a session where it should open, and makes it the current one.
   void _openSession(Session session) {
@@ -44,11 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final page = session.kind == SessionKind.restart
         ? db.surahStartPage(layout, session.openAt.$1)
         : db.pageOfAyah(layout, session.surah, session.ayah);
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ReaderScreen(initialPage: page, sessionId: session.id),
-      ),
-    );
+    _push(ReaderScreen(initialPage: page, sessionId: session.id));
   }
 
   @override
@@ -178,11 +179,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         IconButton(
                           tooltip: l.settings,
                           icon: const Icon(LucideIcons.slidersHorizontal),
-                          onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => const SettingsScreen(),
-                            ),
-                          ),
+                          onPressed: () => _push(const SettingsScreen()),
                         ),
                       ],
                     ),
@@ -271,6 +268,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                       child: TextField(
                         onChanged: (v) => setState(() => _query = v),
+                        onTapOutside: (_) =>
+                            FocusManager.instance.primaryFocus?.unfocus(),
                         textInputAction: TextInputAction.search,
                         style: AppType.body(t.ink),
                         decoration: InputDecoration(

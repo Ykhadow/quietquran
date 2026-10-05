@@ -91,7 +91,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get modePages => 'چھپے ہوئے صفحات';
 
   @override
-  String get modePagesTagline => 'اصل چھپے ہوئے مصحف کے اسکین';
+  String get modePagesTagline => 'اصل چھپے ہوئے مصحف کے صفحات';
 
   @override
   String get modePagesCaption => 'صفحہ بالکل ویسا ہی جیسا چھپا ہے';
@@ -622,7 +622,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get srcPrintedNote =>
-      'چھپے ہوئے مصاحف کے اسکین یا عکس، لہٰذا ان کی صحت اصل طباعت پر منحصر ہے۔ یہ پڑھتے وقت انہی ذرائع سے ڈاؤن لوڈ ہوتی ہیں۔';
+      'شاہ فہد کمپلیکس کے اپنے مصحف کے صفحات، اس کی فائلوں سے بغیر کسی تبدیلی کے، لہٰذا ان کی صحت اصل طباعت پر منحصر ہے۔ یہ پڑھتے وقت ہماری اپنی ہوسٹنگ سے ڈاؤن لوڈ ہوتے ہیں۔';
 
   @override
   String imageThanks(String name) {
@@ -783,7 +783,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get printedFollowThemeHint =>
-      'چھپے صفحات آپ کے منتخب رنگ اپناتے ہیں۔ بند کریں تو وہ بالکل اسکین کی طرح، سفید پر سیاہ، دکھیں گے۔ رنگین تجوید والے صفحات اپنے رنگ برقرار رکھتے ہیں اور رات کو صرف مدھم ہوتے ہیں۔';
+      'چھپے صفحات آپ کے منتخب رنگ اپناتے ہیں۔ بند کریں تو وہ بالکل چھپے ہوئے کی طرح، اپنے اصل رنگوں میں دکھیں گے۔';
 
   @override
   String get remindMe => 'یاد دہانی';

@@ -179,16 +179,17 @@ class TextPagePreview extends ConsumerWidget {
 }
 
 /// The same page from the script's default printed set (bundled, so it
-/// shows offline), adapted to the theme as in the reader.
-class PrintedPagePreview extends StatefulWidget {
+/// shows offline), as the reader would show it: in its own colours, or
+/// adapted to the theme if the reader has chosen that.
+class PrintedPagePreview extends ConsumerStatefulWidget {
   const PrintedPagePreview(this.script, {super.key});
   final QuranScript script;
 
   @override
-  State<PrintedPagePreview> createState() => _PrintedPagePreviewState();
+  ConsumerState<PrintedPagePreview> createState() => _PrintedPagePreviewState();
 }
 
-class _PrintedPagePreviewState extends State<PrintedPagePreview> {
+class _PrintedPagePreviewState extends ConsumerState<PrintedPagePreview> {
   late Future<ByteData> _bytes = _load();
 
   Future<ByteData> _load() =>
@@ -203,6 +204,9 @@ class _PrintedPagePreviewState extends State<PrintedPagePreview> {
   @override
   Widget build(BuildContext context) {
     final t = context.tokens;
+    final followTheme = ref.watch(
+      settingsProvider.select((s) => s.printedFollowTheme),
+    );
     return FutureBuilder<ByteData>(
       future: _bytes,
       builder: (context, snap) {
@@ -219,6 +223,7 @@ class _PrintedPagePreviewState extends State<PrintedPagePreview> {
             colors: t,
             dark: t.dark,
             fit: BoxFit.contain,
+            followTheme: followTheme,
           ),
         );
       },

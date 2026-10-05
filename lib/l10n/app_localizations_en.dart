@@ -93,7 +93,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get modePages => 'Printed pages';
 
   @override
-  String get modePagesTagline => 'Scans of a real printed Mushaf';
+  String get modePagesTagline => 'Pages of a real printed Mushaf';
 
   @override
   String get modePagesCaption => 'The page exactly as printed';
@@ -625,7 +625,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get srcPrintedNote =>
-      'Scans or renders of physical printed Mushafs, so their accuracy rests on the print. They are downloaded from these sources as you read.';
+      'The King Fahd Complex\'s own Mushaf pages, taken unchanged from its files, so their accuracy rests on the print itself. They download from our own hosting as you read.';
 
   @override
   String imageThanks(String name) {
@@ -786,7 +786,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get printedFollowThemeHint =>
-      'Printed pages take your paper and text colours. Turn off to see them exactly as scanned, black on white. Colour-coded tajweed pages keep their colours and are only dimmed at night.';
+      'Printed pages take your paper and text colours. Turn off to see them exactly as printed, in their own colours.';
 
   @override
   String get remindMe => 'Remind me';

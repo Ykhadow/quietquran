@@ -64,3 +64,6 @@ app.*.map.json
 
 # Private correspondence (kept locally, not published)
 /docs/permissions/private/
+
+# Store screenshots and graphics (kept locally)
+/store/
