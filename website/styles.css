@@ -1118,6 +1118,34 @@ section {
   font-size: 0.95rem;
 }
 
+/* A platform's download button, and its second, smaller link. */
+.platform .get {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--acc);
+  color: var(--bg);
+  font: 600 0.9rem/1 var(--sans);
+  text-decoration: none;
+}
+
+.platform .get:hover {
+  filter: brightness(1.08);
+}
+
+.platform .alt {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: var(--mut);
+}
+
+.download-notes {
+  margin-top: 18px;
+  color: var(--mut);
+  font-size: 0.9rem;
+}
+
 .badge {
   align-self: flex-start;
   margin-top: 12px;

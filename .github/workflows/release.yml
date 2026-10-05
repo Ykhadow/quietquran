@@ -1,0 +1,86 @@
+name: Release
+
+# Builds Windows and Linux when a version tag (v1.2.3) is pushed, and puts
+# them on a draft GitHub Release. The Android APKs are built and signed on
+# the developer's own machine (the signing key never comes here) and added
+# to the draft before it is published.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+          - os: ubuntu-latest
+            platform: linux
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # The IndoPak font may not be redistributed, so it lives in a private
+      # repository (see README, "The IndoPak font"). Its fingerprint is
+      # checked so the build uses exactly the permitted file.
+      - name: IndoPak font
+        uses: actions/checkout@v4
+        with:
+          repository: Ykhadow/quietquran-assets
+          token: ${{ secrets.ASSETS_TOKEN }}
+          path: private-assets
+      - name: Put the font in place
+        shell: bash
+        run: |
+          cp private-assets/fonts/IndoPakNastaleeq.ttf assets/fonts/IndoPakNastaleeq.ttf
+          echo "9003e8b34f81013c7a7fce35ffc07b864242a5df  assets/fonts/IndoPakNastaleeq.ttf" | sha1sum -c -
+          rm -rf private-assets
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.3
+          channel: stable
+          cache: true
+
+      - name: Linux build tools
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libmpv-dev
+
+      - run: flutter pub get
+
+      - name: Build Windows
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: |
+          flutter build windows --release
+          Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath QuietQuran-windows-x64.zip
+
+      - name: Build Linux
+        if: matrix.platform == 'linux'
+        run: |
+          flutter build linux --release
+          tar -czf QuietQuran-linux-x64.tar.gz -C build/linux/x64/release/bundle .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: QuietQuran-*-x64.*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          files: QuietQuran-*-x64.*

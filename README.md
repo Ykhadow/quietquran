@@ -70,6 +70,12 @@ To build without it, copy any font to that path (the checks on GitHub use `asset
 
 Release builds are signed with the key in `android/upload-keystore.jks`, whose password is in `android/key.properties`. Neither is in the repository. Without them, release builds use the debug key.
 
+### Releasing
+
+1. Set `version:` in `pubspec.yaml`, commit, and push a tag: `git tag v1.2.3 && git push origin v1.2.3`.
+2. `.github/workflows/release.yml` builds Windows and Linux and puts them on a draft GitHub Release. It fetches the IndoPak font from a private repository (`Ykhadow/quietquran-assets`, read with the `ASSETS_TOKEN` secret) and checks its fingerprint.
+3. Build the Android APKs locally (`flutter build apk --release --split-per-abi`), name them `QuietQuran-android-arm64.apk` and `QuietQuran-android-arm32.apk`, add them and a `SHA256SUMS` file to the draft, and publish it. The website's download buttons always point at the latest release.
+
 ## Tests
 
 ```bash

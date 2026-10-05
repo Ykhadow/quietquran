@@ -92,9 +92,9 @@ BEGIN
             VALUE "CompanyName", "Quiet Quran" "\0"
             VALUE "FileDescription", "Quiet Quran" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "mushaf15" "\0"
+            VALUE "InternalName", "QuietQuran" "\0"
             VALUE "LegalCopyright", "Quiet Quran. Free and open source." "\0"
-            VALUE "OriginalFilename", "mushaf15.exe" "\0"
+            VALUE "OriginalFilename", "QuietQuran.exe" "\0"
             VALUE "ProductName", "Quiet Quran" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
