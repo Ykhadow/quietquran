@@ -1,0 +1,523 @@
+{
+  "@@locale": "en",
+  "appTitle": "Quiet Quran",
+  "back": "Back",
+  "settings": "Settings",
+  "save": "Save",
+  "continueLabel": "Continue",
+  "startReading": "Start reading",
+  "changeLater": "You can change this any time in Settings.",
+  "scriptTitle": "Which script do you read?",
+  "scriptSubtitle": "Choose the style of Mushaf you learned from. Next you can pick the exact printed edition.",
+  "indopakTitle": "IndoPak (Nastaliq)",
+  "indopakTagline": "Common in Pakistan, India, Bangladesh and South Africa",
+  "madaniTitle": "Madani (Uthmani)",
+  "madaniTagline": "The King Fahd Complex Mushaf, standard across the Arab world",
+  "scriptIndopak": "IndoPak",
+  "scriptMadani": "Madani",
+  "modeTitle": "How would you like to read?",
+  "modeSubtitle": "Read the Quran as live text drawn with Quranic fonts, or as pictures of a printed {script} Mushaf.",
+  "@modeSubtitle": {
+    "placeholders": {
+      "script": {
+        "type": "String"
+      }
+    }
+  },
+  "modeText": "Text",
+  "modeTextTagline": "Adjustable size, theme aware, and crisp at any resolution",
+  "modeTextCaption": "Your Mushaf's exact lines, drawn as text",
+  "modeTextPoint1": "Adjustable text size, with an Easy read view for large print",
+  "modeTextPoint2": "Light and dark themes that are easy on the eyes",
+  "modeTextPoint3": "Crisp at any size, including tablets and desktop",
+  "modeTextPoint4": "Included in the app: nothing to download",
+  "modePages": "Printed pages",
+  "modePagesTagline": "Scans of a real printed Mushaf",
+  "modePagesCaption": "The page exactly as printed",
+  "modePagesPoint1": "Looks exactly like the Mushaf you are used to",
+  "modePagesPoint2": "Keeps the visual page memory that hifz depends on",
+  "modePagesPoint3": "Pinch to zoom",
+  "modePagesFootnote": "Pages download as you read, or save a whole edition for offline use in Settings.",
+  "editionTitle": "Which Mushaf do you read from?",
+  "editionSubtitleText": "Pick the edition you learned from. Every line and page break follows that print.",
+  "editionSubtitlePages": "Pick the printed edition you know best.",
+  "editionDetailText": "{lines} lines per page · {pages} pages",
+  "@editionDetailText": {
+    "placeholders": {
+      "lines": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "editionDetailPages": "{description} About {mb} MB to save the full set.",
+  "@editionDetailPages": {
+    "placeholders": {
+      "description": {
+        "type": "String"
+      },
+      "mb": {
+        "type": "int"
+      }
+    }
+  },
+  "dailyReading": "Daily reading",
+  "otherSessions": "Other sessions",
+  "newLabel": "New",
+  "sessionsHint": "Keep separate places for other readings — Al-Kahf on Fridays, Al-Mulk at night — without losing your daily page.",
+  "browse": "Browse",
+  "surahs": "Surahs",
+  "juz": "Juz",
+  "bookmarks": "Bookmarks",
+  "searchHint": "Search surahs — name, meaning or number",
+  "noSurahMatches": "No surah matches \"{query}\".",
+  "@noSurahMatches": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "opensAtStart": "Opens at the start · Page {page}",
+  "@opensAtStart": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "pageJuz": "Page {page} · Juz {juz}",
+  "@pageJuz": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "juz": {
+        "type": "int"
+      }
+    }
+  },
+  "open": "Open",
+  "resume": "Resume",
+  "sessionStart": "start",
+  "pageShort": "p. {page}",
+  "@pageShort": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "versesPage": "{count} verses · p. {page}",
+  "@versesPage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "juzN": "Juz {n}",
+  "@juzN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "surahN": "Surah {n}",
+  "@surahN": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "noBookmarks": "No bookmarks yet",
+  "noBookmarksHint": "Bookmark a page or an ayah to find it again here.",
+  "editSession": "Edit session",
+  "name": "Name",
+  "eachTimeOpen": "Each time you open it",
+  "startOfSurah": "Start of surah",
+  "deleteSession": "Delete session",
+  "tapAgainDelete": "Tap again to delete \"{name}\"",
+  "@tapAgainDelete": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "note": "Note",
+  "optional": "Optional",
+  "removeBookmark": "Remove bookmark",
+  "newSession": "New session",
+  "newSessionHint": "A place to come back to, separate from your daily reading.",
+  "nameExample": "e.g. Night · Al-Mulk",
+  "startsAt": "Starts at",
+  "createSession": "Create session",
+  "browsing": "Browsing",
+  "continueFromHere": "Continue {name} from here",
+  "@continueFromHere": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "movesTo": "Moves {name} to {place}",
+  "@movesTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "place": {
+        "type": "String"
+      }
+    }
+  },
+  "saveAsNew": "Save as a new session",
+  "saveAsNewHint": "Name it, and come back to it from Home",
+  "backToHome": "Back to home",
+  "saveAsSession": "Save this place as a session",
+  "bookmarkPage": "Bookmark this page",
+  "readerMeta": "Juz {juz} · {pages} of {total}",
+  "@readerMeta": {
+    "placeholders": {
+      "juz": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "String"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "displayTooltip": "Display: Mushaf or Easy read, text size, Text or Printed",
+  "pageOf": "Page {page} of {total}",
+  "@pageOf": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "scrubberLabel": "{unit} {current} of {count}. Drag to jump.",
+  "@scrubberLabel": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "current": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "surah": "Surah",
+  "runningHeadJuz": "JUZ {juz}",
+  "@runningHeadJuz": {
+    "placeholders": {
+      "juz": {
+        "type": "int"
+      }
+    }
+  },
+  "display": "Display",
+  "readAs": "Read as",
+  "printed": "Printed",
+  "layout": "Layout",
+  "mushafPage": "Mushaf page",
+  "reflow": "Easy read",
+  "textSize": "Text size",
+  "bookmark": "Bookmark",
+  "bookmarked": "Bookmarked",
+  "copy": "Copy",
+  "copied": "Copied {reference}",
+  "@copied": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "offline": "You're offline",
+  "pageFailed": "This page didn't load",
+  "offlineDetail": "Page {page} hasn't been saved to this device yet. Connect to the internet, or save the full set in Settings to read offline.",
+  "@offlineDetail": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "failedDetail": "Something went wrong fetching page {page}.",
+  "@failedDetail": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "tryAgain": "Try again",
+  "pageN": "Page {page}",
+  "@pageN": {
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "loadingPage": "Loading the printed page…",
+  "appearance": "Appearance",
+  "mushaf": "Mushaf",
+  "edition": "Edition",
+  "typeface": "Typeface",
+  "textLayout": "Text layout",
+  "reflowTextSize": "Easy read text size",
+  "reader": "Reader",
+  "scrubberHint": "The strip at the bottom of the reader jumps by",
+  "offlinePages": "Printed pages for offline use",
+  "about": "About",
+  "aboutText": "Free and open source, with no ads, no tracking and no accounts.",
+  "linesPages": "{lines} lines · {pages} pages",
+  "@linesPages": {
+    "placeholders": {
+      "lines": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "system": "System",
+  "custom": "Custom",
+  "swatchLabel": "{label} colours",
+  "@swatchLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadStopped": "Download stopped: {error}",
+  "@downloadStopped": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadProgress": "{cached} of {total} pages · about {mb} MB",
+  "@downloadProgress": {
+    "placeholders": {
+      "cached": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "mb": {
+        "type": "int"
+      }
+    }
+  },
+  "pause": "Pause",
+  "downloadAll": "Download all",
+  "deleteSaved": "Delete saved pages",
+  "language": "Language",
+  "languageSystem": "System",
+  "languageHint": "The app's language.",
+  "paletteNight": "Night",
+  "paletteDay": "Day",
+  "paletteSepia": "Sepia",
+  "paletteGreen": "Green",
+  "paletteContrast": "High contrast",
+  "typefaceIndopak": "IndoPak Nastaleeq",
+  "typefaceIndopakDesc": "The classic Subcontinent style",
+  "typefaceQpcNastaleeq": "KFGQPC Nastaleeq",
+  "typefaceQpcNastaleeqDesc": "IndoPak style by the King Fahd Complex",
+  "typefaceQpcHafs": "KFGQPC Hafs",
+  "typefaceQpcHafsDesc": "Uthmani script by the King Fahd Complex",
+  "customColours": "Custom colours",
+  "contrastGood": "Contrast {ratio}:1 — easy to read.",
+  "@contrastGood": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      }
+    }
+  },
+  "contrastBad": "Contrast {ratio}:1 — text may be hard to read. 4.5:1 or more is recommended.",
+  "@contrastBad": {
+    "placeholders": {
+      "ratio": {
+        "type": "String"
+      }
+    }
+  },
+  "background": "Background",
+  "textColour": "Text",
+  "accent": "Accent",
+  "suggestions": "Suggestions",
+  "suggestedColour": "Suggested colour",
+  "editionIndopak15Qudratullah": "15-line · Qudratullah",
+  "editionIndopak16Taj": "16-line · Taj Company",
+  "editionIndopak13Qudratullah": "13-line · Qudratullah",
+  "editionIndopak13Taj": "13-line · Taj Company",
+  "editionIndopak9Gaba": "9-line · Gaba (large print)",
+  "editionMadani1405": "1405H · KFGQPC V1",
+  "editionMadani1421": "1421H · KFGQPC V2",
+  "imageIndopak15Plain": "15-line · King Fahd Complex",
+  "imageIndopak15PlainDesc": "The King Fahd Complex's IndoPak 15-line Mushaf (610 pages).",
+  "imageIndopak16Taj": "16-line · Taj Company",
+  "imageIndopak16TajDesc": "Scan of the Taj Company 16-line print (548 pages).",
+  "imageIndopak13Qudratullah": "13-line · Qudratullah",
+  "imageIndopak13QudratullahDesc": "Scan of the Qudratullah 13-line print (849 pages).",
+  "imageIndopak15Colour": "15-line · colour-coded tajweed",
+  "imageIndopak15ColourDesc": "Tajweed rules in colour on every page (610 pages).",
+  "imageMadani15": "15-line · King Fahd Complex",
+  "imageMadani15Desc": "The King Fahd Complex's Madinah Mushaf, Mumtaz print (604 pages).",
+  "sources": "Sources",
+  "sourcesHint": "Where the Quran text, layouts, fonts and page images come from",
+  "sourcesIntro": "Every word of Quran text, every Mushaf layout and all Quran data in this app come from QUL, the Quranic Universal Library by Tarteel AI, which publishes proofread data. The text is used exactly as published, apart from trimming stray spaces at the edges of words.",
+  "srcText": "Quran text, word by word",
+  "srcLayouts": "Mushaf layouts",
+  "srcLayoutsNote": "Which words sit on each line of each page, for each printed edition.",
+  "srcFonts": "Quran fonts",
+  "srcMetadata": "Quran data",
+  "metaSurahs": "Surah names, revelation places and verse counts",
+  "metaAyahs": "Ayah list",
+  "metaJuz": "Juz",
+  "metaHizb": "Hizb",
+  "metaRub": "Rub al-hizb",
+  "metaManzil": "Manzil",
+  "metaRuku": "Ruku",
+  "metaSajda": "Places of sajdah",
+  "srcPrinted": "Printed page images",
+  "srcPrintedNote": "Scans or renders of physical printed Mushafs, so their accuracy rests on the print. They are downloaded from these sources as you read.",
+  "imageThanks": "With thanks to {name}, whose page collection led us to this original.",
+  "@imageThanks": {"placeholders": {"name": {"type": "String"}}},
+  "srcOther": "Not Quran text",
+  "srcOtherNote": "These parts are made or taken outside QUL. None of them is Quran text.",
+  "otherMeanings": "English meanings of surah names (used in search)",
+  "otherHeaders": "The words آياتها, مكية and مدنية in surah headers",
+  "writtenInApp": "Written in the app",
+  "otherMarkers": "Ayah markers for the KFGQPC Nastaleeq typeface",
+  "otherMarkersSource": "Drawn by the app: the font's own ayah ornament, with QUL's ayah numbers",
+  "otherLineFit": "Text size of each edition",
+  "otherLineFitSource": "Measured with HarfBuzz from the bundled fonts, so every line fits",
+  "srcAppFonts": "App fonts",
+  "appFontsSource": "Google Fonts · SIL Open Font License",
+  "openLink": "Open link",
+  "languageStepSubtitle": "Choose the language for the app's menus and buttons.",
+  "languageSystemHint": "Follow the phone's language",
+  "colourVividness": "Vividness",
+  "hexCode": "Hex code",
+  "editionBigTextIndopak": "Want bigger letters? The 13-line and 9-line editions have larger text, and in the reader you can pinch to zoom or switch to Easy read, which shows the text at any size.",
+  "editionBigTextMadani": "Want bigger letters? In the reader you can pinch to zoom, or switch to Easy read, which shows the text at any size.",
+  "displayBigTextIndopak": "Want bigger text? Pinch the page to zoom, choose Easy read, or pick the 13- or 9-line edition in Settings.",
+  "displayBigTextMadani": "Want bigger text? Pinch the page to zoom, or choose Easy read.",
+  "translation": "Translation",
+  "translationNone": "None",
+  "translationAuto": "Match app language",
+  "translationHint": "Shown when you hold an ayah, and under each ayah in Easy read. The Mushaf page itself stays Quran only.",
+  "showTranslation": "Show translation",
+  "translationBy": "Translation: {translator}",
+  "srcTranslations": "Translations of the meanings",
+  "srcTranslationsNote": "Shown with the Arabic, never instead of it, exactly as each translator published it (without footnotes).",
+  "languageEnglish": "English",
+  "languageUrdu": "Urdu",
+  "@translationBy": {
+    "placeholders": {
+      "translator": {
+        "type": "String"
+      }
+    }
+  },
+  "translationStepTitle": "Would you like a translation?",
+  "translationStepSubtitle": "The meaning of each ayah in your language. Press and hold any ayah while reading to see its translation.",
+  "theme": "Theme",
+  "themeAuto": "Auto",
+  "pagesLabel": "Pages",
+  "onePage": "One",
+  "twoPagesLabel": "Two",
+  "twoPagesSetting": "Two pages side by side",
+  "twoPagesHint": "On tablets, computers and phones held sideways, like an open book.",
+  "onePageTip": "One page",
+  "twoPagesTip": "Two pages side by side",
+  "textSizeStepTitle": "Choose a comfortable text size",
+  "textSizeStepSubtitle": "Choose the size you'd like to read at. You can change it any time while reading.",
+  "viewLabel": "View",
+  "printedFollowTheme": "Printed pages follow the theme",
+  "printedFollowThemeHint": "Printed pages take your paper and text colours. Turn off to see them exactly as scanned, black on white. Colour-coded tajweed pages keep their colours and are only dimmed at night.",
+  "remindMe": "Remind me",
+  "reminderBody": "Time for your reading",
+  "everyDay": "Every day",
+  "reminderPermissionOff": "Notifications are turned off for this app. Allow them in your phone's settings to get reminders.",
+  "reminderAt": "Reminder at {time}",
+  "@reminderAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "share": "Share",
+  "shareImage": "Share image",
+  "shareText": "Share text",
+  "saveImage": "Save image",
+  "copyText": "Copy text",
+  "cardPost": "Post",
+  "cardStory": "Story",
+  "imageSaved": "Image saved to {path}",
+  "@imageSaved": {"placeholders": {"path": {"type": "String"}}},
+  "wordSpacing": "Word spacing",
+  "surahTitles": "Surah titles",
+  "verticalScrollSetting": "Scroll pages vertically",
+  "verticalScrollHint": "One continuous scroll, top to bottom, instead of turning pages sideways. Pages show one at a time.",
+  "listen": "Listen",
+  "previousAyah": "Previous ayah",
+  "nextAyah": "Next ayah",
+  "stopRecitation": "Stop",
+  "recitation": "Recitation",
+  "reciter": "Reciter",
+  "repeatAyah": "Recite each ayah",
+  "recitationFailed": "Couldn't load. Check your connection.",
+  "recitationHint": "Each reciter's own recording, ayah by ayah, from EveryAyah. Ayahs you've heard are kept, so they play again without a connection.",
+  "bismillah": "Bismillah",
+  "srcRecitationNote": "One recording per ayah, as each reciter recorded it and EveryAyah publishes it; nothing is cut or joined. The Bismillah before a surah is Al-Fatihah's first ayah.",
+  "srcTranslationVoices": "Translations, read aloud",
+  "roundOf": "{round} of {rounds}",
+  "@roundOf": {"placeholders": {"round": {"type": "int"}, "rounds": {"type": "int"}}},
+  "backup": "Your places",
+  "exportLibrary": "Save to a file",
+  "exportLibraryHint": "Your sessions, bookmarks and notes, to keep or open on another device.",
+  "importLibrary": "Open a saved file",
+  "importLibraryHint": "Brings in places saved from Quiet Quran on any device.",
+  "importConfirmTitle": "Replace your places here?",
+  "importConfirmBody": "The sessions, bookmarks and notes on this device will be replaced by the file’s.",
+  "replace": "Replace",
+  "imported": "Brought in {sessions} sessions and {bookmarks} bookmarks.",
+  "@imported": {"placeholders": {"sessions": {"type": "int"}, "bookmarks": {"type": "int"}}},
+  "importFailed": "That isn’t a file saved from Quiet Quran.",
+  "exported": "Saved.",
+  "translationAudioHint": "When the translation is shown under each ayah, it's read aloud after the recitation.",
+  "switchToDay": "Switch to Day",
+  "switchToNight": "Switch to Night",
+  "showAll": "Show all ({count})",
+  "@showAll": {"placeholders": {"count": {"type": "int"}}},
+  "showLess": "Show less"
+}

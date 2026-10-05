@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar and notification icon (reminders, recitation): the logo's
+     nested arches, white on transparent (Android tints it), drawn bolder than
+     the logo so they read at 24 dp. Made by design/logo/make_android_media.py. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+    <path
+        android:pathData="M236 870 L236 470 C236 265.4 423.68 199.4 512.0 140 C600.32 199.4 788 265.4 788 470 L788 870"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="64"
+        android:strokeLineJoin="miter"
+        android:fillColor="#00000000"/>
+    <path
+        android:pathData="M320 870 L320 500 C320 345.0 450.56 295.0 512.0 250 C573.44 295.0 704 345.0 704 500 L704 870"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="42"
+        android:strokeLineJoin="miter"
+        android:fillColor="#00000000"/>
+    <path
+        android:pathData="M400 870 L400 530 C400 424.6 476.15999999999997 390.6 512.0 360 C547.84 390.6 624 424.6 624 530 L624 870"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="28"
+        android:strokeLineJoin="miter"
+        android:fillColor="#00000000"/>
+</vector>

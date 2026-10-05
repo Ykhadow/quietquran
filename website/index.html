@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiet Quran — a calm Quran reader for IndoPak and Madani readers</title>
+  <meta name="description" content="A free, calm Quran reader for IndoPak and Madani readers, with each Mushaf's own pages, line for line. No ads, no tracking. For Android, iPhone, Windows, macOS and Linux.">
+  <meta name="theme-color" content="#f4f0e8">
+  <script>
+    // Apply the saved theme before anything paints (no flash).
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="img/mark-day.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="canonical" href="https://quietquran.com/">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="robots" content="index, follow">
+  <meta property="og:site_name" content="Quiet Quran">
+  <meta property="og:title" content="Quiet Quran — a calm Quran reader for IndoPak and Madani readers">
+  <meta property="og:description" content="A free, calm Quran reader with each Mushaf's own pages, line for line. Listen ayah by ayah. No ads, no tracking.">
+  <meta property="og:image" content="https://quietquran.com/img/og-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Quiet Quran beside a page of Surah Al-Mulk">
+  <meta property="og:url" content="https://quietquran.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Quiet Quran">
+  <meta name="twitter:description" content="A free, calm Quran reader for IndoPak and Madani readers. No ads, no tracking.">
+  <meta name="twitter:image" content="https://quietquran.com/img/og-card.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://quietquran.com/#website",
+        "url": "https://quietquran.com/",
+        "name": "Quiet Quran",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://quietquran.com/#org",
+        "name": "Quiet Quran",
+        "url": "https://quietquran.com/",
+        "logo": "https://quietquran.com/img/icon-512.png",
+        "email": "support@quietquran.com"
+      },
+      {
+        "@type": "MobileApplication",
+        "name": "Quiet Quran",
+        "url": "https://quietquran.com/",
+        "description": "A free, calm Quran reader for IndoPak and Madani readers, with each Mushaf's own pages, line for line, and ayah-by-ayah recitation. No ads, no tracking.",
+        "applicationCategory": "ReferenceApplication",
+        "operatingSystem": "Android, iOS, Windows, macOS, Linux",
+        "inLanguage": ["en", "ur", "ar"],
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "image": "https://quietquran.com/img/og-card.png",
+        "publisher": { "@id": "https://quietquran.com/#org" }
+      }
+    ]
+  }
+  </script>
+  <link rel="preload" href="fonts/Newsreader-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/SourceSans3-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="./" aria-label="Quiet Quran, home">
+        <img class="for-light" src="img/mark-day.svg" alt="" width="34" height="34">
+        <img class="for-dark" src="img/mark-night.svg" alt="" width="34" height="34">
+        Quiet Quran
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a class="optional" href="#read">Reading</a>
+        <a class="optional" href="#listen">Listen</a>
+        <a class="optional" href="#features">Features</a>
+        <a class="optional" href="#sources">Sources</a>
+        <a href="#download">Download</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= Hero ================= -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-text">
+          <p class="eyebrow">A Quran reader</p>
+          <h1>A <em>quiet</em> space for every verse.</h1>
+          <p class="lead">
+            A calm Quran reader for IndoPak and Madani readers, on your phone,
+            your tablet and your computer.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#download">Get Quiet Quran</a>
+          </div>
+          <ul class="promises" aria-label="Promises">
+            <li>Free forever</li>
+            <li>No ads</li>
+            <li>No tracking</li>
+            <li>Open source</li>
+          </ul>
+        </div>
+
+        <div class="devices" role="img" aria-label="Quiet Quran on a tablet, showing two Mushaf pages side by side, and on a phone, showing the home screen.">
+          <div class="devices-stage">
+            <div class="tablet tablet-land">
+              <div class="tablet-screen">
+                <img class="for-light" src="img/laptop.webp" alt="" width="2400" height="1600">
+                <img class="for-dark" src="img/laptop-night.webp" alt="" width="2400" height="1600">
+              </div>
+            </div>
+            <div class="phone">
+              <img class="for-light" src="img/home.webp" alt="" width="752" height="1632">
+              <img class="for-dark" src="img/home-night.webp" alt="" width="752" height="1632">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Ways to read ================= -->
+    <section id="read" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Two ways to read</p>
+          <h2>Read the way that suits your eyes.</h2>
+          <p>Switch at any time. Your place is kept by ayah, so you never lose it.</p>
+        </div>
+        <div class="ways">
+          <figure class="way">
+<div class="page-card"><img class="for-light" src="img/easy-read.webp" alt="Surah Al-Mulk in Easy read: large IndoPak text, framed like a page with the surah, juz and page number." width="880" height="1260" loading="lazy"><img class="for-dark" src="img/easy-read-night.webp" alt="Surah Al-Mulk in Easy read: large IndoPak text, framed like a page with the surah, juz and page number." width="880" height="1260" loading="lazy"></div>
+            <h3>Easy read</h3>
+            <p>The Quran at any size you like, flowing to fit your screen, and still framed like a page: surah, juz and page number, with each surah's header.</p>
+          </figure>
+          <figure class="way">
+<div class="page-card paper"><img src="img/printed.webp" alt="A printed page of the King Fahd Complex's IndoPak 15-line Mushaf." width="780" height="1204" loading="lazy"></div>
+            <h3>Printed pages</h3>
+            <p>The real printed pages, such as the King Fahd Complex's own IndoPak Mushaf, downloaded once and read offline.</p>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Scripts ================= -->
+    <section>
+      <div class="wrap editions">
+        <div>
+          <p class="eyebrow">IndoPak or Madani</p>
+          <h2>The script you learned from.</h2>
+          <p class="lead" style="margin-top:16px">
+            The Nastaliq of South Asia's Mushafs, or the Uthmani script of the
+            Madinah Mushaf. Choose yours, and switch whenever you like.
+          </p>
+          <div class="script-switch" role="tablist" aria-label="Script">
+            <button type="button" role="tab" aria-selected="true" aria-controls="layout-screen" data-layout="indopak-15-qudratullah" data-name="IndoPak">IndoPak</button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="layout-screen" data-layout="madani-1405" data-name="Madani">Madani</button>
+          </div>
+          <p class="muted layouts-line">
+            Seven page layouts, each line for line as printed: IndoPak 15, 16,
+            13 and 9-line, and the Madinah Mushaf.
+          </p>
+        </div>
+
+        <figure class="tablet-stage">
+          <div class="tablet" id="layout-screen" role="tabpanel" aria-live="polite">
+            <div class="tablet-screen">
+              <img class="layout-shot for-light" data-variant="" src="img/layout-indopak-15-qudratullah.webp" alt="The opening of Surah Al-Fath in the IndoPak script." width="1200" height="1720">
+              <img class="layout-shot for-dark" data-variant="-night" src="img/layout-indopak-15-qudratullah-night.webp" alt="The opening of Surah Al-Fath in the IndoPak script." width="1200" height="1720">
+            </div>
+          </div>
+          <figcaption class="muted">Surah Al-Fath</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ================= Sessions and reminders ================= -->
+    <section id="sessions" class="band">
+      <div class="wrap split flip">
+        <div>
+          <p class="eyebrow">Sessions</p>
+          <h2>Keep several readings going at once.</h2>
+          <p class="lead" style="margin-top:16px">
+            A daily reading, a surah you're memorising, Al-Kahf on Fridays.
+            Each one resumes where you left it, or starts its surah afresh.
+          </p>
+          <dl class="rows">
+            <div><dt>Reminders</dt><dd>for each session, on the days and at the time you choose. Tap one and you're back in that reading.</dd></div>
+          </dl>
+        </div>
+
+        <div class="sessions-demo" role="img" aria-label="The home screen's sessions: Daily reading at Al-Baqarah 2:255 with a Resume button; Al-Kahf on Fridays with a reminder at 9:00 AM on Fridays; Al-Mulk before sleep with a reminder every day at 10:00 PM; and Memorising Ya-Sin on page 441.">
+          <div class="session-card">
+            <div class="session-head"><span>Daily reading</span><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg></div>
+            <img class="for-light session-ayah" src="img/session-ayah-day.webp" alt="" width="678" height="122">
+            <img class="for-dark session-ayah" src="img/session-ayah-night.webp" alt="" width="678" height="122">
+            <div class="session-foot">
+              <div><strong>Al-Baqarah</strong> <span class="muted">2:255</span><small>Page 42 · Juz 3</small></div>
+              <span class="resume">Resume</span>
+            </div>
+          </div>
+          <ul class="session-list">
+            <li><span>Al-Kahf on Fridays</span><span class="when"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>Fridays · 9:00 AM</span></li>
+            <li><span>Al-Mulk before sleep</span><span class="when"><svg class="bell" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg>Every day · 10:00 PM</span></li>
+            <li><span>Memorising Ya-Sin</span><span class="when">p. 441</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Recitation ================= -->
+    <section id="listen">
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow">Recitation</p>
+          <h2>Listen along, ayah by ayah.</h2>
+          <p class="lead" style="margin-top:16px">
+            Nineteen renowned reciters, each heard just as they recorded.
+            The page follows the recitation, lighting each ayah as it is read.
+          </p>
+          <dl class="rows">
+            <div><dt>Reciters</dt><dd>Mishary Alafasy, Abdul Basit, Al-Husary, Al-Minshawi, As-Sudais, Maher Al-Muaiqly and more.</dd></div>
+            <div><dt>Translation</dt><dd>read aloud after each ayah, if you wish, in English or Urdu.</dd></div>
+            <div><dt>Memorising</dt><dd>hear each ayah as many times as you need before the next.</dd></div>
+            <div><dt>Screen off</dt><dd>it keeps playing, with controls on your lock screen.</dd></div>
+          </dl>
+        </div>
+
+        <div class="listen-demo" data-ayah="2" role="img" aria-label="Surah Al-Mulk in Easy read, each ayah highlighted in turn as it is recited, and the player below it: Al-Mulk, Mishary Rashid Alafasy, with previous, pause, next and stop.">
+          <div class="page-card">
+            <img class="for-light ayah-2" src="img/listen-day.webp" alt="" width="880" height="1260" loading="lazy">
+            <img class="for-dark ayah-2" src="img/listen-night.webp" alt="" width="880" height="1260" loading="lazy">
+            <img class="for-light ayah-3" src="img/listen-day-3.webp" alt="" width="880" height="1260" loading="lazy">
+            <img class="for-dark ayah-3" src="img/listen-night-3.webp" alt="" width="880" height="1260" loading="lazy">
+          </div>
+          <div class="player">
+            <div class="player-controls">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" x2="5" y1="19" y2="5"/></svg>
+              <span class="player-play"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg></span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></svg>
+            </div>
+            <div class="player-now">
+              <strong class="player-ayah">Al-Mulk 67:2</strong>
+              <small>Mishary Rashid Alafasy <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></small>
+            </div>
+            <svg class="player-stop" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            <span class="player-progress"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Features ================= -->
+    <section id="features" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Made for daily reading</p>
+          <h2>Thoughtfully made.</h2>
+        </div>
+        <div class="features">
+          <article class="feature">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 10h10M4 15h16M4 20h8"/></svg></div>
+            <h3>Translation of the meanings</h3>
+            <p>English and Urdu beneath each ayah, or just for the ayah you hold.</p>
+          </article>
+          <article class="feature">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M7 8l5-5 5 5M7 16l5 5 5-5"/></svg></div>
+            <h3>Turn or scroll</h3>
+            <p>Turn pages like a book, or read in one continuous vertical scroll.</p>
+          </article>
+          <article class="feature">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+            <h3>Find any surah</h3>
+            <p>Search by name in English, Arabic or Urdu, or browse by surah and juz.</p>
+          </article>
+          <article class="feature">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 21l-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></div>
+            <h3>Bookmarks and notes</h3>
+            <p>Mark an ayah and add a note. Bookmarked ayahs are softly highlighted as you read.</p>
+          </article>
+          <article class="feature">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5 9.5 17 19 7"/><path d="M12 3a9 9 0 1 0 9 9"/></svg></div>
+            <h3>Works offline</h3>
+            <p>The whole Quran is built in. Download a printed Mushaf once and read it anywhere, with no connection.</p>
+          </article>
+          <article class="feature">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+            <h3>In your language</h3>
+            <p>The app speaks English, Urdu and Arabic, right to left where it should be.</p>
+            <div class="langs"><span lang="en">English</span><span lang="ur" dir="rtl">اردو</span><span lang="ar" dir="rtl">العربية</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Share ================= -->
+    <section>
+      <div class="wrap split">
+        <div>
+          <img class="share-card for-light" src="img/share-card.webp" alt="A shared ayah: Al-Mulk 67:3 in IndoPak script with its English translation, in the app's calm design." width="1080" height="1080" loading="lazy">
+          <img class="share-card for-dark" src="img/share-card-night.webp" alt="A shared ayah: Al-Mulk 67:3 in IndoPak script with its English translation, in the app's calm design." width="1080" height="1080" loading="lazy">
+        </div>
+        <div>
+          <p class="eyebrow">Share an ayah</p>
+          <h2>Pass on what moved you.</h2>
+          <p class="lead" style="margin-top:16px">
+            Hold any ayah to share it as a beautiful image, for a post or a
+            story, or as text, with its translation and translator credited.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Themes ================= -->
+    <section class="band">
+      <div class="wrap split flip">
+        <div class="theme-row" aria-hidden="true">
+<div class="page-card"><img src="img/sepia.webp" alt="" width="880" height="1260" loading="lazy"></div>
+<div class="page-card"><img src="img/madani-night.webp" alt="" width="880" height="1260" loading="lazy"></div>
+        </div>
+        <div>
+          <p class="eyebrow">Easy on the eyes</p>
+          <h2>Day, night, and everything in between.</h2>
+          <ul class="checks">
+            <li>Day, Night, Sepia, Green and High contrast, following your phone if you like.</li>
+            <li>Your own colours, with a check that the text stays readable.</li>
+            <li>Choose your text size once; set your word spacing to taste.</li>
+            <li>Printed pages can follow your theme, dimmed at night.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Principles ================= -->
+    <section>
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">What we promise</p>
+          <h2>A Quran app you can trust.</h2>
+        </div>
+        <div class="principles">
+          <div class="principle">
+            <h3>Free, forever</h3>
+            <p>No ads, no purchases, no subscriptions. It isn't sold, and it earns nothing.</p>
+          </div>
+          <div class="principle">
+            <h3>Private</h3>
+            <p>No tracking and no analytics. Your reading stays on your device.</p>
+          </div>
+          <div class="principle">
+            <h3>From trusted sources</h3>
+            <p>Every page, font and word comes from reputable, proofread sources, each one credited.</p>
+          </div>
+          <div class="principle">
+            <h3>Open</h3>
+            <p>The code is public, so anyone can see exactly what the app does.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Sources ================= -->
+    <section id="sources" class="band">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Sources and credits</p>
+          <h2>Where everything comes from.</h2>
+        </div>
+        <div class="sources-nod">
+          <p class="lead">
+            The Quran text, its page layouts and the translations come from the
+            <a href="https://qul.tarteel.ai">Quranic Universal Library</a>, a
+            proofread source. Printed pages are from the King Fahd Glorious
+            Quran Printing Complex in Madinah, and recitations from
+            <a href="https://everyayah.com">EveryAyah</a>.
+          </p>
+          <p class="muted">Every source, font and contributor is credited on the app's Sources page.</p>
+        </div>
+        <p class="muted" style="margin-top:28px">
+          Found a mistake in the text or a layout? Please
+          <a href="mailto:support@quietquran.com?subject=Mistake%20report">tell us</a>. We take every report seriously.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================= Download ================= -->
+    <section id="download">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Download</p>
+          <h2>On every screen you read on.</h2>
+          <p>Coming soon. Until then, <a href="mailto:support@quietquran.com?subject=Tell%20me%20when%20it%27s%20out">write to us</a> and we'll let you know.</p>
+        </div>
+        <div class="platforms">
+          <div class="platform"><strong>Android</strong><span>Google Play</span><span class="badge">Coming soon</span></div>
+          <div class="platform"><strong>iPhone &amp; iPad</strong><span>App Store</span><span class="badge">Coming soon</span></div>
+          <div class="platform"><strong>Windows</strong><span>Download</span><span class="badge">Coming soon</span></div>
+          <div class="platform"><strong>macOS</strong><span>Download</span><span class="badge">Coming soon</span></div>
+          <div class="platform"><strong>Linux</strong><span>AppImage, then Flathub</span><span class="badge">Coming soon</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div>
+        <a class="brand" href="./" style="font-size:1.2rem">
+          <img class="for-light" src="img/mark-day.svg" alt="" width="28" height="28">
+          <img class="for-dark" src="img/mark-night.svg" alt="" width="28" height="28">
+          Quiet Quran
+        </a>
+        <p style="margin:10px 0 0">A calm Quran reader. Free, private and open.</p>
+      </div>
+      <nav aria-label="Footer">
+        <a href="mailto:support@quietquran.com">support@quietquran.com</a>
+        <a href="/privacy">Privacy</a>
+        <a href="#sources">Sources</a>
+        <a href="mailto:support@quietquran.com?subject=Mistake%20report">Report a mistake</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="site.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android Auto Backup (Android 11 and older): back up only the reader's
+     settings, sessions and bookmarks (all in Flutter's shared preferences).
+     The Quran database and downloaded page images are left out: they come
+     with the app or download again, and would exceed the 25 MB backup quota,
+     which would stop backups altogether. -->
+<full-backup-content>
+    <include domain="sharedpref" path="FlutterSharedPreferences.xml" />
+</full-backup-content>

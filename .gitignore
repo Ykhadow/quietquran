@@ -1,0 +1,66 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Raw API responses cached by tool/build_quran_db.py
+/tool/.cache/
+
+# Raw QUL downloads (login required; see README)
+/tool/qul/
+
+# Page images prepared for our own hosting (uploaded, not committed)
+/hosting/
+
+# Golden test failure images (written by flutter test)
+/test/failures/
+
+# Logo experiments and their working files (not published)
+/design/
+
+# The IndoPak font may not be redistributed (see README, "The IndoPak font")
+/assets/fonts/IndoPakNastaleeq.ttf
+
+# Private correspondence (kept locally, not published)
+/docs/permissions/private/

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Resources looked up by name at runtime, which the release build would
+     otherwise strip as unused: the reminder and recitation notification
+     icon, and audio_service's notification buttons (play, pause, previous,
+     next...). Without those the recitation's notification and lock-screen
+     controls fail to build ("You must specify an icon resource id"). -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification,@drawable/audio_service_*" />

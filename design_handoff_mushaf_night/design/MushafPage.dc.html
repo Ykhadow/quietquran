@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&amp;family=Noto+Naskh+Arabic:wght@400;600&amp;family=Amiri+Quran&amp;family=Source+Sans+3:wght@400;600&amp;family=Reem+Kufi:wght@400;600&amp;family=Noto+Kufi+Arabic:wght@400;600&amp;display=swap"><style>@font-face{font-family:'UthmanicHafs';src:url('https://verses.quran.foundation/fonts/quran/hafs/uthmanic_hafs/UthmanicHafs1Ver18.woff2') format('woff2');font-display:swap}@font-face{font-family:'IndoPak';src:url('https://verses.quran.foundation/fonts/quran/hafs/nastaleeq/indopak/indopak-nastaleeq-waqf-lazim-v4.2.1.woff2') format('woff2');font-display:swap}body{margin:0}</style></helmet>
+<div style="container-type:size; width:100%; height:100%; position:relative; overflow:hidden; font-family:{{ ff }};">
+<sc-if value="{{ isA }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute; inset:0; background:#f3f2f2; color:#201e1d; display:flex; flex-direction:column; padding:6cqh 6cqw 3.5cqh;">
+  <div dir="rtl" style="display:flex; justify-content:space-between; align-items:baseline; font-family:'Noto Naskh Arabic', serif; font-size:3.4cqw; color:#605d5d; padding-bottom:0.8cqh; border-bottom:2px solid rgba(32,30,29,0.4);">
+    <span>{{ run }}</span><span>{{ juz }}</span>
+  </div>
+  <div style="flex:1; min-height:0; display:flex; flex-direction:column; padding:1.2cqh 0;">
+    <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+      <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+        <sc-if value="{{ line.isH }}">
+          <div dir="rtl" style="width:100%; height:78%; display:flex; align-items:center; justify-content:space-between; border-top:2px solid #201e1d; border-bottom:2px solid #201e1d; padding:0 2.5cqw;">
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.9cqw; color:#605d5d; width:16cqw; text-align:right;">{{ line.type }}</span>
+            <span style="font-size:5.4cqw; line-height:1; white-space:nowrap;">{{ line.name }}</span>
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.9cqw; color:#605d5d; width:16cqw; text-align:left;">{{ line.ayat }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+        <sc-if value="{{ line.isT }}">
+          <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+            <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.2em; height:1.2em; border:0.06em solid #201e1d; vertical-align:middle; font-family:'Noto Naskh Arabic', serif; font-size:0.78em; line-height:1;"><span style="font-size:0.85em;">{{ s.t }}</span></span></sc-if></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <div style="border-top:2px solid rgba(32,30,29,0.4); padding-top:0.8cqh; text-align:center; font-family:'Noto Naskh Arabic', serif; font-size:3.4cqw; color:#605d5d;">{{ num }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ isB }}">
+<div style="position:absolute; inset:0; background:#f6f1e7; color:#231d17; display:flex; flex-direction:column; padding:4.5cqh 4.5cqw 2cqh;">
+  <div style="flex:1; min-height:0; min-width:0; border:0.9cqw solid #7c1405; padding:0.8cqw; display:flex;">
+    <div style="flex:1; min-width:0; overflow:hidden; border:1px solid #7c1405; display:flex; flex-direction:column; padding:1.5cqh 3.5cqw;">
+      <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+        <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+          <sc-if value="{{ line.isH }}">
+            <div dir="rtl" style="width:100%; height:80%; display:flex; align-items:center; justify-content:space-between; background:#7c1405; color:#f6f1e7; box-shadow:inset 0 0 0 0.7cqw #7c1405, inset 0 0 0 calc(0.7cqw + 1px) #f6f1e7; padding:0 3cqw;">
+              <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.9cqw; width:16cqw; text-align:right;">{{ line.type }}</span>
+              <span style="font-size:5.2cqw; line-height:1; white-space:nowrap;">{{ line.name }}</span>
+              <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.9cqw; width:16cqw; text-align:left;">{{ line.ayat }}</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+          <sc-if value="{{ line.isT }}">
+            <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+              <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.3em; height:1.3em; border:0.14em double #7c1405; border-radius:50%; vertical-align:middle; font-family:'Noto Naskh Arabic', serif; font-size:0.78em; line-height:1; color:#231d17;"><span style="font-size:0.8em;">{{ s.t }}</span></span></sc-if></sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="padding-top:0.7cqh; text-align:center; font-family:'Noto Naskh Arabic', serif; font-size:3.2cqw; color:#5e5247;">{{ num }}</div>
+  <sc-if value="{{ isRight }}"><div style="position:absolute; top:0; bottom:0; left:0; width:7cqw; background:linear-gradient(to right, rgba(70,45,20,0.16), rgba(70,45,20,0));"></div></sc-if>
+  <sc-if value="{{ isLeft }}"><div style="position:absolute; top:0; bottom:0; right:0; width:7cqw; background:linear-gradient(to left, rgba(70,45,20,0.16), rgba(70,45,20,0));"></div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isG }}">
+<div style="position:absolute; inset:0; background:#151614; color:#e4ddd0; display:flex; flex-direction:column; padding:4.5cqh 4.5cqw 2cqh;">
+  <div style="flex:1; min-height:0; min-width:0; border:0.9cqw solid #d98e70; padding:0.8cqw; display:flex;">
+    <div style="flex:1; min-width:0; overflow:hidden; border:1px solid #d98e70; display:flex; flex-direction:column; padding:1.5cqh 3.5cqw;">
+      <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+        <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+          <sc-if value="{{ line.isH }}">
+            <div dir="rtl" style="width:100%; height:80%; display:flex; align-items:center; justify-content:space-between; background:#d98e70; color:#151614; box-shadow:inset 0 0 0 0.7cqw #d98e70, inset 0 0 0 calc(0.7cqw + 1px) #151614; padding:0 3cqw;">
+              <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.9cqw; width:16cqw; text-align:right;">{{ line.type }}</span>
+              <span style="font-size:5.2cqw; line-height:1; white-space:nowrap;">{{ line.name }}</span>
+              <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.9cqw; width:16cqw; text-align:left;">{{ line.ayat }}</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+          <sc-if value="{{ line.isT }}">
+            <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+              <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.3em; height:1.3em; border:0.14em double #d98e70; border-radius:50%; vertical-align:middle; font-family:'Noto Naskh Arabic', serif; font-size:0.78em; line-height:1; color:#e4ddd0;"><span style="font-size:0.8em;">{{ s.t }}</span></span></sc-if></sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="padding-top:0.7cqh; text-align:center; font-family:'Noto Naskh Arabic', serif; font-size:3.2cqw; color:#9a9387;">{{ num }}</div>
+  <sc-if value="{{ isRight }}"><div style="position:absolute; top:0; bottom:0; left:0; width:7cqw; background:linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0));"></div></sc-if>
+  <sc-if value="{{ isLeft }}"><div style="position:absolute; top:0; bottom:0; right:0; width:7cqw; background:linear-gradient(to left, rgba(0,0,0,0.4), rgba(0,0,0,0));"></div></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ isC }}">
+<div style="position:absolute; inset:0; background:#f3f2f2; color:#201e1d; display:flex; flex-direction:column; padding:6cqh 8cqw 3.5cqh;">
+  <div dir="rtl" style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:1.5cqh;">
+    <span style="font-family:'Noto Naskh Arabic', serif; font-size:3.4cqw; color:#ae1800;">{{ run }}</span>
+    <span style="font-family:'Archivo', sans-serif; font-size:2.6cqw; letter-spacing:0.12em; color:#605d5d;">{{ juzLatin }}</span>
+  </div>
+  <div style="flex:1; min-height:0; display:flex; flex-direction:column;">
+    <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+      <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+        <sc-if value="{{ line.isH }}">
+          <div dir="rtl" style="width:100%; display:flex; align-items:center; gap:2.5cqw;">
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.8cqw; color:#605d5d;">{{ line.type }}</span>
+            <span style="flex:1; height:1px; background:rgba(32,30,29,0.4);"></span>
+            <span style="font-size:5.4cqw; line-height:1; white-space:nowrap; color:#ae1800;">{{ line.name }}</span>
+            <span style="flex:1; height:1px; background:rgba(32,30,29,0.4);"></span>
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.8cqw; color:#605d5d;">{{ line.ayat }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+        <sc-if value="{{ line.isT }}">
+          <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+            <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.1em; height:1.1em; border:0.06em solid #ae1800; border-radius:50%; vertical-align:middle; font-family:'Noto Naskh Arabic', serif; font-size:0.78em; line-height:1; color:#ae1800;"><span style="font-size:0.85em;">{{ s.t }}</span></span></sc-if></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <div style="padding-top:1.5cqh; text-align:center; font-family:'Archivo', sans-serif; font-size:2.8cqw; color:#605d5d;">{{ numLatin }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ isD }}">
+<div style="position:absolute; inset:0; background:#151614; color:#e4ddd0; display:flex; flex-direction:column; padding:6cqh 8cqw 3.5cqh;">
+  <div dir="rtl" style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:1.5cqh;">
+    <span style="font-family:'Noto Naskh Arabic', serif; font-size:3.4cqw; color:#d98e70;">{{ run }}</span>
+    <span style="font-family:'Archivo', sans-serif; font-size:2.6cqw; letter-spacing:0.12em; color:#9a9387;">{{ juzLatin }}</span>
+  </div>
+  <div style="flex:1; min-height:0; display:flex; flex-direction:column;">
+    <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+      <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+        <sc-if value="{{ line.isH }}">
+          <div dir="rtl" style="width:100%; display:flex; align-items:center; gap:2.5cqw;">
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.8cqw; color:#9a9387;">{{ line.type }}</span>
+            <span style="flex:1; height:1px; background:rgba(228,221,208,0.2);"></span>
+            <span style="font-size:5.4cqw; line-height:1; white-space:nowrap; color:#d98e70;">{{ line.name }}</span>
+            <span style="flex:1; height:1px; background:rgba(228,221,208,0.2);"></span>
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.8cqw; color:#9a9387;">{{ line.ayat }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+        <sc-if value="{{ line.isT }}">
+          <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+            <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.1em; height:1.1em; border:0.06em solid #d98e70; border-radius:50%; vertical-align:middle; font-family:'Noto Naskh Arabic', serif; font-size:0.78em; line-height:1; color:#d98e70;"><span style="font-size:0.85em;">{{ s.t }}</span></span></sc-if></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <div style="padding-top:1.5cqh; text-align:center; font-family:'Archivo', sans-serif; font-size:2.8cqw; color:#9a9387;">{{ numLatin }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ isE }}">
+<div style="position:absolute; inset:0; background:{{ c.bg }}; color:{{ c.ink }}; display:flex; flex-direction:column; padding:6cqh 8cqw 3.5cqh;">
+  <div dir="rtl" style="display:flex; justify-content:space-between; align-items:baseline; padding-bottom:1.5cqh;">
+    <span style="font-family:'Noto Naskh Arabic', serif; font-size:3.4cqw; color:{{ c.acc }};">{{ run }}</span>
+    <span style="font-family:'Source Sans 3', sans-serif; font-size:2.6cqw; letter-spacing:0.12em; color:{{ c.mut }};">{{ juzLatin }}</span>
+  </div>
+  <div style="flex:1; min-height:0; display:flex; flex-direction:column;">
+    <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+      <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+        <sc-if value="{{ line.isH }}">
+          <div dir="rtl" style="width:100%; display:flex; align-items:center; gap:2.5cqw;">
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.8cqw; color:{{ c.mut }};">{{ line.type }}</span>
+            <span style="flex:1; height:1px; background:{{ c.rule }};"></span>
+            <span style="font-size:5.4cqw; line-height:1; white-space:nowrap; color:{{ c.acc }};">{{ line.name }}</span>
+            <span style="flex:1; height:1px; background:{{ c.rule }};"></span>
+            <span style="font-family:'Noto Naskh Arabic', serif; font-size:2.8cqw; color:{{ c.mut }};">{{ line.ayat }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+        <sc-if value="{{ line.isT }}">
+          <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+            <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.1em; height:1.1em; border:0.06em solid {{ c.acc }}; border-radius:50%; vertical-align:middle; font-family:'Noto Naskh Arabic', serif; font-size:0.78em; line-height:1; color:{{ c.acc }};"><span style="font-size:0.85em;">{{ s.t }}</span></span></sc-if></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <div style="padding-top:1.5cqh; text-align:center; font-family:'Source Sans 3', sans-serif; font-size:2.8cqw; color:{{ c.mut }};">{{ numLatin }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ isF }}">
+<div style="position:absolute; inset:0; background:#efe4cf; color:#1e2a2e; display:flex; flex-direction:column; padding:4.5cqh 6cqw 2.5cqh;">
+  <div style="height:1.6cqw; background:repeating-conic-gradient(#1f6f6b 0 25%, transparent 0 50%) 0 0/3.2cqw 3.2cqw;"></div>
+  <div dir="rtl" style="display:flex; justify-content:space-between; align-items:center; padding:1.2cqh 0 1cqh;">
+    <span style="font-family:'Reem Kufi', sans-serif; font-size:3.6cqw; color:#1f6f6b;">{{ run }}</span>
+    <span style="font-family:'Reem Kufi', sans-serif; font-size:2.6cqw; letter-spacing:0.14em; color:#6d6656;">{{ juzLatin }}</span>
+  </div>
+  <div style="flex:1; min-height:0; display:flex; flex-direction:column;">
+    <sc-for list="{{ lines }}" as="line" hint-placeholder-count="15">
+      <div style="flex:1; min-height:0; min-width:0; display:flex; align-items:center; padding-inline:{{ line.pad }};">
+        <sc-if value="{{ line.isH }}">
+          <div dir="rtl" style="width:100%; height:82%; display:flex; align-items:center; justify-content:space-between; background:#1f6f6b; color:#efe4cf; box-shadow:inset 0 0 0 0.6cqw #1f6f6b, inset 0 0 0 calc(0.6cqw + 1px) #efe4cf; padding:0 3cqw;">
+            <span style="font-family:'Noto Kufi Arabic', sans-serif; font-size:2.6cqw; width:16cqw; text-align:right;">{{ line.type }}</span>
+            <span style="font-family:'Reem Kufi', sans-serif; font-size:5cqw; line-height:1; white-space:nowrap;">{{ line.name }}</span>
+            <span style="font-family:'Noto Kufi Arabic', sans-serif; font-size:2.6cqw; width:16cqw; text-align:left;">{{ line.ayat }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ line.isB }}"><div dir="rtl" style="width:100%; text-align:center; font-size:{{ fs }}; line-height:1;">{{ bism }}</div></sc-if>
+        <sc-if value="{{ line.isT }}">
+          <div dir="rtl" style="width:100%; white-space:nowrap; text-align:justify; text-align-last:{{ line.align }}; font-size:{{ fs }}; line-height:1;">
+            <sc-for list="{{ line.segs }}" as="s"><sc-if value="{{ s.isW }}"><span>{{ s.t }}</span></sc-if><sc-if value="{{ s.isN }}"><span style="display:inline-flex; align-items:center; justify-content:center; width:1.05em; height:1.05em; border:0.07em solid #1f6f6b; vertical-align:middle; font-family:'Noto Kufi Arabic', sans-serif; font-size:0.7em; line-height:1; color:#1f6f6b;"><span style="font-size:0.8em;">{{ s.t }}</span></span></sc-if></sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+  <div style="height:1.6cqw; margin-top:1cqh; background:repeating-conic-gradient(#1f6f6b 0 25%, transparent 0 50%) 0 0/3.2cqw 3.2cqw;"></div>
+  <div style="padding-top:0.8cqh; text-align:center; font-family:'Reem Kufi', sans-serif; font-size:3.2cqw; color:#6d6656;">{{ num }}</div>
+  <sc-if value="{{ isRight }}"><div style="position:absolute; top:0; bottom:0; left:0; width:6cqw; background:linear-gradient(to right, rgba(60,45,20,0.14), rgba(60,45,20,0));"></div></sc-if>
+  <sc-if value="{{ isLeft }}"><div style="position:absolute; top:0; bottom:0; right:0; width:6cqw; background:linear-gradient(to left, rgba(60,45,20,0.14), rgba(60,45,20,0));"></div></sc-if>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;e&quot;,&quot;f&quot;,&quot;g&quot;],&quot;default&quot;:&quot;a&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tone&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dusk&quot;,&quot;stone&quot;,&quot;quiet&quot;,&quot;lapis&quot;,&quot;arch&quot;,&quot;day&quot;],&quot;default&quot;:&quot;dusk&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;script&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;madani&quot;,&quot;indopak&quot;],&quot;default&quot;:&quot;madani&quot;,&quot;tsType&quot;:&quot;'madani'|'indopak'&quot;},&quot;page&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;604&quot;,&quot;1&quot;,&quot;2&quot;],&quot;default&quot;:&quot;604&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;side&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;single&quot;,&quot;left&quot;,&quot;right&quot;],&quot;default&quot;:&quot;single&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const variant = this.props.variant ?? 'a';
+    const script = this.props.script ?? 'madani';
+    const page = String(this.props.page ?? '604');
+    const side = this.props.side ?? 'single';
+    const ip = script === 'indopak';
+    const dg = ip ? '۰۱۲۳۴۵۶۷۸۹' : '٠١٢٣٤٥٦٧٨٩';
+    const d = n => String(n).split('').map(c => dg[+c]).join('');
+    const H = (name, ayat, type) => ({ isH: true, name, ayat: 'آياتها ' + d(ayat), type, pad: '0' });
+    const B = { isB: true, pad: '0' };
+    const E = { pad: '0' };
+    const T = (parts, align, pad) => ({ isT: true, align: align || 'justify', pad: pad || '0',
+      segs: parts.map(p => typeof p === 'number' ? { isN: true, t: d(p) } : { isW: true, t: ' ' + p + ' ' }) });
+    let lines, run, juz, num, numLatin, juzLatin;
+    if (page === '1' || page === '2') {
+      const P = page === '1' ? '14cqw' : '4cqw';
+      run = page === '1' ? 'الفاتحة' : 'البقرة'; juz = 'الجزء ' + d(1); juzLatin = 'JUZ 1'; num = d(page); numLatin = page;
+      lines = page === '1' ? [E, E, E, H('سُورَةُ الفَاتِحَةِ', 7, 'مكية'),
+        T(['بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', 1], 'center', P),
+        T(['ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ', 2], 'justify', P),
+        T(['ٱلرَّحْمَٰنِ ٱلرَّحِيمِ', 3, 'مَٰلِكِ يَوْمِ ٱلدِّينِ', 4], 'justify', P),
+        T(['إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', 5], 'justify', P),
+        T(['ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ', 6], 'justify', P),
+        T(['صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ'], 'justify', P),
+        T(['غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ', 7], 'justify', P), E, E, E, E]
+      : [E, E, H('سُورَةُ البَقَرَةِ', 286, 'مدنية'), B,
+        T(['الٓمٓ', 1, 'ذَٰلِكَ ٱلْكِتَٰبُ لَا رَيْبَ فِيهِ'], 'justify', P),
+        T(['هُدًى لِّلْمُتَّقِينَ', 2, 'ٱلَّذِينَ يُؤْمِنُونَ'], 'justify', P),
+        T(['بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا'], 'justify', P),
+        T(['رَزَقْنَٰهُمْ يُنفِقُونَ', 3, 'وَٱلَّذِينَ يُؤْمِنُونَ'], 'justify', P),
+        T(['بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ'], 'justify', P),
+        T(['وَبِٱلْـَٔاخِرَةِ هُمْ يُوقِنُونَ', 4, 'أُولَٰٓئِكَ عَلَىٰ'], 'justify', P),
+        T(['هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰٓئِكَ هُمُ ٱلْمُفْلِحُونَ', 5], 'justify', P), E, E, E, E];
+    } else if (ip) {
+      run = 'الاخلاص · الفلق · الناس'; juz = 'پارہ ' + d(30); juzLatin = 'PARA 30'; num = d(610); numLatin = '610';
+      lines = [H('سُوْرَةُ الْاِخْلَاصِ', 4, 'مکیۃ'), B,
+        T(['قُلْ هُوَ اللّٰهُ اَحَدٌ', 1, 'اَللّٰهُ الصَّمَدُ', 2, 'لَمْ يَلِدْ'], 'justify'),
+        T(['وَلَمْ يُوْلَدْ', 3, 'وَلَمْ يَكُنْ لَّهٗ كُفُوًا اَحَدٌ', 4]),
+        H('سُوْرَةُ الْفَلَقِ', 5, 'مکیۃ'), B,
+        T(['قُلْ اَعُوْذُ بِرَبِّ الْفَلَقِ', 1, 'مِنْ شَرِّ مَا خَلَقَ', 2]),
+        T(['وَمِنْ شَرِّ غَاسِقٍ اِذَا وَقَبَ', 3, 'وَمِنْ شَرِّ النَّفّٰثٰتِ']),
+        T(['فِی الْعُقَدِ', 4, 'وَمِنْ شَرِّ حَاسِدٍ اِذَا حَسَدَ', 5]),
+        H('سُوْرَةُ النَّاسِ', 6, 'مکیۃ'), B,
+        T(['قُلْ اَعُوْذُ بِرَبِّ النَّاسِ', 1, 'مَلِكِ النَّاسِ', 2]),
+        T(['اِلٰهِ النَّاسِ', 3, 'مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ', 4]),
+        T(['الَّذِیْ یُوَسْوِسُ فِیْ صُدُوْرِ النَّاسِ', 5]),
+        T(['مِنَ الْجِنَّةِ وَالنَّاسِ', 6], 'center')];
+    } else {
+      run = 'الإخلاص · الفلق · الناس'; juz = 'الجزء ' + d(30); juzLatin = 'JUZ 30'; num = d(604); numLatin = '604';
+      lines = [H('سُورَةُ الإِخْلَاصِ', 4, 'مكية'), B,
+        T(['قُلْ هُوَ ٱللَّهُ أَحَدٌ', 1, 'ٱللَّهُ ٱلصَّمَدُ', 2, 'لَمْ يَلِدْ']),
+        T(['وَلَمْ يُولَدْ', 3, 'وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ', 4]),
+        H('سُورَةُ الفَلَقِ', 5, 'مكية'), B,
+        T(['قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ', 1, 'مِن شَرِّ مَا خَلَقَ', 2]),
+        T(['وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ', 3, 'وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ']),
+        T(['فِى ٱلْعُقَدِ', 4, 'وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ', 5]),
+        H('سُورَةُ النَّاسِ', 6, 'مكية'), B,
+        T(['قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ', 1, 'مَلِكِ ٱلنَّاسِ', 2]),
+        T(['إِلَٰهِ ٱلنَّاسِ', 3, 'مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ', 4]),
+        T(['ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ', 5]),
+        T(['مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ', 6], 'center')];
+    }
+    return {
+      isA: variant === 'a', isB: variant === 'b', isC: variant === 'c', isD: variant === 'd', isE: variant === 'e', isF: variant === 'f', isG: variant === 'g', c: this.props.tone === 'day' ? { bg:'#f4f0e8', ink:'#211f1b', acc:'#a9532f', mut:'#6e675c', rule:'rgba(33,31,27,0.16)' } : this.props.tone === 'arch' ? { bg:'#f3eee6', ink:'#232823', acc:'#3d5a4c', mut:'#857f75', rule:'rgba(35,40,35,0.14)' } : this.props.tone === 'lapis' ? { bg:'#f7f4ee', ink:'#1c1b19', acc:'#2c47a8', mut:'#8a857c', rule:'rgba(28,27,25,0.12)' } : this.props.tone === 'quiet' ? { bg:'#fbfaf8', ink:'#1a1a19', acc:'#1a1a19', mut:'#8b8a86', rule:'rgba(26,26,25,0.12)' } : (this.props.tone === 'stone' ? { bg:'#f5f4f0', ink:'#1d1f1c', acc:'#2e6a50', mut:'#6c6f68', rule:'rgba(29,31,28,0.14)' } : { bg:'#10141b', ink:'#e3e0d8', acc:'#d6b56c', mut:'#8d93a0', rule:'rgba(227,224,216,0.16)' }),
+      isLeft: side === 'left', isRight: side === 'right',
+      ff: ip ? "'IndoPak', 'Noto Naskh Arabic', serif" : "'UthmanicHafs', 'Amiri Quran', serif",
+      fs: (page === '1' || page === '2') ? '4.9cqw' : (ip ? '5.3cqw' : '5.6cqw'),
+      bism: ip ? 'بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِیْمِ' : 'بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',
+      lines, run, juz, num, numLatin, juzLatin
+    };
+  }
+}
+</script>
+</body>
+</html>

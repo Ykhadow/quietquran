@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Noto+Naskh+Arabic:wght@400;600&amp;family=Amiri+Quran&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap"><style>body{margin:0;background:#dedad3;font-family:'Source Sans 3',system-ui,sans-serif;color:#201e1d}a{color:#a9532f}a:hover{color:#7c3a1f}</style></helmet>
+<div style="padding:48px; display:flex; flex-direction:column; gap:64px;">
+  <div style="display:flex; flex-direction:column; gap:8px; max-width:780px;">
+    <div style="font-family:'Newsreader',serif; font-size:34px; line-height:1.15;">Mushaf · Night</div>
+    <div style="font-size:15px; line-height:1.55; color:#5a544d; text-wrap:pretty;">A calmer 2b, with a light mode. Kept: the margin page, the last line in Quran script as the resume point, and juz names in Arabic while scrubbing. Removed: the juz card row, the floating nav pill, the two segmented toggles (now under Aa), and the 60-tick ruler (now 30 juz cells). Home is split into clear groups (current session, other sessions, browse), each on its own surface. Built to the brief: sessions first on Home, Bookmarks as a tab, and the session name, or "Browsing", in the reader.</div>
+  </div>
+
+  <sc-for list="{{ themes }}" as="t" hint-placeholder-count="2">
+  <div data-screen-label="{{ t.label }}" style="display:flex; flex-direction:column; gap:16px;">
+    <div style="font:600 12px ui-monospace,Menlo,monospace; letter-spacing:0.08em; color:#5a544d;">{{ t.label }}</div>
+    <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap;">
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font:600 11px ui-monospace,Menlo,monospace; color:#6f6860;">HOME</div>
+        <div style="width:390px; height:844px; position:relative; overflow:hidden; background:{{ t.bg }}; color:{{ t.ink }}; font-family:'Source Sans 3',sans-serif; display:flex; flex-direction:column; box-shadow:0 1px 3px rgba(0,0,0,0.14);">
+          <div style="height:44px; flex:none; display:flex; align-items:center; padding:0 26px; font-weight:600; font-size:15px;">9:41</div>
+          <div style="display:flex; align-items:center; padding:4px 10px 0 22px; color:{{ t.mut }};">
+            <div style="font-family:'Newsreader',serif; font-style:italic; font-size:22px; margin-right:auto; color:{{ t.ink }};">Mushaf</div>
+            <div aria-label="Go to page" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="9" y2="9"></line><line x1="4" x2="20" y1="15" y2="15"></line><line x1="10" x2="8" y1="3" y2="21"></line><line x1="16" x2="14" y1="3" y2="21"></line></svg></div>
+            <div aria-label="Settings" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg></div>
+          </div>
+
+          <div style="margin:10px 16px 0; padding:18px 20px 18px; border-radius:22px; background:{{ t.surf }}; box-shadow:inset 0 0 0 1px {{ t.line2 }}; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:{{ t.acc }};"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"></path><path d="M21 3v5h-5"></path></svg>Daily reading</div>
+            <div dir="rtl" style="font-family:'UthmanicHafs','Amiri Quran',serif; font-size:32px; line-height:1.9; text-align:right;">مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ <span style="display:inline-flex; align-items:center; justify-content:center; width:1.1em; height:1.1em; border:0.05em solid {{ t.acc }}; border-radius:50%; vertical-align:middle; font-family:'Noto Naskh Arabic',serif; font-size:0.7em; color:{{ t.acc }};">٦</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+              <div style="line-height:1.3;">
+                <div style="font-family:'Newsreader',serif; font-size:20px;">An-Nas <span style="color:{{ t.mut }}; font-size:15px;">114:6</span></div>
+                <div style="font-size:13px; color:{{ t.mut }};">Page 604 · Juz 30</div>
+              </div>
+              <div style="height:48px; border-radius:24px; background:{{ t.acc }}; color:{{ t.onAcc }}; display:flex; align-items:center; padding:0 24px; font-weight:600; font-size:15px;">Resume</div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:22px 16px 6px 24px;">
+            <span style="font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:{{ t.mut }};">Other sessions</span>
+            <span style="height:36px; display:flex; align-items:center; padding:0 8px; font-size:14px; font-weight:600; color:{{ t.acc }};">+ New</span>
+          </div>
+          <div style="margin:0 16px; border-radius:18px; background:{{ t.surf }}; box-shadow:inset 0 0 0 1px {{ t.line2 }}; padding:0 6px 0 16px;">
+            <sc-for list="{{ sessions }}" as="s" hint-placeholder-count="2">
+              <div style="display:flex; align-items:center; gap:12px; min-height:56px; border-bottom:{{ s.bd }};">
+                <span style="color:{{ t.mut }}; display:flex;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"></path><path d="M21 3v5h-5"></path></svg></span>
+                <span style="font-family:'Newsreader',serif; font-size:17px; flex:1;">{{ s.name }}</span>
+                <span style="font-size:13px; color:{{ t.mut }};">{{ s.meta }}</span>
+                <span style="width:36px; height:44px; display:flex; align-items:center; justify-content:center; color:{{ t.mut }};"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg></span>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="padding:22px 24px 8px; font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:{{ t.mut }};">Browse</div>
+          <div style="margin:0 16px; display:grid; grid-template-columns:1fr 1fr 1fr; padding:4px; border-radius:22px; background:{{ t.surf }}; box-shadow:inset 0 0 0 1px {{ t.line2 }}; font-size:14px;">
+            <div style="height:40px; border-radius:18px; background:{{ t.bg }}; box-shadow:0 1px 3px {{ t.shadow }}; display:flex; align-items:center; justify-content:center; font-weight:600;">Surahs</div>
+            <div style="height:40px; display:flex; align-items:center; justify-content:center; color:{{ t.mut }};">Juz</div>
+            <div style="height:40px; display:flex; align-items:center; justify-content:center; color:{{ t.mut }};">Bookmarks</div>
+          </div>
+          <div style="flex:1; overflow:hidden; padding:6px 22px 0;">
+            <sc-for list="{{ surahs }}" as="s" hint-placeholder-count="4">
+              <div style="display:grid; grid-template-columns:32px 1fr auto; gap:12px; align-items:center; min-height:64px; border-bottom:1px solid {{ t.line }};">
+                <div style="width:32px; height:32px; border-radius:10px; box-shadow:inset 0 0 0 1px {{ t.line }}; display:flex; align-items:center; justify-content:center; font-size:13px; color:{{ t.mut }}; font-variant-numeric:tabular-nums;">{{ s.n }}</div>
+                <div>
+                  <div style="font-family:'Newsreader',serif; font-size:18px; line-height:1.2;">{{ s.en }}</div>
+                  <div style="font-size:13px; color:{{ t.mut }};">{{ s.v }} verses · p. {{ s.p }}</div>
+                </div>
+                <div dir="rtl" style="font-family:'Amiri',serif; font-size:23px; line-height:1.5;">{{ s.ar }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font:600 11px ui-monospace,Menlo,monospace; color:#6f6860;">READER · IMMERSIVE</div>
+        <div style="width:390px; height:844px; position:relative; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.14);">
+          <dc-import name="MushafPage" variant="{{ t.page }}" tone="{{ t.tone }}" script="madani" page="604" style="position:absolute; inset:0;" hint-size="390px,844px"></dc-import>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font:600 11px ui-monospace,Menlo,monospace; color:#6f6860;">READER · OVERLAY IN A SESSION</div>
+        <div style="width:390px; height:844px; position:relative; overflow:hidden; font-family:'Source Sans 3',sans-serif; color:{{ t.ink }}; box-shadow:0 1px 3px rgba(0,0,0,0.14);">
+          <dc-import name="MushafPage" variant="{{ t.page }}" tone="{{ t.tone }}" script="madani" page="604" style="position:absolute; inset:0;" hint-size="390px,844px"></dc-import>
+          <div style="position:absolute; top:44px; left:0; right:0; height:64px; background:{{ t.bg }}; border-bottom:1px solid {{ t.line2 }}; display:grid; grid-template-columns:56px 1fr 56px; align-items:center; padding:0 6px;">
+            <div aria-label="Back to home" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:6px; font-size:14px; font-weight:600;"><span style="color:{{ t.acc }}; display:flex;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"></path><path d="M21 3v5h-5"></path></svg></span>Daily reading</div>
+            <div aria-label="Bookmark this page" style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; justify-self:end;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></div>
+          </div>
+          <div style="position:absolute; left:0; right:0; bottom:0; background:{{ t.bg }}; border-top:1px solid {{ t.line2 }}; padding:16px 16px 30px 22px; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div style="flex:1; min-width:0; line-height:1.25;">
+                <div style="font-family:'Newsreader',serif; font-size:17px;">An-Nas</div>
+                <div style="font-size:13px; color:{{ t.mut }};">Juz 30 · 604 of 604</div>
+              </div>
+              <div aria-label="Display: Mushaf or Reflow, text size, Text or Printed" style="width:48px; height:48px; border-radius:24px; background:{{ t.surf }}; display:flex; align-items:center; justify-content:center; font-family:'Newsreader',serif; font-size:18px;">Aa</div>
+              <div aria-label="Settings" style="width:48px; height:48px; border-radius:24px; background:{{ t.surf }}; display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg></div>
+            </div>
+            <div dir="rtl" style="position:relative; display:flex; gap:2px; height:22px; margin-left:6px;">
+              <sc-for list="{{ t.cells }}" as="j" hint-placeholder-count="30"><div style="flex:1; border-radius:2px; background:{{ j.bg }};"></div></sc-for>
+              <div style="position:absolute; left:-4px; top:-7px; width:14px; height:36px; border-radius:7px; background:{{ t.ink }}; box-shadow:0 0 0 3px {{ t.bg }};"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin:-6px 6px 0 0; font-size:12px; color:{{ t.mut }};"><span>Juz 30</span><span>Juz 1</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font:600 11px ui-monospace,Menlo,monospace; color:#6f6860;">READER · SCRUBBING</div>
+        <div style="width:390px; height:844px; position:relative; overflow:hidden; font-family:'Source Sans 3',sans-serif; color:{{ t.ink }}; box-shadow:0 1px 3px rgba(0,0,0,0.14);">
+          <dc-import name="MushafPage" variant="{{ t.page }}" tone="{{ t.tone }}" script="madani" page="604" style="position:absolute; inset:0;" hint-size="390px,844px"></dc-import>
+          <div style="position:absolute; inset:0; background:{{ t.veil }};"></div>
+          <div style="position:absolute; left:28px; right:28px; top:260px; display:flex; flex-direction:column; align-items:center; gap:4px; text-align:center;">
+            <div style="font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:{{ t.acc }}; font-weight:600;">Juz 29</div>
+            <div dir="rtl" style="font-family:'Amiri',serif; font-size:64px; line-height:1.5;">تبارك الذي</div>
+            <div style="font-family:'Newsreader',serif; font-size:22px;">Al-Mulk</div>
+            <div style="font-size:14px; color:{{ t.mut }};">Page 562 of 604</div>
+          </div>
+          <div style="position:absolute; left:0; right:0; bottom:0; padding:0 22px 40px;">
+            <div dir="rtl" style="position:relative; display:flex; gap:2px; height:22px;">
+              <sc-for list="{{ t.cellsScrub }}" as="j" hint-placeholder-count="30"><div style="flex:1; border-radius:2px; background:{{ j.bg }};"></div></sc-for>
+              <div style="position:absolute; left:6px; top:-7px; width:18px; height:36px; border-radius:9px; background:{{ t.ink }}; box-shadow:0 0 0 4px {{ t.ring }};"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px; color:{{ t.mut }};"><span>30</span><span>15</span><span>1</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font:600 11px ui-monospace,Menlo,monospace; color:#6f6860;">TABLET LANDSCAPE · SPREAD</div>
+        <div style="width:1180px; height:820px; background:{{ t.bg }}; display:flex; align-items:center; justify-content:center; gap:28px; box-shadow:0 1px 3px rgba(0,0,0,0.14);">
+          <div style="width:474px; height:740px; position:relative;"><dc-import name="MushafPage" variant="{{ t.page }}" tone="{{ t.tone }}" script="madani" page="2" side="left" style="position:absolute; inset:0;" hint-size="474px,740px"></dc-import></div>
+          <div style="width:1px; height:620px; background:{{ t.line }};"></div>
+          <div style="width:474px; height:740px; position:relative;"><dc-import name="MushafPage" variant="{{ t.page }}" tone="{{ t.tone }}" script="madani" page="1" side="right" style="position:absolute; inset:0;" hint-size="474px,740px"></dc-import></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const surahs = [
+      [1, 'Al-Fatihah', 7, 1, 'الفاتحة'],
+      [2, 'Al-Baqarah', 286, 2, 'البقرة'],
+      [3, "Ali 'Imran", 200, 50, 'آل عمران'],
+      [4, "An-Nisa'", 176, 77, 'النساء']
+    ].map(([n, en, v, p, ar]) => ({ n, en, v, p, ar }));
+    const sessions = [
+      { name: 'Night · Al-Mulk', meta: 'p. 562' },
+      { name: 'Friday · Al-Kahf', meta: 'p. 293' }
+    ];
+    sessions[0].bd = '1px solid rgba(128,120,108,0.22)';
+    sessions[1].bd = 'none';
+    const cells = (cur, on, a) => Array.from({ length: 30 }, (_, i) => ({ bg: i === cur ? on : (i % 5 === 4 ? a[1] : a[0]) }));
+    const themes = [
+      { label: 'DARK · NIGHT', page: 'd', tone: 'dusk', bg: '#151614', ink: '#e4ddd0', mut: '#9a9387', acc: '#d98e70', onAcc: '#151614', surf: '#20211d', line: 'rgba(228,221,208,0.16)', line2: 'rgba(228,221,208,0.1)', shadow: 'rgba(0,0,0,0.5)', veil: 'rgba(12,12,11,0.9)', ring: 'rgba(228,221,208,0.18)',
+        cells: cells(29, '#d98e70', ['#3a3b35', '#4a4b44']), cellsScrub: cells(28, '#d98e70', ['#3a3b35', '#4a4b44']) },
+      { label: 'LIGHT · DAY', page: 'e', tone: 'day', bg: '#f4f0e8', ink: '#211f1b', mut: '#6e675c', acc: '#a9532f', onAcc: '#fbf8f2', surf: '#ebe5da', line: 'rgba(33,31,27,0.16)', line2: 'rgba(33,31,27,0.1)', shadow: 'rgba(33,31,27,0.16)', veil: 'rgba(244,240,232,0.94)', ring: 'rgba(33,31,27,0.12)',
+        cells: cells(29, '#a9532f', ['#d9d1c3', '#c9bfae']), cellsScrub: cells(28, '#a9532f', ['#d9d1c3', '#c9bfae']) }
+    ];
+    return { themes, surahs, sessions };
+  }
+}
+</script>
+</body>
+</html>

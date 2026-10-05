@@ -1,0 +1,11 @@
+# Line endings are LF in the repository and in every checkout, so formatting
+# checks see the same files on every system.
+* text=auto eol=lf
+
+*.png binary
+*.webp binary
+*.ttf binary
+*.woff2 binary
+*.db binary
+*.jar binary
+*.ico binary

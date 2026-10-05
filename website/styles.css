@@ -1,0 +1,1313 @@
+/* Quiet Quran — the app's own Day and Night palettes and type. */
+
+@font-face {
+  font-family: "Newsreader";
+  src: url("fonts/Newsreader-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("fonts/Newsreader-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("fonts/SourceSans3-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans 3";
+  src: url("fonts/SourceSans3-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  --bg: #f4f0e8;
+  --surf: #ebe5da;
+  --card: #fbf8f2;
+  --ink: #211f1b;
+  --mut: #6e675c;
+  --acc: #a9532f;
+  --on-acc: #fbf8f2;
+  --line: rgba(33, 31, 27, 0.16);
+  --line2: rgba(33, 31, 27, 0.1);
+  --shadow: 0 1px 2px rgba(33, 31, 27, 0.08), 0 12px 32px rgba(33, 31, 27, 0.12);
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --arabic: "Noto Naskh Arabic", "Segoe UI", "Geeza Pro", "Noto Sans Arabic", serif;
+  --urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Segoe UI", serif;
+  --max: 1120px;
+  color-scheme: light;
+}
+
+/* Night: when the device is dark (unless the visitor chose light), or when
+   the visitor chose dark. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151614;
+    --surf: #20211d;
+    --card: #1b1c19;
+    --ink: #e4ddd0;
+    --mut: #9a9387;
+    --acc: #d98e70;
+    --on-acc: #151614;
+    --line: rgba(228, 221, 208, 0.16);
+    --line2: rgba(228, 221, 208, 0.1);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #151614;
+  --surf: #20211d;
+  --card: #1b1c19;
+  --ink: #e4ddd0;
+  --mut: #9a9387;
+  --acc: #d98e70;
+  --on-acc: #151614;
+  --line: rgba(228, 221, 208, 0.16);
+  --line2: rgba(228, 221, 208, 0.1);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+/* Images drawn for one theme or the other (the logo). */
+.for-dark {
+  display: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .for-light {
+    display: none !important;
+  }
+  :root:not([data-theme="light"]) .for-dark {
+    display: block !important;
+  }
+}
+
+:root[data-theme="dark"] .for-light {
+  display: none !important;
+}
+
+:root[data-theme="dark"] .for-dark {
+  display: block !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1.0625rem/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--acc);
+  text-underline-offset: 0.18em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+@media (min-width: 720px) {
+  .wrap {
+    padding: 0 32px;
+  }
+}
+
+.skip {
+  position: absolute;
+  left: -999px;
+  top: 8px;
+  background: var(--acc);
+  color: var(--on-acc);
+  padding: 8px 14px;
+  border-radius: 8px;
+  z-index: 10;
+}
+
+.skip:focus {
+  left: 12px;
+}
+
+/* ---- Header ---- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.2) blur(10px);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid var(--line2);
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink);
+  text-decoration: none;
+  font: 400 1.35rem/1 var(--serif);
+  white-space: nowrap;
+}
+
+.brand img {
+  width: 34px;
+  height: 34px;
+  /* Optical centring: the arches' feet reach below the baseline and their
+     thin tips read lighter, so the mark sits a little higher than centre. */
+  transform: translateY(-0.14em);
+}
+
+.nav {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.nav a {
+  color: var(--mut);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+.nav a:hover {
+  color: var(--ink);
+  background: var(--surf);
+}
+
+@media (max-width: 560px) {
+  .nav .optional {
+    display: none;
+  }
+}
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  flex: none;
+}
+
+.theme-toggle:hover {
+  background: var(--surf);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The icon shows what the button switches to. */
+.theme-toggle .icon-sun {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun {
+    display: block;
+  }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon {
+    display: none;
+  }
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+/* ---- Type ---- */
+
+h1,
+h2,
+h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.12;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 7vw, 4.4rem);
+}
+
+h2 {
+  font-size: clamp(1.9rem, 4.4vw, 2.8rem);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+.eyebrow {
+  font: 600 0.8rem/1.2 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acc);
+  margin: 0 0 14px;
+}
+
+.lead {
+  font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+  color: var(--mut);
+  max-width: 34em;
+}
+
+.muted {
+  color: var(--mut);
+}
+
+section {
+  padding: 72px 0;
+}
+
+@media (min-width: 900px) {
+  section {
+    padding: 104px 0;
+  }
+}
+
+.section-head {
+  max-width: 40em;
+  margin-bottom: 44px;
+}
+
+.section-head p:not(.eyebrow) {
+  color: var(--mut);
+  margin: 16px 0 0;
+  font-size: 1.1rem;
+}
+
+/* ---- Buttons ---- */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font: 600 1rem/1 var(--sans);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.button.primary {
+  background: var(--acc);
+  color: var(--on-acc);
+}
+
+.button.primary:hover {
+  filter: brightness(1.06);
+}
+
+.button.quiet {
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.button.quiet:hover {
+  background: var(--surf);
+}
+
+/* ---- Hero ---- */
+
+.hero {
+  padding: 48px 0 64px;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    padding: 72px 0 96px;
+  }
+}
+
+.hero-text {
+  max-width: 46rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-text .lead {
+  margin: 22px auto 0;
+}
+
+.hero-text .actions,
+.hero-text .promises {
+  justify-content: center;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--acc);
+}
+
+.promises {
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--mut);
+  font-size: 0.95rem;
+}
+
+.promises li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.promises li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--acc);
+}
+
+/* A landscape tablet with two pages and a phone on the home screen in
+   front, laid out on a 1000 x 640 stage that is zoomed to fit the width,
+   with a soft glow of the accent behind them. */
+.devices {
+  display: flex;
+  justify-content: center;
+  margin: 56px auto 0;
+}
+
+.devices-stage {
+  position: relative;
+  flex: none;
+  width: 1000px;
+  height: 640px;
+}
+
+.devices-stage::before {
+  content: "";
+  position: absolute;
+  inset: 8% 12%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--acc) 22%, transparent),
+    transparent
+  );
+  filter: blur(30px);
+}
+
+.devices-stage .tablet-land {
+  --w: 820px;
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  width: 820px;
+  padding: 16px;
+  border-radius: 38px;
+}
+
+.tablet-land .tablet-screen {
+  aspect-ratio: 3 / 2;
+  border-radius: 24px;
+}
+
+.tablet-land .tablet-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.devices-stage .phone {
+  --w: 230px;
+  position: absolute;
+  right: 30px;
+  top: 150px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 1064px) {
+  .devices-stage {
+    zoom: 0.8;
+  }
+}
+
+@media (max-width: 864px) {
+  .devices-stage {
+    zoom: 0.64;
+  }
+}
+
+@media (max-width: 720px) {
+  .devices-stage {
+    zoom: 0.52;
+  }
+}
+
+@media (max-width: 560px) {
+  .devices-stage {
+    zoom: 0.36;
+  }
+}
+
+@media (max-width: 400px) {
+  .devices-stage {
+    zoom: 0.33;
+  }
+}
+
+/* ---- Phones ---- */
+
+/* A modern phone, kept minimal: a thin, even bezel around a screen that
+   fills nearly the whole front, rounded corners, a small camera hole and
+   two side buttons. Sized by --w. */
+.phone {
+  --w: 250px;
+  position: relative;
+  width: var(--w);
+  padding: calc(var(--w) * 0.024);
+  border-radius: calc(var(--w) * 0.15);
+  background: #111;
+  /* The frame's edge: a border is drawn evenly round the corners (an inset
+     shadow comes out thicker there). */
+  border: 1px solid #34332f;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 18px 36px rgba(33, 31, 27, 0.2);
+  flex: none;
+}
+
+.phone img {
+  width: 100%;
+  aspect-ratio: 376 / 816;
+  object-fit: cover;
+  object-position: top;
+  border-radius: calc(var(--w) * 0.128);
+  /* The frame's colour: a screen's rounded corners are smoothed against it,
+     so they never show a light fringe. */
+  background: #111;
+}
+
+.phone img.whole {
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+}
+
+.phone::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--w) * 0.05);
+  left: 50%;
+  width: calc(var(--w) * 0.034);
+  height: calc(var(--w) * 0.034);
+  margin-left: calc(var(--w) * -0.017);
+  border-radius: 50%;
+  background: #0a0a0a;
+  box-shadow: 0 0 0 1px #262626;
+}
+
+.phone::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 21%;
+  width: 3px;
+  height: 14%;
+  border-radius: 0 2px 2px 0;
+  background: #2b2a27;
+  box-shadow: 0 calc(var(--w) * 0.42) 0 0 #2b2a27;
+}
+
+.phone-slot {
+  display: flex;
+  justify-content: center;
+}
+
+.theme-row .page-card {
+  width: min(230px, 42vw);
+}
+
+/* ---- Three ways to read ---- */
+
+.ways {
+  display: grid;
+  gap: 40px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+@media (min-width: 720px) {
+  .ways {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+}
+
+.way {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.way .page-card {
+  margin-bottom: 30px;
+  /* Both pages the same shape, so they end on one line; the printed page,
+     a little narrower, sits within it on white. */
+  aspect-ratio: 880 / 1260;
+}
+
+.way .page-card img {
+  height: 100%;
+  object-fit: contain;
+}
+
+/* A page on its own, like a sheet of paper: no device around it. */
+.page-card {
+  width: min(300px, 78vw);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(33, 31, 27, 0.08),
+    0 16px 36px rgba(33, 31, 27, 0.16);
+  outline: 1px solid var(--line2);
+}
+
+/* A printed page: white paper around it. (Other pages bring their own
+   colour, so their rounded corners are never smoothed against white.) */
+.page-card.paper {
+  background: #fff;
+}
+
+.page-card img {
+  width: 100%;
+}
+
+.way p {
+  color: var(--mut);
+  margin: 10px 0 0;
+  max-width: 22em;
+}
+
+/* ---- Editions ---- */
+
+.band {
+  background: var(--surf);
+}
+
+.editions {
+  display: grid;
+  gap: 44px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .editions {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 56px;
+  }
+}
+
+/* ---- Scripts: IndoPak or Madani, shown on a tablet ---- */
+
+.script-switch {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 28px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--surf);
+  border: 1px solid var(--line2);
+}
+
+.script-switch button {
+  all: unset;
+  cursor: pointer;
+  padding: 12px 26px;
+  border-radius: 999px;
+  font: 600 1.05rem/1 var(--sans);
+  color: var(--mut);
+}
+
+.script-switch button:hover {
+  color: var(--ink);
+}
+
+.script-switch button[aria-selected="true"] {
+  background: var(--acc);
+  color: var(--on-acc);
+}
+
+.script-switch button:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+}
+
+.layouts-line {
+  margin: 22px 0 0;
+  max-width: 30em;
+}
+
+/* A sleek tablet: a thin, even dark bezel, rounded corners and a small
+   camera, the page filling the screen. Sized by --w. */
+.tablet-stage {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.tablet {
+  --w: 440px;
+  position: relative;
+  width: min(var(--w), 100%);
+  padding: 14px;
+  border-radius: 34px;
+  background: #111;
+  /* The frame's edge: a border is drawn evenly round the corners (an inset
+     shadow comes out thicker there). */
+  border: 1px solid #34332f;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 24px 48px rgba(33, 31, 27, 0.22);
+}
+
+.tablet::before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: #2b2b2b;
+}
+
+.tablet-screen {
+  border-radius: 22px;
+  overflow: hidden;
+  aspect-ratio: 600 / 860;
+  background: #111;
+}
+
+.layout-shot {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.25s ease;
+}
+
+.layout-shot.fading {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layout-shot {
+    transition: none;
+  }
+}
+
+/* ---- Features ---- */
+
+.features {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .features {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature {
+  background: var(--card);
+  border: 1px solid var(--line2);
+  border-radius: 20px;
+  padding: 26px 24px;
+}
+
+.feature h3 {
+  margin-bottom: 8px;
+}
+
+.feature p {
+  margin: 0;
+  color: var(--mut);
+}
+
+.feature .icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--surf);
+  color: var(--acc);
+  margin-bottom: 18px;
+}
+
+.feature .icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 12px;
+  color: var(--ink);
+}
+
+.langs [lang="ur"] {
+  font-family: var(--urdu);
+}
+
+.langs [lang="ar"] {
+  font-family: var(--arabic);
+}
+
+/* ---- Share and themes ---- */
+
+.split {
+  display: grid;
+  gap: 44px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+  .split.flip > :first-child {
+    order: 2;
+  }
+}
+
+.share-card {
+  width: min(440px, 100%);
+  margin: 0 auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line2);
+}
+
+.theme-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.theme-row .page-card:nth-child(2) {
+  transform: translateY(60px);
+}
+
+.checks {
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 0;
+  display: grid;
+  gap: 10px;
+}
+
+.checks li {
+  padding-left: 28px;
+  position: relative;
+}
+
+.checks li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0.55em;
+  width: 11px;
+  height: 6px;
+  border-left: 2px solid var(--acc);
+  border-bottom: 2px solid var(--acc);
+  transform: rotate(-45deg);
+}
+
+/* ---- Sessions: the home screen's cards, drawn in HTML ---- */
+
+.rows {
+  margin: 28px 0 0;
+}
+
+.rows div {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.rows dt {
+  display: inline;
+  font-weight: 600;
+}
+
+.rows dd {
+  display: inline;
+  margin: 0;
+  color: var(--mut);
+}
+
+.rows dt + dd::before {
+  content: " ";
+}
+
+.sessions-demo {
+  width: min(460px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 14px;
+}
+
+.session-card,
+.session-list {
+  background: var(--surf);
+  border: 1px solid var(--line2);
+  border-radius: 22px;
+}
+
+.session-card {
+  padding: 22px 24px;
+}
+
+.session-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 600 0.8rem/1 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+
+.bell {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* The end of the ayah, its start fading in from the right, as in the app. */
+.session-ayah {
+  width: 100%;
+  height: auto;
+  margin: 14px 0 8px;
+  object-fit: contain;
+  object-position: right;
+  -webkit-mask-image: linear-gradient(to left, transparent, #000 38%);
+  mask-image: linear-gradient(to left, transparent, #000 38%);
+}
+
+.session-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.session-foot strong {
+  font: 400 1.35rem/1.2 var(--serif);
+}
+
+.session-foot small {
+  display: block;
+  margin-top: 4px;
+  color: var(--mut);
+  font-size: 0.85rem;
+}
+
+.resume {
+  background: var(--acc);
+  color: var(--on-acc);
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px 20px;
+}
+
+.session-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  font: 400 1.15rem/1.3 var(--serif);
+}
+
+.session-list li + li {
+  border-top: 1px solid var(--line);
+}
+
+.session-list .when {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 400 0.9rem/1 var(--sans);
+  color: var(--mut);
+  white-space: nowrap;
+}
+
+.session-list .bell {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---- Principles ---- */
+
+.principles {
+  display: grid;
+  gap: 32px 40px;
+}
+
+@media (min-width: 720px) {
+  .principles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .principles {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.principle {
+  border-top: 2px solid var(--acc);
+  padding-top: 18px;
+}
+
+.principle p {
+  margin: 8px 0 0;
+  color: var(--mut);
+}
+
+/* ---- Sources: a short nod, the full list lives in the app ---- */
+
+.sources-nod {
+  max-width: 62ch;
+}
+
+.sources-nod .muted {
+  margin: 14px 0 0;
+}
+
+/* ---- Download ---- */
+
+.platforms {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.platform {
+  background: var(--card);
+  border: 1px solid var(--line2);
+  border-radius: 18px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.platform strong {
+  font: 400 1.3rem/1.2 var(--serif);
+}
+
+.platform span {
+  color: var(--mut);
+  font-size: 0.95rem;
+}
+
+.badge {
+  align-self: flex-start;
+  margin-top: 12px;
+  font: 600 0.75rem/1 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--acc);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+
+/* ---- Footer ---- */
+
+.site-footer {
+  border-top: 1px solid var(--line2);
+  padding: 44px 0 56px;
+  color: var(--mut);
+  font-size: 0.95rem;
+}
+
+.site-footer .wrap {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 720px) {
+  .site-footer .wrap {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+}
+
+.site-footer a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--acc);
+}
+
+/* ---- Privacy page ---- */
+
+.doc {
+  max-width: 44em;
+  padding: 56px 0 88px;
+}
+
+.doc h1 {
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  margin-bottom: 10px;
+}
+
+.doc h2 {
+  font-size: 1.6rem;
+  margin: 40px 0 10px;
+}
+
+.doc p,
+.doc li {
+  color: var(--ink);
+}
+
+.doc ul {
+  padding-left: 1.2em;
+}
+
+.doc li + li {
+  margin-top: 6px;
+}
+
+/* ---- Recitation: a page as it's recited, and the player, drawn in HTML ---- */
+
+.listen-demo {
+  position: relative;
+  width: min(380px, 100%);
+  margin: 0 auto;
+  padding-bottom: 34px;
+}
+
+.listen-demo .page-card {
+  width: 100%;
+}
+
+/* The ayah being heard: the other one's pictures stay hidden. */
+.listen-demo[data-ayah="2"] .ayah-3,
+.listen-demo[data-ayah="3"] .ayah-2 {
+  display: none !important;
+}
+
+.player {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  /* A little wider than the page, but within the screen's margins. */
+  width: min(400px, calc(100% + 20px), calc(100vw - 32px));
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px 8px 8px;
+  background: var(--bg);
+  border: 1px solid var(--line2);
+  border-radius: 22px;
+  box-shadow: 0 12px 32px rgba(33, 31, 27, 0.16);
+  overflow: hidden;
+}
+
+.player svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.player-play {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--acc);
+  display: grid;
+  place-items: center;
+}
+
+.player-play svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--on-acc);
+}
+
+.player-now {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-now strong {
+  display: block;
+  font: 400 1.15rem/1.2 var(--serif);
+}
+
+.player-now small {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--mut);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.player-now small svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--mut);
+}
+
+/* The line along the bottom that fills as the ayah plays. */
+.player-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 58%;
+  background: var(--acc);
+  animation: player-progress 7s linear infinite;
+}
+
+@keyframes player-progress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player-progress {
+    animation: none;
+  }
+}
