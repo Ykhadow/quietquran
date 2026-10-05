@@ -38,6 +38,10 @@ Built with Flutter for Android, iOS, Windows, macOS and Linux. Website: [quietqu
 
 The Quran text, layouts and metadata come from **QUL** (qul.tarteel.ai), a proofread source. Every source is listed file by file in **[SOURCES.md](SOURCES.md)**, with its credit and terms, and the database's `sources` table records the same list. Nothing from a source is altered.
 
+## How it was made
+
+The Quran text and page images are never generated or changed: they come from proofread sources (QUL and the King Fahd Complex) and are used exactly as published, checked against their sources by the tests and tools in this repository. The app's code was written with the help of an AI assistant (Claude), and reviewed and tested by the developer.
+
 ## Building
 
 ```bash
