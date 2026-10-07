@@ -75,18 +75,22 @@ class ReflowPage extends StatelessWidget {
     );
     final markerStyle = style.copyWith(color: colors.acc);
 
-    Widget paragraph(List<List<Word>> units, {bool center = false}) =>
-        QuranParagraph(
-          units: units,
-          typeface: typeface,
-          style: style,
-          markerStyle: markerStyle,
-          center: center,
-          wordGap: wordSpacing,
-          // The bismillah isn't the ayah 1:1 a bookmark means.
-          marked: center ? const {} : marked,
-          highlight: center ? null : highlight,
-        );
+    Widget paragraph(
+      List<List<Word>> units, {
+      bool center = false,
+      bool ayahs = true,
+    }) => QuranParagraph(
+      units: units,
+      typeface: typeface,
+      style: style,
+      markerStyle: markerStyle,
+      center: center,
+      wordGap: wordSpacing,
+      // A surah's opening bismillah isn't an ayah a bookmark or the
+      // recitation can mean.
+      marked: ayahs ? marked : const {},
+      highlight: ayahs ? highlight : null,
+    );
 
     final blocks = <Widget>[];
     final pairRule = Padding(
@@ -97,16 +101,20 @@ class ReflowPage extends StatelessWidget {
     // A unit is a group of words that must stay on one line: an ayah's last
     // word travels with its end marker.
     var units = <List<Word>>[];
-    void flush() {
+    void flush({bool center = false}) {
       if (units.isEmpty) return;
-      blocks.add(paragraph(units));
+      blocks.add(paragraph(units, center: center));
       units = [];
     }
 
     void addBismillah() => blocks.add(
-      paragraph([
-        for (final w in db.bismillah(typeface)) [w],
-      ], center: true),
+      paragraph(
+        [
+          for (final w in db.bismillah(typeface)) [w],
+        ],
+        center: true,
+        ayahs: false,
+      ),
     );
 
     for (final line in page.lines) {
@@ -134,6 +142,13 @@ class ReflowPage extends StatelessWidget {
           addBismillah();
         case LineKind.text:
           for (final w in line.words) {
+            // Al-Fatihah's first ayah is its bismillah, and every print sets
+            // it on a line of its own, centred: so does Easy read.
+            final opening = (w.surah, w.ayah) == (1, 1);
+            if (opening && units.isNotEmpty && !_opens(units.first)) flush();
+            if (!opening && units.isNotEmpty && _opens(units.first)) {
+              flush(center: true);
+            }
             if (w.isAyahEnd && units.isNotEmpty && !units.last.last.isAyahEnd) {
               units.last.add(w);
             } else {
@@ -143,7 +158,7 @@ class ReflowPage extends StatelessWidget {
             // by its meaning.
             final tr = translation;
             if (tr != null && w.isAyahEnd) {
-              flush();
+              flush(center: opening);
               final text = db.translationText(tr.id, w.surah, w.ayah);
               if (text != null) {
                 blocks.add(
@@ -165,7 +180,7 @@ class ReflowPage extends StatelessWidget {
           }
       }
     }
-    flush();
+    flush(center: units.isNotEmpty && _opens(units.first));
     // The page's own rule follows the last pair.
     if (blocks.isNotEmpty && identical(blocks.last, pairRule)) {
       blocks.removeLast();
@@ -252,6 +267,9 @@ class ReflowPage extends StatelessWidget {
     );
   }
 }
+
+/// Whether [unit] is part of Al-Fatihah's first ayah, its bismillah.
+bool _opens(List<Word> unit) => (unit.first.surah, unit.first.ayah) == (1, 1);
 
 /// Words broken into right-to-left lines that fill the available width.
 /// Every line but the last is justified; the last is right-aligned, or

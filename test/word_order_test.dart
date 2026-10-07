@@ -102,6 +102,45 @@ void main() {
     );
   }
 
+  // Al-Fatihah's first ayah is its bismillah, which every print sets on a
+  // line of its own; Easy read must too, even where the next words would
+  // fit beside it (a wide page, with and without a translation).
+  for (final typeface in QuranTypeface.values) {
+    for (final tid in [null, 'en-sahih']) {
+      testWidgets('reflow Al-Fatihah bismillah alone ${typeface.name} $tid', (
+        tester,
+      ) async {
+        ambient = TextDirection.ltr;
+        final p = db.page(typeface.script.defaultTextEdition, 1, typeface);
+        await pump(
+          tester,
+          const Size(800, 20000),
+          ReflowPage(
+            page: p,
+            db: db,
+            fontSize: 30,
+            translation: db.translation(tid),
+          ),
+        );
+        final placed = collectPlacements(
+          tester.renderObject(find.byType(ReflowPage)),
+        );
+        bool opening((Word, Rect) e) => (e.$1.surah, e.$1.ayah) == (1, 1);
+        final rows = {
+          for (final e in placed.where(opening)) e.$2.center.dy.round(),
+        };
+        expect(rows, hasLength(1), reason: 'the bismillah is one line');
+        expect(
+          placed
+              .where((e) => !opening(e))
+              .where((e) => (e.$2.center.dy - rows.first).abs() < 5),
+          isEmpty,
+          reason: 'nothing else shares its line',
+        );
+      });
+    }
+  }
+
   // Pages with known hazards (67:1-2, 4:36, 12:8, Ya-Sin, Al-Fatihah, the
   // last page) plus a spread of ordinary pages.
   const pages = [1, 2, 84, 236, 440, 562, 600, 610];
