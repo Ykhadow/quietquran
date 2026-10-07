@@ -1093,71 +1093,6 @@ section {
 
 /* ---- Download ---- */
 
-.platforms {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-}
-
-.platform {
-  background: var(--card);
-  border: 1px solid var(--line2);
-  border-radius: 18px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.platform strong {
-  font: 400 1.3rem/1.2 var(--serif);
-}
-
-.platform span {
-  color: var(--mut);
-  font-size: 0.95rem;
-}
-
-/* A platform's download button, and its second, smaller link. */
-.platform .get {
-  align-self: flex-start;
-  margin-top: 12px;
-  padding: 9px 18px;
-  border-radius: 999px;
-  background: var(--acc);
-  color: var(--bg);
-  font: 600 0.9rem/1 var(--sans);
-  text-decoration: none;
-}
-
-.platform .get:hover {
-  filter: brightness(1.08);
-}
-
-.platform .alt {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  color: var(--mut);
-}
-
-.download-notes {
-  margin-top: 18px;
-  color: var(--mut);
-  font-size: 0.9rem;
-}
-
-.badge {
-  align-self: flex-start;
-  margin-top: 12px;
-  font: 600 0.75rem/1 var(--sans);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--acc);
-  border: 1px solid currentColor;
-  border-radius: 999px;
-  padding: 6px 10px;
-}
-
 /* ---- Footer ---- */
 
 .site-footer {
@@ -1338,4 +1273,134 @@ section {
   .player-progress {
     animation: none;
   }
+}
+
+/* Downloads: a tile for each platform available now, side by side; a quiet
+   line for what's coming. */
+.get-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.get-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 26px;
+  background: var(--card);
+  border: 1px solid var(--line2);
+  border-radius: 22px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.get-row:hover,
+.get-row:focus-visible {
+  background: var(--surf);
+  border-color: var(--line);
+  transform: translateY(-2px);
+}
+
+.get-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--surf);
+}
+
+.get-icon svg,
+.get-row .arrow {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.get-icon svg {
+  width: 26px;
+  height: 26px;
+}
+
+.get-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.get-text strong {
+  font: 400 1.6rem/1.15 var(--serif);
+}
+
+.get-text span {
+  color: var(--mut);
+  font-size: 0.95rem;
+}
+
+.get-cta {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--acc);
+  font: 600 0.95rem/1 var(--sans);
+}
+
+.get-row .arrow {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.15s;
+}
+
+.get-row:hover .arrow {
+  transform: translateY(2px);
+}
+
+@media (max-width: 760px) {
+  .get-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .get-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+  }
+
+  .get-text strong {
+    font-size: 1.3rem;
+  }
+
+  .get-cta {
+    margin: 0 0 0 auto;
+    font-size: 0;
+  }
+}
+
+.get-soon {
+  margin-top: 16px;
+  color: var(--mut);
+  font-size: 0.95rem;
+}
+
+.get-soon span {
+  margin-right: 8px;
+  font: 600 0.72rem/1 var(--sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acc);
+}
+
+.download-notes {
+  max-width: 720px;
+  margin-top: 10px;
+  color: var(--mut);
+  font-size: 0.9rem;
 }
