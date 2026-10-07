@@ -291,7 +291,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get displayTooltip =>
-      'Display: Mushaf or Easy read, text size, Text or Printed';
+      'Quick settings: view, text size, translation and theme';
+
+  @override
+  String get showTranslation => 'Show translation';
+
+  @override
+  String get hideTranslation => 'Hide translation';
 
   @override
   String pageOf(int page, int total) {
@@ -714,9 +720,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get translationHint =>
       'Shown when you hold an ayah, and under each ayah in Easy read. The Mushaf page itself stays Quran only.';
-
-  @override
-  String get showTranslation => 'Show translation';
 
   @override
   String translationBy(String translator) {

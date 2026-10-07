@@ -289,7 +289,13 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get displayTooltip =>
-      'منظر: مصحف یا آسان مطالعہ، حروف کا سائز، متن یا چھپے صفحات';
+      'فوری ترتیبات: منظر، حروف کا سائز، ترجمہ اور تھیم';
+
+  @override
+  String get showTranslation => 'ترجمہ دکھائیں';
+
+  @override
+  String get hideTranslation => 'ترجمہ چھپائیں';
 
   @override
   String pageOf(int page, int total) {
@@ -711,9 +717,6 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get translationHint =>
       'کسی آیت کو دبا کر رکھنے پر، اور آسان مطالعہ میں ہر آیت کے نیچے دکھایا جاتا ہے۔ مصحف کا صفحہ صرف قرآن رہتا ہے۔';
-
-  @override
-  String get showTranslation => 'ترجمہ دکھائیں';
 
   @override
   String translationBy(String translator) {

@@ -312,6 +312,24 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   });
 
   /// Bookmarks the page (its first ayah), or clears every bookmark on it.
+  /// The translation button: shows or hides the translation under each
+  /// ayah. With none chosen yet (or none for the app's language), it turns
+  /// on the one for the app's language, or English; the Aa sheet changes
+  /// which.
+  void _toggleTranslation(Settings settings) {
+    final n = ref.read(settingsProvider.notifier);
+    final locale = context.l10n.localeName;
+    final chosen = settings.translationFor(locale);
+    if (settings.reflowTranslation && chosen != null) {
+      n.setReflowTranslation(false);
+      return;
+    }
+    if (chosen == null) {
+      n.setTranslation(locale == 'ur' ? 'ur-jalandhari' : 'en-sahih');
+    }
+    n.setReflowTranslation(true);
+  }
+
   void _toggleBookmark() {
     final library = ref.read(libraryProvider);
     final notifier = ref.read(libraryProvider.notifier);
@@ -755,6 +773,14 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                     onCommit: (n) => _commitScrub(settings.scrubber, n),
                     onDisplay: () =>
                         _withSheet(() => showDisplaySheet(context)),
+                    // Translations sit under each ayah in Easy read only.
+                    translationOn:
+                        settings.mode == ReadingMode.text &&
+                            settings.textLayout == TextLayout.reflow
+                        ? settings.reflowTranslation &&
+                              settings.translationFor(l.localeName) != null
+                        : null,
+                    onTranslation: () => _toggleTranslation(settings),
                   ),
                 ),
                 visible: _overlay || _scrubbing != null,
@@ -1181,7 +1207,14 @@ class _BottomSheet extends StatelessWidget {
     required this.onScrub,
     required this.onCommit,
     required this.onDisplay,
+    required this.translationOn,
+    required this.onTranslation,
   });
+
+  /// Whether the translation shows under each ayah, or null where it can't
+  /// (Mushaf and printed pages), which hides its button.
+  final bool? translationOn;
+  final VoidCallback onTranslation;
 
   final String surah;
   final String meta;
@@ -1204,10 +1237,11 @@ class _BottomSheet extends StatelessWidget {
       required String tooltip,
       required Widget child,
       required VoidCallback onTap,
+      bool selected = false,
     }) => Tooltip(
       message: tooltip,
       child: Material(
-        color: t.surf,
+        color: selected ? t.acc : t.surf,
         shape: const CircleBorder(),
         child: InkWell(
           customBorder: const CircleBorder(),
@@ -1246,19 +1280,28 @@ class _BottomSheet extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (translationOn case final on?) ...[
+                    Semantics(
+                      toggled: on,
+                      child: round(
+                        tooltip: on ? l.hideTranslation : l.showTranslation,
+                        onTap: onTranslation,
+                        selected: on,
+                        child: Icon(
+                          LucideIcons.languages,
+                          size: 20,
+                          color: on ? t.bg : t.ink,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
                   listen,
                   const SizedBox(width: 8),
                   round(
                     tooltip: l.displayTooltip,
                     onTap: onDisplay,
-                    child: Text(
-                      'Aa',
-                      style: TextStyle(
-                        fontFamily: AppType.serif,
-                        fontSize: 18,
-                        color: t.ink,
-                      ),
-                    ),
+                    child: Icon(LucideIcons.settings2, size: 20, color: t.ink),
                   ),
                 ],
               ),

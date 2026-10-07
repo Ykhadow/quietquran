@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mushaf15/core/settings.dart';
 import 'package:mushaf15/data/quran_db.dart';
 import 'package:mushaf15/features/home/home_screen.dart';
@@ -148,7 +149,7 @@ void main() {
         if (name == 'aa-sheet') {
           await tester.tapAt(const Offset(200, 450));
           await tester.pump(const Duration(milliseconds: 300));
-          await tester.tap(find.text('Aa'));
+          await tester.tap(find.byIcon(LucideIcons.settings2));
           await tester.pump();
           await tester.pump(const Duration(seconds: 1));
         }

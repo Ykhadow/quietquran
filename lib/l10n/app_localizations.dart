@@ -583,8 +583,20 @@ abstract class AppLocalizations {
   /// No description provided for @displayTooltip.
   ///
   /// In en, this message translates to:
-  /// **'Display: Mushaf or Easy read, text size, Text or Printed'**
+  /// **'Quick settings: view, text size, translation and theme'**
   String get displayTooltip;
+
+  /// No description provided for @showTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Show translation'**
+  String get showTranslation;
+
+  /// No description provided for @hideTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide translation'**
+  String get hideTranslation;
 
   /// No description provided for @pageOf.
   ///
@@ -1329,12 +1341,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Shown when you hold an ayah, and under each ayah in Easy read. The Mushaf page itself stays Quran only.'**
   String get translationHint;
-
-  /// No description provided for @showTranslation.
-  ///
-  /// In en, this message translates to:
-  /// **'Show translation'**
-  String get showTranslation;
 
   /// No description provided for @translationBy.
   ///

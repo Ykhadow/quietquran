@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:leak_tracker_flutter_testing/leak_tracker_flutter_testing.dart';
 import 'package:mushaf15/core/settings.dart';
 import 'package:mushaf15/data/quran_db.dart';
@@ -81,13 +82,18 @@ void main() {
         // Overlay and the Aa sheet.
         for (
           var i = 0;
-          i < 2 && find.text('Aa').hitTestable().evaluate().isEmpty;
+          i < 2 &&
+              find
+                  .byIcon(LucideIcons.settings2)
+                  .hitTestable()
+                  .evaluate()
+                  .isEmpty;
           i++
         ) {
           await tester.tapAt(const Offset(205, 450));
           await settle(tester);
         }
-        await tester.tap(find.text('Aa'));
+        await tester.tap(find.byIcon(LucideIcons.settings2));
         await settle(tester);
         await tester.tap(find.text('English'));
         await settle(tester);

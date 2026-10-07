@@ -199,7 +199,9 @@
       }
     }
   },
-  "displayTooltip": "Display: Mushaf or Easy read, text size, Text or Printed",
+  "displayTooltip": "Quick settings: view, text size, translation and theme",
+  "showTranslation": "Show translation",
+  "hideTranslation": "Hide translation",
   "pageOf": "Page {page} of {total}",
   "@pageOf": {
     "placeholders": {

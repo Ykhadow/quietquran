@@ -285,7 +285,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get displayTooltip =>
-      'العرض: صفحة المصحف أو قراءة ميسّرة، حجم الخط، نص أو مطبوع';
+      'إعدادات سريعة: العرض وحجم الخط والترجمة والمظهر';
+
+  @override
+  String get showTranslation => 'إظهار الترجمة';
+
+  @override
+  String get hideTranslation => 'إخفاء الترجمة';
 
   @override
   String pageOf(int page, int total) {
@@ -705,9 +711,6 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get translationHint =>
       'تظهر عند الضغط المطوّل على آية، وتحت كل آية في القراءة الميسّرة. صفحة المصحف تبقى للقرآن وحده.';
-
-  @override
-  String get showTranslation => 'إظهار الترجمة';
 
   @override
   String translationBy(String translator) {

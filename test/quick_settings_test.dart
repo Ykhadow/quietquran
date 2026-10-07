@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mushaf15/core/settings.dart';
 import 'package:mushaf15/data/library.dart';
 import 'package:mushaf15/data/quran_db.dart';
@@ -58,7 +59,7 @@ void main() {
     // Show the overlay, then open the Aa sheet.
     await tester.tapAt(const Offset(205, 450));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
-    await tester.tap(find.text('Aa'));
+    await tester.tap(find.byIcon(LucideIcons.settings2));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
     // Fixed waits: printed pages show an endless loading animation here.
     Future<void> tap(Finder f) async {
