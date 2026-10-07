@@ -51,10 +51,13 @@ class SettingsScreen extends ConsumerWidget {
           child: ListView(
             padding: const EdgeInsets.only(bottom: 40),
             children: [
+              // Themes first: the colours set the feel of everything below.
               Eyebrow(
-                l.language,
+                l.appearance,
                 padding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
               ),
+              const _Appearance(),
+              Eyebrow(l.language),
               pad(
                 Segmented<String>(
                   value: s.language,
@@ -285,8 +288,6 @@ class SettingsScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              Eyebrow(l.appearance),
-              const _Appearance(),
               Eyebrow(l.backup),
               const BackupRows(),
               Eyebrow(l.about),
