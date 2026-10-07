@@ -25,21 +25,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The IndoPak font may not be redistributed, so it lives in a private
-      # repository (see README, "The IndoPak font"). Its fingerprint is
-      # checked so the build uses exactly the permitted file.
-      - name: IndoPak font
-        uses: actions/checkout@v4
-        with:
-          repository: Ykhadow/quietquran-assets
-          token: ${{ secrets.ASSETS_TOKEN }}
-          path: private-assets
-      - name: Put the font in place
+      # The IndoPak font is used by permission, unmodified (see
+      # assets/fonts/IndoPakNastaleeq-LICENSE.md): build with exactly that
+      # file.
+      - name: Check the IndoPak font
         shell: bash
-        run: |
-          cp private-assets/fonts/IndoPakNastaleeq.ttf assets/fonts/IndoPakNastaleeq.ttf
-          echo "9003e8b34f81013c7a7fce35ffc07b864242a5df  assets/fonts/IndoPakNastaleeq.ttf" | sha1sum -c -
-          rm -rf private-assets
+        run: echo "9003e8b34f81013c7a7fce35ffc07b864242a5df  assets/fonts/IndoPakNastaleeq.ttf" | sha1sum -c -
 
       - uses: subosito/flutter-action@v2
         with:

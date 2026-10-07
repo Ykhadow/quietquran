@@ -1,5 +1,5 @@
 /// Tag for tests that need the IndoPak font itself (its shapes and ink).
-/// The font isn't in the public repository (see README), so GitHub's checks
-/// put a stand-in in its place and leave these out; they run wherever the
-/// real font is.
+/// The font is used by permission (assets/fonts/IndoPakNastaleeq-LICENSE.md);
+/// if it ever has to come out of the repository, a stand-in can take its
+/// place and these tests can be left out with `--exclude-tags indopak-font`.
 const indopakFont = 'indopak-font';

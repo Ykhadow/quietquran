@@ -55,16 +55,9 @@ iOS and macOS builds need a Mac.
 
 ### The IndoPak font
 
-The default IndoPak typeface is **"AlQuran IndoPak by QuranWBW"** by Ayman Siddiqui, QuranWBW ([quranwbw.com](https://quranwbw.com)), based on the Al Qalam Quran Majeed fonts. Its licence does not allow redistribution, and we use it with QuranWBW's written permission for this app only (`docs/permissions/quranwbw-font.md`). That permission doesn't extend to sharing the font file, so **it is not in this repository**.
+The default IndoPak typeface is **"AlQuran IndoPak by QuranWBW"** by Ayman Siddiqui, QuranWBW ([quranwbw.com](https://quranwbw.com)), based on the Al Qalam Quran Majeed fonts. It is included, unmodified, as `assets/fonts/IndoPakNastaleeq.ttf`, used with QuranWBW's written permission (`docs/permissions/quranwbw-font.md`).
 
-To build with it:
-
-1. Download "Indopak Nastaleeq" from QUL: [qul.tarteel.ai/resources/font/242](https://qul.tarteel.ai/resources/font/242) (a free login is needed).
-2. Save it as `assets/fonts/IndoPakNastaleeq.ttf`.
-
-Its use is subject to QuranWBW's terms: free, with no ads, nothing behind a paywall, the font unmodified, and everyone credited. A fork that uses it needs its own permission from QuranWBW.
-
-To build without it, copy any font to that path (the checks on GitHub use `assets/fonts/UthmanicHafs.ttf`). The app builds and runs, but IndoPak text won't look right.
+**It is not covered by this project's GPL licence.** Its terms are in [`assets/fonts/IndoPakNastaleeq-LICENSE.md`](assets/fonts/IndoPakNastaleeq-LICENSE.md): free, sadaqah jariyah projects only, with no ads, nothing behind a paywall and no commercial use; unmodified; everyone credited; digital use only. The permission was given to Quiet Quran, so a fork or any other project that uses the font needs its own permission from QuranWBW.
 
 ### Signing
 
@@ -73,7 +66,7 @@ Release builds are signed with the key in `android/upload-keystore.jks`, whose p
 ### Releasing
 
 1. Set `version:` in `pubspec.yaml`, commit, and push a tag: `git tag v1.2.3 && git push origin v1.2.3`.
-2. `.github/workflows/release.yml` builds Windows and Linux and puts them on a draft GitHub Release. It fetches the IndoPak font from a private repository (`Ykhadow/quietquran-assets`, read with the `ASSETS_TOKEN` secret) and checks its fingerprint.
+2. `.github/workflows/release.yml` builds Windows and Linux and puts them on a draft GitHub Release, after checking that the IndoPak font is exactly the permitted file.
 3. Build the Android APKs locally (`flutter build apk --release --split-per-abi`), name them `QuietQuran-android-arm64.apk` and `QuietQuran-android-arm32.apk`, add them and a `SHA256SUMS` file to the draft, and publish it. The website's download buttons always point at the latest release.
 
 ## Tests
@@ -83,7 +76,7 @@ flutter analyze
 flutter test
 ```
 
-Tests that need the real IndoPak font are tagged `indopak-font`; without the font, run `flutter test --exclude-tags indopak-font`. The checks on GitHub (`.github/workflows/checks.yml`) do that, on Windows, where the golden images were drawn.
+The checks on GitHub (`.github/workflows/checks.yml`) run the analyzer and every test on Windows, where the golden images were drawn. Tests that need the IndoPak font itself are tagged `indopak-font`, so they can be left out (`--exclude-tags indopak-font`) if the font is ever replaced by a stand-in.
 
 - `test/word_order_test.dart` measures right-to-left word order on rendered pages. Never judge it from a screenshot.
 - After font or layout changes, `INK_AUDIT=1 flutter test test/ink_bounds_test.dart` checks that no word's ink leaves its line.
@@ -130,4 +123,4 @@ The design system ("Night", with a Day mode) is described in `design_handoff_mus
 
 The code is licensed under the **GNU General Public License v3.0** ([LICENSE](LICENSE)). Anyone may use, study, change and share it, and anything built from it must stay open under the same licence.
 
-The licence covers this project's own code. The Quran text, fonts, translations, recitations and page images keep their own terms, listed in [SOURCES.md](SOURCES.md).
+The licence covers this project's own code. The Quran text, fonts (including the IndoPak font, see above), translations, recitations and page images keep their own terms, listed in [SOURCES.md](SOURCES.md).

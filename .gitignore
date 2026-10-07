@@ -59,9 +59,6 @@ app.*.map.json
 # Logo experiments and their working files (not published)
 /design/
 
-# The IndoPak font may not be redistributed (see README, "The IndoPak font")
-/assets/fonts/IndoPakNastaleeq.ttf
-
 # Private correspondence (kept locally, not published)
 /docs/permissions/private/
 

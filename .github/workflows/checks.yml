@@ -18,14 +18,7 @@ jobs:
           channel: stable
           cache: true
 
-      # The IndoPak font isn't in the repository (see README). A stand-in
-      # takes its place, and the tests that need the font itself are left
-      # out (tag indopak-font).
-      - name: Stand-in for the IndoPak font
-        shell: bash
-        run: cp assets/fonts/UthmanicHafs.ttf assets/fonts/IndoPakNastaleeq.ttf
-
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
-      - run: flutter test --exclude-tags indopak-font
+      - run: flutter test
