@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/settings.dart';
-import '../../core/theme.dart';
 import '../../data/image_editions.dart';
 import '../../data/quran_db.dart';
 import '../../l10n/l10n.dart';
-import '../reader/reflow_page.dart';
+import '../settings/page_download.dart';
 import 'reading_previews.dart';
 
 /// First-run flow: choose a script (with live samples), then choose whether to
@@ -22,9 +21,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pager = PageController();
   QuranScript? _script;
   ReadingMode? _mode;
-  String? _edition;
   int _step = 0;
-  static const _steps = 6;
+  static const _steps = 4;
 
   @override
   void dispose() {
@@ -41,10 +39,28 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     );
   }
 
-  void _finish() {
+  /// Starts with the script's usual edition (the 15-line Mushaf for
+  /// IndoPak); Settings has the others. Text size is set while reading.
+  Future<void> _finish() async {
+    final script = _script!;
+    final mode = _mode!;
+    final edition = mode == ReadingMode.text
+        ? script.defaultTextEdition
+        : script.defaultImageEdition;
+    // Printed pages download in full first; declining stays here, to
+    // choose Text instead.
+    if (mode == ReadingMode.pages &&
+        !await ensurePagesDownloaded(
+          context,
+          ref,
+          ImageEdition.byId(edition),
+        )) {
+      return;
+    }
+    if (!mounted) return;
     ref
         .read(settingsProvider.notifier)
-        .completeOnboarding(script: _script!, mode: _mode!, edition: _edition!);
+        .completeOnboarding(script: script, mode: mode, edition: edition);
   }
 
   @override
@@ -53,8 +69,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       0 => true, // language: following the device is a fine answer
       1 => _script != null,
       2 => _mode != null,
-      3 => _edition != null,
-      _ => true, // text size and translation always have a choice
+      _ => true, // translation always has a choice
     };
     final last = _step == _steps - 1;
     return Scaffold(
@@ -93,26 +108,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   const _LanguageStep(),
                   _ScriptStep(
                     selected: _script,
-                    onSelect: (s) => setState(() {
-                      if (s != _script) _edition = null;
-                      _script = s;
-                    }),
+                    onSelect: (s) => setState(() => _script = s),
                   ),
                   _ModeStep(
                     script: _script ?? QuranScript.indopak,
                     selected: _mode,
-                    onSelect: (m) => setState(() {
-                      if (m != _mode) _edition = null;
-                      _mode = m;
-                    }),
+                    onSelect: (m) => setState(() => _mode = m),
                   ),
-                  _EditionStep(
-                    script: _script ?? QuranScript.indopak,
-                    mode: _mode ?? ReadingMode.text,
-                    selected: _edition,
-                    onSelect: (e) => setState(() => _edition = e),
-                  ),
-                  _TextSizeStep(script: _script ?? QuranScript.indopak),
                   const _TranslationStep(),
                 ],
               ),
@@ -412,185 +414,6 @@ class _ModeStep extends StatelessWidget {
 }
 
 /// Picks the specific Mushaf: a text layout, or a set of printed pages.
-class _EditionStep extends ConsumerWidget {
-  const _EditionStep({
-    required this.script,
-    required this.mode,
-    required this.selected,
-    required this.onSelect,
-  });
-
-  final QuranScript script;
-  final ReadingMode mode;
-  final String? selected;
-  final ValueChanged<String> onSelect;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final db = ref.watch(quranDbProvider);
-    final scheme = Theme.of(context).colorScheme;
-    final l = context.l10n;
-    final options = mode == ReadingMode.text
-        ? [
-            for (final e in db.editionsFor(script))
-              (
-                e.id,
-                l.editionName(e),
-                l.editionDetailText(e.linesPerPage, e.pages),
-              ),
-          ]
-        : [
-            for (final e in ImageEdition.forScript(script))
-              (
-                e.id,
-                l.imageTitle(e),
-                l.editionDetailPages(l.imageDescription(e), e.approxTotalMb),
-              ),
-          ];
-    return _StepScaffold(
-      title: l.editionTitle,
-      subtitle: mode == ReadingMode.text
-          ? l.editionSubtitleText
-          : l.editionSubtitlePages,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Card.outlined(
-              clipBehavior: Clip.antiAlias,
-              child: RadioGroup<String>(
-                groupValue: selected,
-                onChanged: (v) => onSelect(v!),
-                child: Column(
-                  children: [
-                    for (final (id, title, detail) in options)
-                      RadioListTile<String>(
-                        value: id,
-                        title: Text(title),
-                        subtitle: Text(
-                          detail,
-                          style: TextStyle(color: scheme.onSurfaceVariant),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-            // Where to find bigger letters, for anyone who needs them.
-            if (mode == ReadingMode.text)
-              _BigTextHint(
-                script == QuranScript.indopak
-                    ? l.editionBigTextIndopak
-                    : l.editionBigTextMadani,
-              ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// A small note with a magnifier icon, pointing to larger text.
-class _BigTextHint extends StatelessWidget {
-  const _BigTextHint(this.text);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.tokens;
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(4, 14, 4, 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.zoom_in, size: 18, color: t.acc),
-          const SizedBox(width: 8),
-          Expanded(child: Text(text, style: AppType.caption(t.mut))),
-        ],
-      ),
-    );
-  }
-}
-
-/// Chooses the reading size for Reflow, with a live preview of Al-Fatihah
-/// in the chosen script. Applies at once.
-class _TextSizeStep extends ConsumerWidget {
-  const _TextSizeStep({required this.script});
-  final QuranScript script;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l = context.l10n;
-    final t = context.tokens;
-    final db = ref.watch(quranDbProvider);
-    final size = ref.watch(settingsProvider.select((s) => s.reflowFontSize));
-    final spacing = ref.watch(
-      settingsProvider.select((s) => s.reflowWordSpacing),
-    );
-    final page = db.page(
-      script.defaultTextEdition,
-      1,
-      QuranTypeface.forScript(script).first,
-    );
-    return _StepScaffold(
-      title: l.textSizeStepTitle,
-      subtitle: l.textSizeStepSubtitle,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                Text('A', style: AppType.body(t.mut)),
-                Expanded(
-                  child: Slider(
-                    value: size,
-                    min: 18,
-                    max: 64,
-                    divisions: 23,
-                    label: size.round().toString(),
-                    onChanged: ref
-                        .read(settingsProvider.notifier)
-                        .setReflowFontSize,
-                  ),
-                ),
-                Text('A', style: AppType.body(t.mut).copyWith(fontSize: 24)),
-              ],
-            ),
-            const SizedBox(height: 8),
-            // The opening of Al-Fatihah as Easy read shows it, at this size.
-            ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: t.bg,
-                  border: Border.all(color: t.line),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                // Room to see several ayahs at the chosen size: about half
-                // the screen.
-                child: SizedBox(
-                  height: (MediaQuery.sizeOf(context).height * 0.5).clamp(
-                    360.0,
-                    620.0,
-                  ),
-                  child: ReflowPage(
-                    page: page,
-                    db: db,
-                    fontSize: size,
-                    wordSpacing: spacing,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-/// Chooses a translation of the meanings (or none). Applies at once.
 class _TranslationStep extends ConsumerWidget {
   const _TranslationStep();
 

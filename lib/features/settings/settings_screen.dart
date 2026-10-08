@@ -13,6 +13,7 @@ import '../reader/reflow_page.dart';
 import '../../widgets/night.dart';
 import '../onboarding/reading_previews.dart';
 import 'backup_rows.dart';
+import 'page_download.dart';
 import 'palette_editor.dart';
 import 'sources_screen.dart';
 import '../../l10n/l10n.dart';
@@ -82,7 +83,20 @@ class SettingsScreen extends ConsumerWidget {
                           ? l.indopakTagline
                           : l.madaniTagline,
                       selected: s.script == v,
-                      onTap: () => n.setScript(v),
+                      onTap: () async {
+                        // On printed pages, the other script's set must be
+                        // downloaded too; without it, read its text pages.
+                        final toText =
+                            s.mode == ReadingMode.pages &&
+                            v != s.script &&
+                            !await ensurePagesDownloaded(
+                              context,
+                              ref,
+                              ImageEdition.byId(v.defaultImageEdition),
+                            );
+                        n.setScript(v);
+                        if (toText) n.setMode(ReadingMode.text);
+                      },
                       preview: Text(
                         _sample(db, QuranTypeface.forScript(v).first),
                         textDirection: TextDirection.rtl,
@@ -105,7 +119,18 @@ class SettingsScreen extends ConsumerWidget {
                   child: ReadingModeChoice(
                     script: s.script,
                     selected: s.mode,
-                    onSelect: n.setMode,
+                    onSelect: (m) async {
+                      // Printed pages download in full before they're shown.
+                      if (m == ReadingMode.pages &&
+                          !await ensurePagesDownloaded(
+                            context,
+                            ref,
+                            ImageEdition.byId(s.imageEdition),
+                          )) {
+                        return;
+                      }
+                      n.setMode(m);
+                    },
                     maxWidth: 440,
                   ),
                 ),
@@ -128,7 +153,15 @@ class SettingsScreen extends ConsumerWidget {
                             title: l.imageTitle(e),
                             subtitle: l.imageDescription(e),
                             selected: e.id == s.imageEdition,
-                            onTap: () => n.setImageEdition(e.id),
+                            onTap: () async {
+                              if (await ensurePagesDownloaded(
+                                context,
+                                ref,
+                                e,
+                              )) {
+                                n.setImageEdition(e.id);
+                              }
+                            },
                           ),
                       ],
               ),
@@ -549,7 +582,16 @@ class _DownloadRow extends ConsumerWidget {
             IconButton(
               tooltip: context.l10n.deleteSaved,
               icon: const Icon(LucideIcons.trash2),
-              onPressed: () => store.deleteAll(edition),
+              onPressed: () {
+                store.deleteAll(edition);
+                // Printed pages show only when saved: reading them, go
+                // back to text.
+                final s = ref.read(settingsProvider);
+                if (s.mode == ReadingMode.pages &&
+                    s.imageEdition == edition.id) {
+                  ref.read(settingsProvider.notifier).setMode(ReadingMode.text);
+                }
+              },
             ),
         ],
       ),

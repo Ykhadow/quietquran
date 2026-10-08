@@ -521,5 +521,19 @@
   "switchToNight": "Switch to Night",
   "showAll": "Show all ({count})",
   "@showAll": {"placeholders": {"count": {"type": "int"}}},
-  "showLess": "Show less"
+  "showLess": "Show less",
+  "printedDownloadTitle": "Download printed pages?",
+  "printedDownloadBody": "Printed pages are downloaded once, then work fully offline. {pages} pages, about {mb} MB. Wi-Fi is recommended.",
+  "@printedDownloadBody": {"placeholders": {"pages": {"type": "int"}, "mb": {"type": "int"}}},
+  "printedDownloadStart": "Download",
+  "printedDownloading": "Downloading printed pages",
+  "printedDownloadStopped": "Download paused",
+  "printedDownloadProgress": "{done} of {total} pages",
+  "@printedDownloadProgress": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "printedDownloadKeepOpen": "Keep the app open until it finishes. Then every page is on your device, and you can read without a connection.",
+  "printedDownloadStoppedHint": "The connection was lost. Pages already saved are kept: try again to carry on from here.",
+  "pageNotSaved": "This page isn't saved",
+  "pageNotSavedDetail": "Page {page} of this printed set isn't on this device. Download the set again to read it.",
+  "@pageNotSavedDetail": {"placeholders": {"page": {"type": "int"}}},
+  "downloadPrinted": "Download printed pages"
 }

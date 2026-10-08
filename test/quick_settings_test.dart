@@ -1,5 +1,7 @@
 // The reader's Aa sheet switches theme and translation; first-run setup ends
 // with a translation choice.
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +23,13 @@ void main() {
     ShapePrefetcher.enabled = false;
     PageSnapshots.enabled = false;
     db = QuranDb.openFile('assets/db/quran.db');
+    // Saved printed pages live in the app's folder: an empty one here.
+    final folder = Directory.systemTemp.createTempSync('quietquran_test');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('plugins.flutter.io/path_provider'),
+          (call) async => folder.path,
+        );
   });
 
   Future<ProviderContainer> start(
@@ -87,9 +96,19 @@ void main() {
     await tap(find.text('None'));
     expect(s().translationFor('en'), isNull);
 
-    // Printed pages, then back.
-    await tap(find.text('Printed'));
-    expect(s().mode, ReadingMode.pages);
+    // Printed pages must be downloaded first: it asks, and Cancel stays on
+    // the text pages.
+    await tester.tap(find.text('Printed'));
+    // Counting the saved pages reads the disk: real time, not the test's.
+    for (var i = 0; i < 10; i++) {
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 50)),
+      );
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(find.text('Download printed pages?'), findsOneWidget);
+    await tap(find.text('Cancel'));
+    expect(s().mode, ReadingMode.text);
     await tap(find.text('Easy read'));
     expect(s().mode, ReadingMode.text);
     expect(s().textLayout, TextLayout.reflow);
@@ -104,6 +123,8 @@ void main() {
     await tester.pump(const Duration(seconds: 5));
   });
 
+  // Four steps: language, script, text or printed, translation. The
+  // edition starts as the usual one and text size is set while reading.
   testWidgets('setup ends with a translation choice', (tester) async {
     final c = await start(tester, onboarded: false);
     Future<void> next() async {
@@ -132,20 +153,13 @@ void main() {
     await next();
     await pick(); // text or printed
     await next();
-    await pick(); // edition
-    await next();
-    expect(find.text('Choose a comfortable text size'), findsOneWidget);
-    final slider = find.byType(Slider);
-    await tester.drag(slider, const Offset(120, 0));
-    await tester.pumpAndSettle(const Duration(milliseconds: 100));
-    expect(c.read(settingsProvider).reflowFontSize, greaterThan(30));
-    await next();
     expect(find.text('Would you like a translation?'), findsOneWidget);
     await tester.tap(find.text('Fateh Muhammad Jalandhari'));
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
     await next(); // Start reading
     expect(c.read(settingsProvider).onboarded, isTrue);
     expect(c.read(settingsProvider).translation, 'ur-jalandhari');
+    expect(c.read(settingsProvider).textEdition, 'indopak-15-qudratullah');
   });
 
   testWidgets('wide screens: two pages, or one if the reader prefers', (

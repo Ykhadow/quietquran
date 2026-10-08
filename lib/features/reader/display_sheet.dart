@@ -4,9 +4,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/settings.dart';
 import '../../core/theme.dart';
+import '../../data/image_editions.dart';
 import '../../data/quran_db.dart';
 import '../../l10n/l10n.dart';
 import '../../widgets/night.dart';
+import '../settings/page_download.dart';
 
 /// The reader's "Aa" sheet, kept to a few quiet rows: how to read (Reflow,
 /// Mushaf page or printed page), the reflow text size, the translation, and
@@ -39,9 +41,16 @@ class _DisplaySheet extends ConsumerWidget {
         : s.textLayout == TextLayout.reflow
         ? _View.reflow
         : _View.mushaf;
-    void setView(_View v) {
+    Future<void> setView(_View v) async {
       if (v == _View.printed) {
-        n.setMode(ReadingMode.pages);
+        // Printed pages download in full before they're shown.
+        if (await ensurePagesDownloaded(
+          context,
+          ref,
+          ImageEdition.byId(s.imageEdition),
+        )) {
+          n.setMode(ReadingMode.pages);
+        }
         return;
       }
       n.setMode(ReadingMode.text);

@@ -51,8 +51,7 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
 
   Future<void> _refreshCounts() async {
     for (final e in ImageEdition.all) {
-      final d = await _dir(e);
-      final n = d.listSync().where((f) => !f.path.endsWith('.tmp')).length;
+      final n = await savedCount(e);
       _update(
         e.id,
         (st) => DownloadStatus(cached: n, running: st.running, error: st.error),
@@ -60,11 +59,30 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
     }
   }
 
+  /// How many of [e]'s pages are saved on this device, counted afresh.
+  Future<int> savedCount(ImageEdition e) async =>
+      (await _dir(e)).listSync().where((f) => !f.path.endsWith('.tmp')).length;
+
+  /// A saved page's bytes (SVG text or image), or null if it isn't saved.
+  /// Printed pages are read only once the whole set is downloaded, so the
+  /// reader never depends on a connection.
+  Future<Uint8List?> saved(ImageEdition e, int page) async {
+    final file = await _file(e, page);
+    if (!file.existsSync()) return null;
+    final bytes = await file.readAsBytes();
+    // Unpacking a vector page takes a moment: off the UI thread, so it
+    // can't stutter a swipe.
+    return e.format == ImageFormat.svg
+        ? Isolate.run(() => Uint8List.fromList(gzip.decode(bytes)))
+        : bytes;
+  }
+
   void _update(String id, DownloadStatus Function(DownloadStatus) f) {
     state = {...state, id: f(state[id] ?? const DownloadStatus())};
   }
 
-  /// Raw page bytes (SVG text or image), downloading and caching if needed.
+  /// Raw page bytes (SVG text or image), downloading and saving if needed.
+  /// Used by [downloadAll]; the reader reads [saved] pages only.
   Future<Uint8List> load(ImageEdition e, int page) {
     final key = '${e.id}/$page';
     // Block body: returning the removed future here would make whenComplete
@@ -119,7 +137,7 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
       for (var n = 1; n <= pageCount(e); n++) {
         if (!(await _file(e, n)).existsSync()) missing.add(n);
       }
-      // A few parallel workers: fast, but polite to the hosts.
+      // A few parallel workers: fast, but polite to the host.
       var next = 0;
       Future<void> worker() async {
         while (next < missing.length && !_cancelled.contains(e.id)) {
@@ -127,7 +145,7 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
         }
       }
 
-      await Future.wait(List.generate(4, (_) => worker()));
+      await Future.wait(List.generate(6, (_) => worker()));
       _update(e.id, (st) => DownloadStatus(cached: st.cached));
     } catch (err) {
       _update(e.id, (st) => DownloadStatus(cached: st.cached, error: '$err'));

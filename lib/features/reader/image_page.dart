@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -11,9 +10,10 @@ import '../../core/theme.dart';
 import '../../data/image_editions.dart';
 import '../../data/page_images.dart';
 import '../../l10n/l10n.dart';
+import '../settings/page_download.dart';
 
-/// A printed Mushaf page (Madani SVG or IndoPak scan), fetched on first view
-/// and cached on disk afterwards.
+/// A printed Mushaf page, read from the device: printed sets are downloaded
+/// in full before they're shown (see ensurePagesDownloaded).
 class ImagePage extends ConsumerStatefulWidget {
   const ImagePage({
     super.key,
@@ -34,7 +34,7 @@ class ImagePage extends ConsumerStatefulWidget {
 }
 
 class _ImagePageState extends ConsumerState<ImagePage> {
-  late Future<Uint8List> _bytes;
+  late Future<Uint8List?> _bytes;
 
   @override
   void initState() {
@@ -51,31 +51,44 @@ class _ImagePageState extends ConsumerState<ImagePage> {
   void _load() {
     _bytes = ref
         .read(pageImageStoreProvider.notifier)
-        .load(widget.edition, widget.page);
+        .saved(widget.edition, widget.page);
+  }
+
+  /// A page went missing (deleted, or an interrupted download): fetch the
+  /// rest of the set, then show it.
+  Future<void> _redownload() async {
+    if (await ensurePagesDownloaded(context, ref, widget.edition) && mounted) {
+      setState(_load);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = context.tokens;
     final dark = colors.dark;
-    return FutureBuilder<Uint8List>(
+    return FutureBuilder<Uint8List?>(
       future: _bytes,
       builder: (context, snap) {
+        final l = context.l10n;
         if (snap.hasError) {
-          final offline =
-              snap.error is SocketException ||
-              '${snap.error}'.contains('SocketException') ||
-              '${snap.error}'.contains('Failed host lookup');
-          final l = context.l10n;
           return _PageState(
-            icon: offline ? LucideIcons.wifiOff : LucideIcons.triangleAlert,
-            title: offline ? l.offline : l.pageFailed,
-            detail: offline
-                ? l.offlineDetail(widget.page)
-                : l.failedDetail(widget.page),
+            icon: LucideIcons.triangleAlert,
+            title: l.pageFailed,
+            detail: l.failedDetail(widget.page),
             action: FilledButton(
               onPressed: () => setState(_load),
               child: Text(l.tryAgain),
+            ),
+          );
+        }
+        if (snap.connectionState == ConnectionState.done && !snap.hasData) {
+          return _PageState(
+            icon: LucideIcons.download,
+            title: l.pageNotSaved,
+            detail: l.pageNotSavedDetail(widget.page),
+            action: FilledButton(
+              onPressed: _redownload,
+              child: Text(l.downloadPrinted),
             ),
           );
         }
