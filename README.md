@@ -1,4 +1,16 @@
-# Quiet Quran
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/brand/mark_night.svg">
+    <img src="assets/brand/mark_day.svg" alt="Quiet Quran logo" width="96">
+  </picture>
+</p>
+
+<h1 align="center">Quiet Quran</h1>
+
+<p align="center">
+  <a href="https://quietquran.com">quietquran.com</a> ·
+  <a href="https://github.com/Ykhadow/quietquran/releases/latest">Download</a>
+</p>
 
 A calm Quran reader for IndoPak and Madani readers. Each Mushaf is shown in its own line layout, page for page, as it is printed. It is free, with no ads and no tracking, and it always will be: it is made as sadaqah jariyah.
 
