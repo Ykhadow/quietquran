@@ -687,7 +687,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageSystemHint => 'Follow the phone\'s language';
 
   @override
-  String get colourVividness => 'Vividness';
+  String get colourBrightness => 'Brightness';
 
   @override
   String get hexCode => 'Hex code';

@@ -684,7 +684,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get languageSystemHint => 'فون کی زبان کے مطابق';
 
   @override
-  String get colourVividness => 'رنگ کی شدت';
+  String get colourBrightness => 'روشنی';
 
   @override
   String get hexCode => 'ہیکس کوڈ';

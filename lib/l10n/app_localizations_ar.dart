@@ -678,7 +678,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get languageSystemHint => 'حسب لغة الهاتف';
 
   @override
-  String get colourVividness => 'شدة اللون';
+  String get colourBrightness => 'السطوع';
 
   @override
   String get hexCode => 'رمز Hex';

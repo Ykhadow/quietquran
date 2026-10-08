@@ -1282,11 +1282,11 @@ abstract class AppLocalizations {
   /// **'Follow the phone\'s language'**
   String get languageSystemHint;
 
-  /// No description provided for @colourVividness.
+  /// No description provided for @colourBrightness.
   ///
   /// In en, this message translates to:
-  /// **'Vividness'**
-  String get colourVividness;
+  /// **'Brightness'**
+  String get colourBrightness;
 
   /// No description provided for @hexCode.
   ///

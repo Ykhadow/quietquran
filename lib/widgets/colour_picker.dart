@@ -1,13 +1,15 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/theme.dart';
 import '../l10n/l10n.dart';
 
-/// Pick a colour with one touch on a rainbow: hue from left to right, light
-/// at the top to dark at the bottom, and a grey column for whites, greys and
-/// blacks. A vividness slider reaches the soft, muted tones reading palettes
-/// often want, and a hex field takes an exact colour.
+/// Pick a colour with one tap on a honeycomb: white at the centre, each hue
+/// in its direction around it, growing more vivid towards the edge. A
+/// brightness slider darkens the whole comb (for night palettes), a row of
+/// greys runs from white to black, and a hex field takes an exact colour.
 class ColourPicker extends StatefulWidget {
   const ColourPicker({super.key, required this.color, required this.onChanged});
 
@@ -19,15 +21,7 @@ class ColourPicker extends StatefulWidget {
 }
 
 class _ColourPickerState extends State<ColourPicker> {
-  late HSLColor _hsl = HSLColor.fromColor(widget.color);
-
-  /// Vividness of the rainbow (HSL saturation). Near-grey colours (such as
-  /// dark reading backgrounds) start it colourful, so it shows a rainbow.
-  late double _vivid = _startVivid(_hsl.saturation);
-
-  static double _startVivid(double s) => s < 0.25 ? 0.7 : _clampVivid(s);
-
-  static double _clampVivid(double v) => v.clamp(0.05, 1.0);
+  late HSVColor _hsv = HSVColor.fromColor(widget.color);
 
   final _hex = TextEditingController();
   final _hexFocus = FocusNode();
@@ -38,7 +32,7 @@ class _ColourPickerState extends State<ColourPicker> {
     _hex.text = _hexOf(widget.color);
     _hexFocus.addListener(() {
       // Leaving the field shows the colour actually in use.
-      if (!_hexFocus.hasFocus) _hex.text = _hexOf(_hsl.toColor());
+      if (!_hexFocus.hasFocus) _hex.text = _hexOf(_hsv.toColor());
     });
   }
 
@@ -53,26 +47,30 @@ class _ColourPickerState extends State<ColourPicker> {
   void didUpdateWidget(ColourPicker old) {
     super.didUpdateWidget(old);
     // Follow outside changes (a swatch was tapped, another colour chosen for
-    // editing), keeping our hue for greys, where hue is undefined.
-    if (widget.color.toARGB32() != _hsl.toColor().toARGB32()) {
+    // editing).
+    if (widget.color.toARGB32() != _hsv.toColor().toARGB32()) {
       _adopt(widget.color);
     }
   }
 
   void _adopt(Color c) {
-    final next = HSLColor.fromColor(c);
-    _hsl = next.saturation == 0 ? next.withHue(_hsl.hue) : next;
-    _vivid = _startVivid(next.saturation);
+    final next = HSVColor.fromColor(c);
+    // Greys have no hue: keep ours, so the comb's mark doesn't jump.
+    _hsv = next.saturation == 0 ? next.withHue(_hsv.hue) : next;
     if (!_hexFocus.hasFocus) _hex.text = _hexOf(c);
   }
 
-  void _set(HSLColor v) {
+  void _set(HSVColor v) {
     setState(() {
-      _hsl = v;
+      _hsv = v;
       if (!_hexFocus.hasFocus) _hex.text = _hexOf(v.toColor());
     });
     widget.onChanged(v.toColor());
   }
+
+  /// The comb's brightness: the colour's own, except near black, where a
+  /// black comb would show nothing to pick from.
+  double get _combValue => _hsv.value < 0.15 ? 1 : _hsv.value;
 
   static String _hexOf(Color c) =>
       (c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase();
@@ -81,115 +79,51 @@ class _ColourPickerState extends State<ColourPicker> {
   Widget build(BuildContext context) {
     final t = context.tokens;
     final l = context.l10n;
-    const height = 200.0;
-    const greyWidth = 30.0;
-    const gap = 8.0;
-    final grey = _hsl.saturation == 0;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         LayoutBuilder(
           builder: (context, box) {
-            final rainbowWidth = box.maxWidth - greyWidth - gap;
-            double lightness(double dy) => 1 - (dy / height).clamp(0.0, 1.0);
-            void pickRainbow(Offset p) => _set(
-              HSLColor.fromAHSL(
-                1,
-                (p.dx / rainbowWidth).clamp(0.0, 1.0) * 359.9,
-                _vivid,
-                lightness(p.dy),
-              ),
-            );
-            void pickGrey(Offset p) =>
-                _set(_hsl.withSaturation(0).withLightness(lightness(p.dy)));
+            final comb = _Comb.fit(box.maxWidth);
+            final selected = comb.nearest(_hsv);
+            void pick(Offset p) {
+              final cell = comb.cellAt(p);
+              if (cell != null) {
+                _set(comb.colourOf(cell, _combValue));
+              }
+            }
 
-            final knobX = grey
-                ? rainbowWidth + gap + greyWidth / 2
-                : _hsl.hue / 360 * rainbowWidth;
-            final knobY = (1 - _hsl.lightness) * height;
-
-            return SizedBox(
-              height: height,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    width: rainbowWidth,
-                    height: height,
-                    child: GestureDetector(
-                      onPanDown: (d) => pickRainbow(d.localPosition),
-                      onPanUpdate: (d) => pickRainbow(d.localPosition),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(14),
-                        // Its own layer: dragging the knob doesn't
-                        // repaint the gradients.
-                        child: RepaintBoundary(
-                          child: CustomPaint(painter: _Rainbow(_vivid)),
-                        ),
-                      ),
-                    ),
+            return Center(
+              child: GestureDetector(
+                onTapDown: (d) => pick(d.localPosition),
+                onPanUpdate: (d) => pick(d.localPosition),
+                child: CustomPaint(
+                  size: comb.size,
+                  painter: _CombPainter(
+                    comb,
+                    _combValue,
+                    selected,
+                    ring: t.ink,
                   ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    width: greyWidth,
-                    height: height,
-                    child: GestureDetector(
-                      onPanDown: (d) => pickGrey(d.localPosition),
-                      onPanUpdate: (d) => pickGrey(d.localPosition),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: t.line),
-                          gradient: const LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [Colors.white, Colors.black],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: knobX - 12,
-                    top: knobY - 12,
-                    child: IgnorePointer(
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _hsl.toColor(),
-                          border: Border.all(color: Colors.white, width: 3),
-                          boxShadow: const [
-                            BoxShadow(color: Color(0x66000000), blurRadius: 4),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           },
         ),
         const SizedBox(height: 14),
+        _Greys(
+          value: _hsv.saturation == 0 ? _hsv.value : null,
+          ring: t.ink,
+          onPick: (v) => _set(_hsv.withSaturation(0).withValue(v)),
+        ),
+        const SizedBox(height: 8),
         Row(
           children: [
-            Text(l.colourVividness, style: AppType.caption(t.mut)),
+            Text(l.colourBrightness, style: AppType.caption(t.mut)),
             Expanded(
               child: Slider(
-                value: _vivid,
-                min: 0.05,
-                max: 1,
-                onChanged: (v) {
-                  _vivid = v;
-                  // Soften or brighten the colour in use, unless it's a grey.
-                  _set(grey ? _hsl : _hsl.withSaturation(v));
-                },
+                value: _hsv.value,
+                onChanged: (v) => _set(_hsv.withValue(v)),
               ),
             ),
           ],
@@ -233,43 +167,215 @@ class _ColourPickerState extends State<ColourPicker> {
   }
 }
 
-/// Hues across at the chosen vividness, fading to white at the top and black
-/// at the bottom (HSL lightness 1 to 0), matching how picks are read.
-class _Rainbow extends CustomPainter {
-  _Rainbow(this.saturation);
+/// The honeycomb's geometry: hexagonal cells (pointy-topped) in a large
+/// hexagon [rings] cells from the centre, at axial coordinates (q, r).
+class _Comb {
+  _Comb(this.cell);
 
-  final double saturation;
+  /// Cells out from the centre: 6 makes 127 colours.
+  static const rings = 6;
+
+  /// Largest cell radius, so the comb stays a comfortable size on tablets.
+  static const _maxCell = 17.0;
+
+  /// The largest comb that fits [width].
+  factory _Comb.fit(double width) =>
+      _Comb(math.min(_maxCell, width / (math.sqrt(3) * (2 * rings + 1))));
+
+  /// Distance from a cell's centre to its corners.
+  final double cell;
+
+  double get _w => math.sqrt(3) * cell;
+
+  Size get size => Size(_w * (2 * rings + 1), cell * (3 * rings + 2));
+
+  Offset get _centre => size.center(Offset.zero);
+
+  late final cells = [
+    for (var q = -rings; q <= rings; q++)
+      for (
+        var r = math.max(-rings, -q - rings);
+        r <= math.min(rings, -q + rings);
+        r++
+      )
+        (q, r),
+  ];
+
+  Offset centreOf((int, int) c) =>
+      _centre + Offset(_w * (c.$1 + c.$2 / 2), cell * 1.5 * c.$2);
+
+  static int ringOf((int, int) c) =>
+      (c.$1.abs() + c.$2.abs() + (c.$1 + c.$2).abs()) ~/ 2;
+
+  /// A cell's colour at brightness [value]: hue from its direction,
+  /// vividness from its distance from the centre.
+  HSVColor colourOf((int, int) c, double value) {
+    final o = centreOf(c) - _centre;
+    final ring = ringOf(c);
+    final hue = ring == 0
+        ? 0.0
+        : (math.atan2(o.dy, o.dx) * 180 / math.pi + 360 + 90) % 360;
+    return HSVColor.fromAHSV(1, hue, ring / rings, value);
+  }
+
+  /// The cell under [p], or null outside the comb.
+  (int, int)? cellAt(Offset p) {
+    final o = p - _centre;
+    final r = o.dy / (cell * 1.5);
+    final q = o.dx / _w - r / 2;
+    // Round in cube coordinates (q, r, s) to the nearest whole cell.
+    final s = -q - r;
+    var rq = q.round(), rr = r.round();
+    final rs = s.round();
+    final dq = (rq - q).abs(), dr = (rr - r).abs(), ds = (rs - s).abs();
+    if (dq > dr && dq > ds) {
+      rq = -rr - rs;
+    } else if (dr > ds) {
+      rr = -rq - rs;
+    }
+    final c = (rq, rr);
+    return ringOf(c) <= rings ? c : null;
+  }
+
+  /// The cell closest in colour to [c] (ignoring brightness), to mark the
+  /// colour in use; none for greys picked from the grey row.
+  (int, int)? nearest(HSVColor c) {
+    (int, int)? best;
+    var bestD = double.infinity;
+    for (final cell in cells) {
+      final k = colourOf(cell, 1);
+      final dh = ((k.hue - c.hue + 540) % 360 - 180).abs() / 180;
+      final d =
+          math.pow(k.saturation - c.saturation, 2) +
+          math.pow(dh * math.min(k.saturation, c.saturation), 2);
+      if (d < bestD) {
+        bestD = d.toDouble();
+        best = cell;
+      }
+    }
+    return best;
+  }
+}
+
+/// Draws the comb's cells at a brightness, ringing the selected one.
+class _CombPainter extends CustomPainter {
+  _CombPainter(this.comb, this.value, this.selected, {required this.ring});
+
+  final _Comb comb;
+  final double value;
+  final (int, int)? selected;
+  final Color ring;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    canvas.drawRect(
-      rect,
-      Paint()
-        ..shader = LinearGradient(
-          colors: [
-            for (var h = 0; h <= 360; h += 30)
-              HSLColor.fromAHSL(1, h % 360 * 1.0, saturation, 0.5).toColor(),
-          ],
-        ).createShader(rect),
-    );
-    canvas.drawRect(
-      rect,
-      Paint()
-        ..shader = const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            Color(0x00FFFFFF),
-            Color(0x00000000),
-            Colors.black,
-          ],
-          stops: [0, 0.5, 0.5, 1],
-        ).createShader(rect),
-    );
+    for (final c in comb.cells) {
+      canvas.drawPath(
+        _hexagon(comb.centreOf(c), comb.cell - 0.8),
+        Paint()..color = comb.colourOf(c, value).toColor(),
+      );
+    }
+    if (selected case final s?) {
+      canvas.drawPath(
+        _hexagon(comb.centreOf(s), comb.cell + 1),
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5
+          ..color = ring,
+      );
+    }
   }
 
   @override
-  bool shouldRepaint(_Rainbow old) => old.saturation != saturation;
+  bool shouldRepaint(_CombPainter old) =>
+      old.value != value ||
+      old.selected != selected ||
+      old.comb.cell != comb.cell ||
+      old.ring != ring;
+}
+
+/// A pointy-topped hexagon around [c].
+Path _hexagon(Offset c, double radius) {
+  final path = Path();
+  for (var i = 0; i < 6; i++) {
+    final a = math.pi / 180 * (60 * i - 90);
+    final p = c + Offset(math.cos(a), math.sin(a)) * radius;
+    i == 0 ? path.moveTo(p.dx, p.dy) : path.lineTo(p.dx, p.dy);
+  }
+  return path..close();
+}
+
+/// A row of greys from white to black. [value] marks the grey in use, if
+/// the colour is one.
+class _Greys extends StatelessWidget {
+  const _Greys({required this.value, required this.ring, required this.onPick});
+
+  final double? value;
+  final Color ring;
+  final ValueChanged<double> onPick;
+
+  static const _steps = 11;
+
+  @override
+  Widget build(BuildContext context) {
+    final v = value;
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 4,
+      children: [
+        for (var i = 0; i < _steps; i++)
+          () {
+            final grey = 1 - i / (_steps - 1);
+            final on = v != null && (v - grey).abs() < 0.05;
+            return Semantics(
+              button: true,
+              selected: on,
+              child: GestureDetector(
+                onTap: () => onPick(grey),
+                child: CustomPaint(
+                  size: const Size(26, 28),
+                  painter: _GreyCell(
+                    HSVColor.fromAHSV(1, 0, 0, grey).toColor(),
+                    on ? ring : null,
+                  ),
+                ),
+              ),
+            );
+          }(),
+      ],
+    );
+  }
+}
+
+class _GreyCell extends CustomPainter {
+  _GreyCell(this.color, this.ring);
+
+  final Color color;
+  final Color? ring;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = size.center(Offset.zero);
+    final r = size.height / 2 - 2;
+    canvas.drawPath(_hexagon(c, r), Paint()..color = color);
+    // A faint edge, so white shows on a light card.
+    canvas.drawPath(
+      _hexagon(c, r),
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 0.6
+        ..color = const Color(0x33000000),
+    );
+    if (ring case final k?) {
+      canvas.drawPath(
+        _hexagon(c, r + 1.5),
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = k,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_GreyCell old) => old.color != color || old.ring != ring;
 }
