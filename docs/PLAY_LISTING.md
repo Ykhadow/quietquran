@@ -42,7 +42,7 @@ YOUR READINGS, KEPT
 • Your place is kept by ayah, so changing Mushaf or reading style never loses it
 
 COMFORTABLE TO READ
-• Day, Night, Sepia, Green and High contrast themes, or your own colours
+• Day, Night, Classic, Sepia, Green and High contrast themes, or your own colours
 • Text size and word spacing to suit your eyes
 • Share an ayah as a beautiful image or as text
 • In English, Urdu and Arabic

@@ -874,6 +874,12 @@ abstract class AppLocalizations {
   /// **'Day'**
   String get paletteDay;
 
+  /// No description provided for @paletteClassic.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic'**
+  String get paletteClassic;
+
   /// No description provided for @paletteSepia.
   ///
   /// In en, this message translates to:

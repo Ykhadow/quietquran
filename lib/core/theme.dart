@@ -40,6 +40,16 @@ class Palette {
     ink: Color(0xFF211F1B),
     acc: Color(0xFFA9532F),
   );
+
+  /// White paper, near-black text, and the deep red printed Mushafs use for
+  /// ayah markers and headings.
+  static const classic = Palette(
+    id: 'classic',
+    name: 'Classic',
+    bg: Color(0xFFFFFFFF),
+    ink: Color(0xFF1F1F1F),
+    acc: Color(0xFF9B1C1C),
+  );
   static const sepia = Palette(
     id: 'sepia',
     name: 'Sepia',
@@ -62,7 +72,7 @@ class Palette {
     acc: Color(0xFFFFC266),
   );
 
-  static const presets = [night, day, sepia, green, highContrast];
+  static const presets = [night, day, classic, sepia, green, highContrast];
 
   static Palette? preset(String id) =>
       presets.where((p) => p.id == id).firstOrNull;

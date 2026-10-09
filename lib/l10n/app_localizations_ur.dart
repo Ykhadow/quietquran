@@ -458,6 +458,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get paletteDay => 'دن';
 
   @override
+  String get paletteClassic => 'کلاسیک';
+
+  @override
   String get paletteSepia => 'سیپیا';
 
   @override

@@ -454,6 +454,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paletteDay => 'نهار';
 
   @override
+  String get paletteClassic => 'كلاسيكي';
+
+  @override
   String get paletteSepia => 'بنّي';
 
   @override

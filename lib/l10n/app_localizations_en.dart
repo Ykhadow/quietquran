@@ -460,6 +460,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paletteDay => 'Day';
 
   @override
+  String get paletteClassic => 'Classic';
+
+  @override
   String get paletteSepia => 'Sepia';
 
   @override

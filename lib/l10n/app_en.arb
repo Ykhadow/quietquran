@@ -343,6 +343,7 @@
   "languageHint": "The app's language.",
   "paletteNight": "Night",
   "paletteDay": "Day",
+  "paletteClassic": "Classic",
   "paletteSepia": "Sepia",
   "paletteGreen": "Green",
   "paletteContrast": "High contrast",

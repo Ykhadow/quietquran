@@ -74,7 +74,7 @@ Each platform needs a place to get the app. The store links aren't available yet
 - A **scrubber** to move quickly through the Mushaf by page, surah or juz.
 
 ### Look and comfort
-- **Themes:** Night, Day, Sepia, Green and High contrast, following the device's light or dark mode if wanted.
+- **Themes:** Night, Day, Classic, Sepia, Green and High contrast, following the device's light or dark mode if wanted.
 - **Custom colours**, with a live preview and a readability check.
 - Printed pages can **follow the theme** (e.g. dimmed at night) or keep their original look.
 - **Adjustable text size**, chosen during setup and changeable anytime.

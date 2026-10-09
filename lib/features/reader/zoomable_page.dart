@@ -52,8 +52,16 @@ class _ZoomablePageState extends State<ZoomablePage> {
 
   void _reset() => _transform.value = Matrix4.identity();
 
+  /// Below this a page counts as unzoomed, and a pinch that ends below it
+  /// springs back. A barely-zoomed page (a stray second finger, a palm) looks
+  /// normal but would otherwise keep page turns off until something reset
+  /// it.
+  static const _zoomedFrom = 1.15;
+
+  double get _scale => _transform.value.getMaxScaleOnAxis();
+
   void _onTransform() {
-    final zoomed = _transform.value.getMaxScaleOnAxis() > 1.01;
+    final zoomed = _scale >= _zoomedFrom;
     if (zoomed == _zoomed) return;
     setState(() => _zoomed = zoomed);
     widget.onZoomChanged?.call(zoomed);
@@ -62,9 +70,14 @@ class _ZoomablePageState extends State<ZoomablePage> {
   @override
   Widget build(BuildContext context) => InteractiveViewer(
     transformationController: _transform,
+    // A page never shrinks below its own size.
+    minScale: 1,
     maxScale: 4,
     // Unzoomed, a one-finger drag belongs to the page turn.
     panEnabled: _zoomed,
+    onInteractionEnd: (_) {
+      if (_scale < _zoomedFrom) _reset();
+    },
     child: widget.builder(context, _zoomed),
   );
 }

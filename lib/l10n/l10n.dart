@@ -59,6 +59,7 @@ extension L10nNames on AppLocalizations {
   String paletteName(Palette p) => switch (p.id) {
     'night' => paletteNight,
     'day' => paletteDay,
+    'classic' => paletteClassic,
     'sepia' => paletteSepia,
     'green' => paletteGreen,
     'contrast' => paletteContrast,
