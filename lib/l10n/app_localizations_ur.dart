@@ -34,7 +34,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get scriptSubtitle =>
-      'وہ مصحف منتخب کریں جس سے آپ نے پڑھنا سیکھا۔ اگلے مرحلے میں آپ اس کا مخصوص نسخہ چن سکیں گے۔';
+      'وہ مصحف منتخب کریں جس سے آپ نے پڑھنا سیکھا۔ دوسرے نسخے ترتیبات میں ہیں۔';
 
   @override
   String get indopakTitle => 'انڈو پاک (نستعلیق)';
@@ -105,10 +105,6 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get modePagesPoint3 => 'زوم کے لیے دو انگلیوں سے پھیلائیں';
-
-  @override
-  String get modePagesFootnote =>
-      'صفحات پڑھتے وقت ڈاؤن لوڈ ہوتے ہیں، یا آف لائن استعمال کے لیے پورا نسخہ ترتیبات میں محفوظ کر لیں۔';
 
   @override
   String get editionTitle => 'آپ کس مصحف سے پڑھتے ہیں؟';
@@ -963,4 +959,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String printedDownloadingBar(int done, int total) {
     return 'چھپے صفحات محفوظ ہو رہے ہیں: $total میں سے $done';
   }
+
+  @override
+  String printedSavingNotice(String done, String total) {
+    return 'چھپے صفحات محفوظ ہو رہے ہیں: $total میں سے $done';
+  }
+
+  @override
+  String get printedSavedNotice =>
+      'چھپے صفحات آف لائن پڑھنے کے لیے محفوظ ہو گئے';
 }

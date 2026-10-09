@@ -383,10 +383,6 @@ class _ModeStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
-    final t = Theme.of(context).textTheme;
-    // Printed pages download as they're read: worth knowing when choosing.
-    final footnote = selected == ReadingMode.pages ? l.modePagesFootnote : null;
     return _StepScaffold(
       title: l.modeTitle,
       subtitle: l.modeSubtitle(l.scriptLabel(script)),
@@ -400,14 +396,6 @@ class _ModeStep extends StatelessWidget {
               selected: selected,
               onSelect: onSelect,
             ),
-            const SizedBox(height: 16),
-            if (footnote != null) ...[
-              const SizedBox(height: 6),
-              Text(
-                footnote,
-                style: t.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-              ),
-            ],
           ],
         ),
       ],
@@ -415,7 +403,7 @@ class _ModeStep extends StatelessWidget {
   }
 }
 
-/// Picks the specific Mushaf: a text layout, or a set of printed pages.
+/// The last step: a translation to show, or none.
 class _TranslationStep extends ConsumerWidget {
   const _TranslationStep();
 

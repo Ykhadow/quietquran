@@ -34,7 +34,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get scriptSubtitle =>
-      'اختر نوع المصحف الذي تعلّمت منه. بعد ذلك يمكنك اختيار الطبعة بالتحديد.';
+      'اختر نوع المصحف الذي تعلّمت منه. الطبعات الأخرى في الإعدادات.';
 
   @override
   String get indopakTitle => 'الهندي الباكستاني (نستعليق)';
@@ -103,10 +103,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get modePagesPoint3 => 'قرّب بإصبعين للتكبير';
-
-  @override
-  String get modePagesFootnote =>
-      'تُنزَّل الصفحات أثناء القراءة، أو احفظ طبعة كاملة للقراءة دون اتصال من الإعدادات.';
 
   @override
   String get editionTitle => 'من أي مصحف تقرأ؟';
@@ -956,4 +952,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String printedDownloadingBar(int done, int total) {
     return 'جارٍ حفظ الصفحات المطبوعة: $done من $total';
   }
+
+  @override
+  String printedSavingNotice(String done, String total) {
+    return 'جارٍ حفظ الصفحات المطبوعة: $done من $total';
+  }
+
+  @override
+  String get printedSavedNotice => 'حُفظت الصفحات المطبوعة للقراءة دون اتصال';
 }

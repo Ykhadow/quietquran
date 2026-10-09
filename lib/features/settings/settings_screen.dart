@@ -566,7 +566,7 @@ class _DownloadRow extends ConsumerWidget {
             IconButton(
               tooltip: context.l10n.downloadAll,
               icon: const Icon(LucideIcons.download),
-              onPressed: () => store.downloadAll(edition),
+              onPressed: () => savePrinted(context, ref, edition),
             ),
           if (status.cached > 0 && !status.running)
             IconButton(

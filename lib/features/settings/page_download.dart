@@ -39,5 +39,18 @@ Future<void> askToSavePrinted(
       ],
     ),
   );
-  if (all ?? false) store.downloadAll(edition);
+  if ((all ?? false) && context.mounted) savePrinted(context, ref, edition);
+}
+
+/// Saves the rest of [edition] in the background, with its progress in a
+/// notification.
+void savePrinted(BuildContext context, WidgetRef ref, ImageEdition edition) {
+  final l = context.l10n;
+  ref
+      .read(pageImageStoreProvider.notifier)
+      .downloadAll(
+        edition,
+        saving: l.printedSavingNotice('{numFinished}', '{numTotal}'),
+        saved: l.printedSavedNotice,
+      );
 }

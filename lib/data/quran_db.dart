@@ -350,13 +350,17 @@ class QuranDb {
       _juzNames.putIfAbsent((juz, typeface, words), () {
         // Juz boundaries are ayahs, so any edition's list gives the same ayah.
         final start = juzStarts(typeface.script.defaultTextEdition)[juz - 1];
-        final range = _wordRange(start.surah, start.ayah);
+        // The first juz is known by Al-Baqarah's opening, "Alif Lam Mim"
+        // (2:1, a single word), not by Al-Fatihah's bismillah.
+        final range = juz == 1
+            ? _wordRange(2, 1)
+            : _wordRange(start.surah, start.ayah);
         if (range == null) return '';
         return _db
             .select(
               'SELECT ${typeface.column} AS text FROM words '
               'WHERE id BETWEEN ? AND ? AND is_end = 0 ORDER BY id LIMIT ?',
-              [range.$1, range.$2, words],
+              [range.$1, range.$2, juz == 1 ? 1 : words],
             )
             .map((r) => r['text'] as String)
             .join(' ');

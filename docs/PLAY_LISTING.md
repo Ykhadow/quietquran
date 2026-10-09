@@ -96,7 +96,7 @@ Website: quietquran.com
 - Use: "Plays Quran recitation chosen by the user, ayah by ayah, so it continues with the screen off or while using other apps. It starts only when the user presses play and shows a notification with playback controls on the lock screen."
 - If a video is asked for: a short screen recording of starting a recitation and the notification controls appearing.
 
-**Notifications permission:** used for reading reminders set by the user and for the recitation player's controls.
+**Notifications permission:** used for reading reminders set by the user, for the recitation player's controls, and for the progress of saving printed pages for offline reading.
 
 ## Closed test
 

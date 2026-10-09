@@ -8,7 +8,7 @@
   "startReading": "Start reading",
   "changeLater": "You can change this any time in Settings.",
   "scriptTitle": "Which script do you read?",
-  "scriptSubtitle": "Choose the style of Mushaf you learned from. Next you can pick the exact printed edition.",
+  "scriptSubtitle": "Choose the style of Mushaf you learned from. The other editions are in Settings.",
   "indopakTitle": "IndoPak (Nastaliq)",
   "indopakTagline": "Common in Pakistan, India, Bangladesh and South Africa",
   "madaniTitle": "Madani (Uthmani)",
@@ -37,7 +37,6 @@
   "modePagesPoint1": "Looks exactly like the Mushaf you are used to",
   "modePagesPoint2": "Keeps the visual page memory that hifz depends on",
   "modePagesPoint3": "Pinch to zoom",
-  "modePagesFootnote": "Pages download as you read, or save a whole edition for offline use in Settings.",
   "editionTitle": "Which Mushaf do you read from?",
   "editionSubtitleText": "Pick the edition you learned from. Every line and page break follows that print.",
   "editionSubtitlePages": "Pick the printed edition you know best.",
@@ -528,5 +527,8 @@
   "printedDownloadAll": "Download all",
   "printedLoadAsRead": "Load as I read",
   "printedDownloadingBar": "Saving printed pages: {done} of {total}",
-  "@printedDownloadingBar": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}}
+  "@printedDownloadingBar": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "printedSavingNotice": "Saving printed pages: {done} of {total}",
+  "@printedSavingNotice": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
+  "printedSavedNotice": "Printed pages saved for offline reading"
 }

@@ -34,7 +34,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scriptSubtitle =>
-      'Choose the style of Mushaf you learned from. Next you can pick the exact printed edition.';
+      'Choose the style of Mushaf you learned from. The other editions are in Settings.';
 
   @override
   String get indopakTitle => 'IndoPak (Nastaliq)';
@@ -107,10 +107,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get modePagesPoint3 => 'Pinch to zoom';
-
-  @override
-  String get modePagesFootnote =>
-      'Pages download as you read, or save a whole edition for offline use in Settings.';
 
   @override
   String get editionTitle => 'Which Mushaf do you read from?';
@@ -965,4 +961,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String printedDownloadingBar(int done, int total) {
     return 'Saving printed pages: $done of $total';
   }
+
+  @override
+  String printedSavingNotice(String done, String total) {
+    return 'Saving printed pages: $done of $total';
+  }
+
+  @override
+  String get printedSavedNotice => 'Printed pages saved for offline reading';
 }

@@ -1,3 +1,4 @@
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,11 +23,12 @@ Future<void> main() async {
   // 100 MB is a lot for a 2 GB phone.
   PaintingBinding.instance.imageCache.maximumSizeBytes = 48 << 20;
   WidgetsBinding.instance.addObserver(_MemoryPressure());
-  final (prefs, db, _, _) = await (
+  final (prefs, db, _, _, _) = await (
     SharedPreferences.getInstance(),
     QuranDb.open(),
     ReminderService.init(),
     _initAudio(),
+    _initDownloads(),
   ).wait;
   runApp(
     ProviderScope(
@@ -37,6 +39,16 @@ Future<void> main() async {
       child: const MushafApp(),
     ),
   );
+}
+
+/// Saving a whole printed set runs in the system's background downloader:
+/// six pages at a time, polite to the host and quick on a phone. Starting
+/// it picks up sets still saving from before the app last closed.
+Future<void> _initDownloads() async {
+  await FileDownloader().configure(
+    globalConfig: (Config.holdingQueue, (6, null, null)),
+  );
+  await FileDownloader().start();
 }
 
 /// Recitation keeps playing with the screen off, with controls in the

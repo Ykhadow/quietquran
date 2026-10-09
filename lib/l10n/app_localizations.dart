@@ -151,7 +151,7 @@ abstract class AppLocalizations {
   /// No description provided for @scriptSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Choose the style of Mushaf you learned from. Next you can pick the exact printed edition.'**
+  /// **'Choose the style of Mushaf you learned from. The other editions are in Settings.'**
   String get scriptSubtitle;
 
   /// No description provided for @indopakTitle.
@@ -279,12 +279,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pinch to zoom'**
   String get modePagesPoint3;
-
-  /// No description provided for @modePagesFootnote.
-  ///
-  /// In en, this message translates to:
-  /// **'Pages download as you read, or save a whole edition for offline use in Settings.'**
-  String get modePagesFootnote;
 
   /// No description provided for @editionTitle.
   ///
@@ -1773,6 +1767,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saving printed pages: {done} of {total}'**
   String printedDownloadingBar(int done, int total);
+
+  /// No description provided for @printedSavingNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving printed pages: {done} of {total}'**
+  String printedSavingNotice(String done, String total);
+
+  /// No description provided for @printedSavedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Printed pages saved for offline reading'**
+  String get printedSavedNotice;
 }
 
 class _AppLocalizationsDelegate

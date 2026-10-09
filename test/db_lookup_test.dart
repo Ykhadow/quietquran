@@ -48,11 +48,16 @@ void main() {
     for (final t in QuranTypeface.values) {
       for (var juz = 1; juz <= 30; juz++) {
         final start = db.juzStarts(t.script.defaultTextEdition)[juz - 1];
+        // Juz 1 is known by "Alif Lam Mim" (2:1, one word); the others by
+        // their opening two words.
+        final (surah, ayah, count) = juz == 1
+            ? (2, 1, 1)
+            : (start.surah, start.ayah, 2);
         final expected = raw
             .select(
               'SELECT ${t.column} AS text FROM words WHERE surah = ? AND ayah = ? '
-              'AND is_end = 0 ORDER BY id LIMIT 2',
-              [start.surah, start.ayah],
+              'AND is_end = 0 ORDER BY id LIMIT ?',
+              [surah, ayah, count],
             )
             .map((r) => r['text'] as String)
             .join(' ');

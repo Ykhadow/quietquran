@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:background_downloader/background_downloader.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-import '../core/settings.dart';
 import 'image_editions.dart';
 import 'quran_db.dart';
 
@@ -19,30 +19,45 @@ class DownloadStatus {
   final String? error;
 }
 
-/// Fetches page images on demand and caches them on disk; can also download
-/// a whole set for offline use. State maps image edition id -> status.
+/// Fetches page images on demand and caches them on disk; can also save a
+/// whole set for offline use. Whole sets go through the system's background
+/// downloader (Android's WorkManager, iOS's URLSession): they carry on with
+/// the app in the background or closed, retry through lost connections,
+/// and show their progress in a notification. State maps image edition
+/// id -> status.
 class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
   final _client = http.Client();
   final _inFlight = <String, Future<Uint8List>>{};
-  final _cancelled = <String>{};
   Directory? _root;
+  StreamSubscription<TaskUpdate>? _updates;
+  final _recounts = <String, Timer>{};
 
   QuranDb get _db => ref.read(quranDbProvider);
-
-  /// Retries of saves stopped by a lost connection, by set.
-  final _retries = <String, Timer>{};
 
   @override
   Map<String, DownloadStatus> build() {
     ref.onDispose(() {
       _client.close();
-      for (final t in _retries.values) {
+      _updates?.cancel();
+      for (final t in _recounts.values) {
         t.cancel();
       }
     });
-    _refreshCounts().then((_) => _resume());
+    if (backgroundDownloads) {
+      _updates = FileDownloader().updates.listen(_onUpdate);
+    }
+    _refreshCounts().then((_) => _refreshRunning());
     return {for (final e in ImageEdition.all) e.id: const DownloadStatus()};
   }
+
+  /// Off in tests, which have no platform downloader.
+  static var backgroundDownloads = true;
+
+  /// The background downloader's group for a set's pages.
+  static String _group(ImageEdition e) => 'pages-${e.id}';
+
+  ImageEdition? _editionOf(Task task) =>
+      ImageEdition.all.where((e) => _group(e) == task.group).firstOrNull;
 
   int pageCount(ImageEdition e) => _db.edition(e.layout).pages;
 
@@ -84,6 +99,51 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
     return e.format == ImageFormat.svg
         ? Isolate.run(() => Uint8List.fromList(gzip.decode(bytes)))
         : bytes;
+  }
+
+  /// Which sets are still saving (possibly from before the app last
+  /// closed).
+  Future<void> _refreshRunning() async {
+    if (!backgroundDownloads) return;
+    for (final e in ImageEdition.all) {
+      final left = await FileDownloader().allTasks(group: _group(e));
+      _update(
+        e.id,
+        (st) => DownloadStatus(cached: st.cached, running: left.isNotEmpty),
+      );
+    }
+  }
+
+  /// A page of a set finished (or failed): recount that set shortly after,
+  /// rather than for every one of hundreds of pages.
+  void _onUpdate(TaskUpdate u) {
+    if (u is! TaskStatusUpdate || !u.status.isFinalState) return;
+    final e = _editionOf(u.task);
+    if (e == null) return;
+    if (u.status == TaskStatus.failed || u.status == TaskStatus.notFound) {
+      _update(
+        e.id,
+        (st) => DownloadStatus(
+          cached: st.cached,
+          running: st.running,
+          error: '${u.exception?.description ?? u.status}',
+        ),
+      );
+    }
+    _recounts[e.id]?.cancel();
+    _recounts[e.id] = Timer(const Duration(milliseconds: 400), () async {
+      _recounts.remove(e.id);
+      final n = await savedCount(e);
+      final left = await FileDownloader().allTasks(group: _group(e));
+      _update(
+        e.id,
+        (st) => DownloadStatus(
+          cached: n,
+          running: left.isNotEmpty,
+          error: left.isEmpty && n < pageCount(e) ? st.error : null,
+        ),
+      );
+    });
   }
 
   void _update(String id, DownloadStatus Function(DownloadStatus) f) {
@@ -137,65 +197,62 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
     return res.bodyBytes;
   }
 
-  /// Sets the reader asked to save keep saving until complete: through a
-  /// lost connection, and across restarts (Android may close the app while
-  /// it's in the background).
-  String _savingKey(String id) => 'saving:$id';
-
-  void _resume() {
-    try {
-      final prefs = ref.read(prefsProvider);
-      for (final e in ImageEdition.all) {
-        if (prefs.getBool(_savingKey(e.id)) ?? false) downloadAll(e);
-      }
-    } on Object {
-      // No saved preferences yet (as in some tests): nothing to resume.
+  /// Saves every page of [e] not yet saved, in the background, with
+  /// [saving] (where {numFinished} and {numTotal} count the pages) and
+  /// [saved] as the notification's text. Raster sets only: vector pages are
+  /// stored compressed, which the downloader doesn't do.
+  Future<void> downloadAll(
+    ImageEdition e, {
+    required String saving,
+    required String saved,
+  }) async {
+    if (!backgroundDownloads ||
+        e.format != ImageFormat.raster ||
+        (state[e.id]?.running ?? false)) {
+      return;
     }
-  }
-
-  Future<void> downloadAll(ImageEdition e) async {
-    if (state[e.id]?.running ?? false) return;
-    _cancelled.remove(e.id);
-    _retries.remove(e.id)?.cancel();
-    final prefs = ref.read(prefsProvider);
-    await prefs.setBool(_savingKey(e.id), true);
+    final missing = <int>[];
+    for (var n = 1; n <= pageCount(e); n++) {
+      if (!(await _file(e, n)).existsSync()) missing.add(n);
+    }
+    if (missing.isEmpty) return;
+    // The progress notification needs permission on Android 13 and later.
+    await FileDownloader().permissions.request(PermissionType.notifications);
+    FileDownloader().configureNotificationForGroup(
+      _group(e),
+      running: TaskNotification(saving, ''),
+      complete: TaskNotification(saved, ''),
+      progressBar: true,
+      groupNotificationId: _group(e),
+    );
     _update(e.id, (st) => DownloadStatus(cached: st.cached, running: true));
-    try {
-      final missing = <int>[];
-      for (var n = 1; n <= pageCount(e); n++) {
-        if (!(await _file(e, n)).existsSync()) missing.add(n);
-      }
-      // A few parallel workers: fast, but polite to the host.
-      var next = 0;
-      Future<void> worker() async {
-        while (next < missing.length && !_cancelled.contains(e.id)) {
-          await load(e, missing[next++]);
-        }
-      }
-
-      await Future.wait(List.generate(6, (_) => worker()));
-      if (!_cancelled.contains(e.id)) await prefs.remove(_savingKey(e.id));
-      _update(e.id, (st) => DownloadStatus(cached: st.cached));
-    } catch (err) {
-      _update(e.id, (st) => DownloadStatus(cached: st.cached, error: '$err'));
-      // Most often the connection: try again shortly, from where it stopped.
-      _retries[e.id] = Timer(const Duration(seconds: 30), () {
-        _retries.remove(e.id);
-        if (prefs.getBool(_savingKey(e.id)) ?? false) downloadAll(e);
-      });
-    }
+    final dir = await _dir(e);
+    final root = (await getApplicationSupportDirectory()).path;
+    await FileDownloader().enqueueAll([
+      for (final n in missing)
+        DownloadTask(
+          taskId: '${e.id}-$n',
+          url: e.url(n, path: e.usesPathTable ? _db.imagePath(e.id, n) : null),
+          baseDirectory: BaseDirectory.applicationSupport,
+          directory: p.relative(dir.path, from: root),
+          filename: '$n.${e.fileExtension}',
+          group: _group(e),
+          updates: Updates.status,
+          retries: 5,
+        ),
+    ]);
   }
 
-  /// Stops saving [e] (Pause in Settings): no retries, no resuming.
-  void cancel(ImageEdition e) {
-    _cancelled.add(e.id);
-    _retries.remove(e.id)?.cancel();
-    ref.read(prefsProvider).remove(_savingKey(e.id));
+  /// Stops saving [e] (Pause in Settings); pages already saved are kept.
+  Future<void> cancel(ImageEdition e) async {
+    if (backgroundDownloads) {
+      await FileDownloader().cancelAll(group: _group(e));
+    }
     _update(e.id, (st) => DownloadStatus(cached: st.cached));
   }
 
   Future<void> deleteAll(ImageEdition e) async {
-    cancel(e);
+    await cancel(e);
     final d = await _dir(e);
     if (d.existsSync()) await d.delete(recursive: true);
     _update(e.id, (_) => const DownloadStatus());
