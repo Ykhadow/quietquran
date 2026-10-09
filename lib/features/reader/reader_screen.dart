@@ -11,6 +11,7 @@ import '../../core/settings.dart';
 import '../../core/theme.dart';
 import '../../data/image_editions.dart';
 import '../../data/models.dart';
+import '../../data/page_images.dart';
 import '../../data/library.dart';
 import '../../data/quran_db.dart';
 import '../../data/reminders.dart';
@@ -678,6 +679,15 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           backgroundColor: t.bg,
           body: Stack(
             children: [
+              // Saving the printed set in the background: a quiet line at
+              // the top while it runs.
+              if (settings.mode == ReadingMode.pages)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: _SavingBar(ImageEdition.byId(settings.imageEdition)),
+                ),
               Positioned.fill(
                 child: SafeArea(
                   child: GestureDetector(
@@ -1400,6 +1410,34 @@ class _ScrubPreview extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A thin progress line while a printed set saves in the background (see
+/// askToSavePrinted); nothing otherwise.
+class _SavingBar extends ConsumerWidget {
+  const _SavingBar(this.edition);
+
+  final ImageEdition edition;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final status = ref.watch(
+      pageImageStoreProvider.select((m) => m[edition.id]),
+    );
+    if (status == null || !status.running) return const SizedBox.shrink();
+    final total = ref.read(pageImageStoreProvider.notifier).pageCount(edition);
+    return SafeArea(
+      bottom: false,
+      child: Semantics(
+        label: context.l10n.printedDownloadingBar(status.cached, total),
+        child: LinearProgressIndicator(
+          value: status.cached / total,
+          minHeight: 2,
+          backgroundColor: Colors.transparent,
         ),
       ),
     );

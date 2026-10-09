@@ -96,8 +96,8 @@ void main() {
     await tap(find.text('None'));
     expect(s().translationFor('en'), isNull);
 
-    // Printed pages must be downloaded first: it asks, and Cancel stays on
-    // the text pages.
+    // Printed pages open at once, asking whether to save the whole set
+    // (in the background) or load pages as they're read.
     await tester.tap(find.text('Printed'));
     // Counting the saved pages reads the disk: real time, not the test's.
     for (var i = 0; i < 10; i++) {
@@ -106,9 +106,13 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 50));
     }
-    expect(find.text('Download printed pages?'), findsOneWidget);
-    await tap(find.text('Cancel'));
-    expect(s().mode, ReadingMode.text);
+    expect(s().mode, ReadingMode.pages);
+    expect(
+      find.text('Save printed pages for offline reading?'),
+      findsOneWidget,
+    );
+    await tap(find.text('Load as I read'));
+    expect(s().mode, ReadingMode.pages);
     await tap(find.text('Easy read'));
     expect(s().mode, ReadingMode.text);
     expect(s().textLayout, TextLayout.reflow);

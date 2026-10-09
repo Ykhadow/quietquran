@@ -945,43 +945,22 @@ class AppLocalizationsUr extends AppLocalizations {
   String get showLess => 'کم دکھائیں';
 
   @override
-  String get printedDownloadTitle => 'چھپے صفحات ڈاؤن لوڈ کریں؟';
+  String get printedDownloadTitle =>
+      'آف لائن پڑھنے کے لیے چھپے صفحات محفوظ کریں؟';
 
   @override
   String printedDownloadBody(int pages, int mb) {
-    return 'چھپے صفحات ایک بار ڈاؤن لوڈ ہوتے ہیں، پھر مکمل طور پر بغیر انٹرنیٹ کے چلتے ہیں۔ $pages صفحات، تقریباً $mb MB۔ وائی فائی بہتر ہے۔';
+    return '$pages صفحات، تقریباً $mb MB۔ ابھی سب ڈاؤن لوڈ کریں، پڑھتے ہوئے پس منظر میں، یا ہر صفحہ پڑھتے وقت لوڈ ہونے دیں (اس کے لیے انٹرنیٹ چاہیے)۔';
   }
 
   @override
-  String get printedDownloadStart => 'ڈاؤن لوڈ کریں';
+  String get printedDownloadAll => 'سب ڈاؤن لوڈ کریں';
 
   @override
-  String get printedDownloading => 'چھپے صفحات ڈاؤن لوڈ ہو رہے ہیں';
+  String get printedLoadAsRead => 'پڑھتے ہوئے لوڈ کریں';
 
   @override
-  String get printedDownloadStopped => 'ڈاؤن لوڈ رک گیا';
-
-  @override
-  String printedDownloadProgress(int done, int total) {
-    return '$total میں سے $done صفحات';
+  String printedDownloadingBar(int done, int total) {
+    return 'چھپے صفحات محفوظ ہو رہے ہیں: $total میں سے $done';
   }
-
-  @override
-  String get printedDownloadKeepOpen =>
-      'مکمل ہونے تک ایپ کھلی رکھیں۔ پھر ہر صفحہ آپ کے آلے پر ہوگا اور آپ بغیر انٹرنیٹ کے پڑھ سکیں گے۔';
-
-  @override
-  String get printedDownloadStoppedHint =>
-      'کنکشن ٹوٹ گیا۔ محفوظ ہو چکے صفحات برقرار ہیں: یہیں سے جاری رکھنے کے لیے دوبارہ کوشش کریں۔';
-
-  @override
-  String get pageNotSaved => 'یہ صفحہ محفوظ نہیں';
-
-  @override
-  String pageNotSavedDetail(int page) {
-    return 'اس چھپے نسخے کا صفحہ $page اس آلے پر موجود نہیں۔ اسے پڑھنے کے لیے نسخہ دوبارہ ڈاؤن لوڈ کریں۔';
-  }
-
-  @override
-  String get downloadPrinted => 'چھپے صفحات ڈاؤن لوڈ کریں';
 }

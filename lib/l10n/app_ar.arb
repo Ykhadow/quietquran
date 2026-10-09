@@ -275,15 +275,9 @@
   "switchToNight": "الوضع الليلي",
   "showAll": "عرض الكل ({count})",
   "showLess": "عرض أقل",
-  "printedDownloadTitle": "تنزيل الصفحات المطبوعة؟",
-  "printedDownloadBody": "تُنزَّل الصفحات المطبوعة مرة واحدة، ثم تعمل دون اتصال تمامًا. {pages} صفحة، نحو {mb} ميغابايت. يُفضَّل استخدام Wi-Fi.",
-  "printedDownloadStart": "تنزيل",
-  "printedDownloading": "جارٍ تنزيل الصفحات المطبوعة",
-  "printedDownloadStopped": "توقف التنزيل",
-  "printedDownloadProgress": "{done} من {total} صفحة",
-  "printedDownloadKeepOpen": "أبقِ التطبيق مفتوحًا حتى ينتهي. بعدها تكون كل الصفحات على جهازك، وتقرأ دون اتصال.",
-  "printedDownloadStoppedHint": "انقطع الاتصال. تبقى الصفحات المحفوظة: حاول مرة أخرى لتكمل من حيث توقفت.",
-  "pageNotSaved": "هذه الصفحة غير محفوظة",
-  "pageNotSavedDetail": "الصفحة {page} من هذه الطبعة ليست على هذا الجهاز. نزّل الطبعة مرة أخرى لقراءتها.",
-  "downloadPrinted": "تنزيل الصفحات المطبوعة"
+  "printedDownloadTitle": "حفظ الصفحات المطبوعة للقراءة دون اتصال؟",
+  "printedDownloadBody": "{pages} صفحة، نحو {mb} ميغابايت. نزّلها كلها الآن في الخلفية أثناء قراءتك، أو دع كل صفحة تُحمَّل حين تقرؤها (يحتاج ذلك اتصالًا).",
+  "printedDownloadAll": "تنزيل الكل",
+  "printedLoadAsRead": "تحميل أثناء القراءة",
+  "printedDownloadingBar": "جارٍ حفظ الصفحات المطبوعة: {done} من {total}"
 }

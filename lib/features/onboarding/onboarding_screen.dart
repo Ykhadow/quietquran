@@ -41,23 +41,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   /// Starts with the script's usual edition (the 15-line Mushaf for
   /// IndoPak); Settings has the others. Text size is set while reading.
-  Future<void> _finish() async {
+  void _finish() {
     final script = _script!;
     final mode = _mode!;
     final edition = mode == ReadingMode.text
         ? script.defaultTextEdition
         : script.defaultImageEdition;
-    // Printed pages download in full first; declining stays here, to
-    // choose Text instead.
-    if (mode == ReadingMode.pages &&
-        !await ensurePagesDownloaded(
-          context,
-          ref,
-          ImageEdition.byId(edition),
-        )) {
-      return;
-    }
-    if (!mounted) return;
     ref
         .read(settingsProvider.notifier)
         .completeOnboarding(script: script, mode: mode, edition: edition);
@@ -113,7 +102,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   _ModeStep(
                     script: _script ?? QuranScript.indopak,
                     selected: _mode,
-                    onSelect: (m) => setState(() => _mode = m),
+                    onSelect: (m) {
+                      setState(() => _mode = m);
+                      // Printed: save the whole set now, or load as read.
+                      if (m == ReadingMode.pages) {
+                        askToSavePrinted(
+                          context,
+                          ref,
+                          ImageEdition.byId(
+                            (_script ?? QuranScript.indopak)
+                                .defaultImageEdition,
+                          ),
+                        );
+                      }
+                    },
                   ),
                   const _TranslationStep(),
                 ],

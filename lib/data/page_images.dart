@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../core/settings.dart';
 import 'image_editions.dart';
 import 'quran_db.dart';
 
@@ -28,10 +29,18 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
 
   QuranDb get _db => ref.read(quranDbProvider);
 
+  /// Retries of saves stopped by a lost connection, by set.
+  final _retries = <String, Timer>{};
+
   @override
   Map<String, DownloadStatus> build() {
-    ref.onDispose(_client.close);
-    _refreshCounts();
+    ref.onDispose(() {
+      _client.close();
+      for (final t in _retries.values) {
+        t.cancel();
+      }
+    });
+    _refreshCounts().then((_) => _resume());
     return {for (final e in ImageEdition.all) e.id: const DownloadStatus()};
   }
 
@@ -128,9 +137,28 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
     return res.bodyBytes;
   }
 
+  /// Sets the reader asked to save keep saving until complete: through a
+  /// lost connection, and across restarts (Android may close the app while
+  /// it's in the background).
+  String _savingKey(String id) => 'saving:$id';
+
+  void _resume() {
+    try {
+      final prefs = ref.read(prefsProvider);
+      for (final e in ImageEdition.all) {
+        if (prefs.getBool(_savingKey(e.id)) ?? false) downloadAll(e);
+      }
+    } on Object {
+      // No saved preferences yet (as in some tests): nothing to resume.
+    }
+  }
+
   Future<void> downloadAll(ImageEdition e) async {
     if (state[e.id]?.running ?? false) return;
     _cancelled.remove(e.id);
+    _retries.remove(e.id)?.cancel();
+    final prefs = ref.read(prefsProvider);
+    await prefs.setBool(_savingKey(e.id), true);
     _update(e.id, (st) => DownloadStatus(cached: st.cached, running: true));
     try {
       final missing = <int>[];
@@ -146,14 +174,23 @@ class PageImageStore extends Notifier<Map<String, DownloadStatus>> {
       }
 
       await Future.wait(List.generate(6, (_) => worker()));
+      if (!_cancelled.contains(e.id)) await prefs.remove(_savingKey(e.id));
       _update(e.id, (st) => DownloadStatus(cached: st.cached));
     } catch (err) {
       _update(e.id, (st) => DownloadStatus(cached: st.cached, error: '$err'));
+      // Most often the connection: try again shortly, from where it stopped.
+      _retries[e.id] = Timer(const Duration(seconds: 30), () {
+        _retries.remove(e.id);
+        if (prefs.getBool(_savingKey(e.id)) ?? false) downloadAll(e);
+      });
     }
   }
 
+  /// Stops saving [e] (Pause in Settings): no retries, no resuming.
   void cancel(ImageEdition e) {
     _cancelled.add(e.id);
+    _retries.remove(e.id)?.cancel();
+    ref.read(prefsProvider).remove(_savingKey(e.id));
     _update(e.id, (st) => DownloadStatus(cached: st.cached));
   }
 

@@ -41,16 +41,10 @@ class _DisplaySheet extends ConsumerWidget {
         : s.textLayout == TextLayout.reflow
         ? _View.reflow
         : _View.mushaf;
-    Future<void> setView(_View v) async {
+    void setView(_View v) {
       if (v == _View.printed) {
-        // Printed pages download in full before they're shown.
-        if (await ensurePagesDownloaded(
-          context,
-          ref,
-          ImageEdition.byId(s.imageEdition),
-        )) {
-          n.setMode(ReadingMode.pages);
-        }
+        n.setMode(ReadingMode.pages);
+        askToSavePrinted(context, ref, ImageEdition.byId(s.imageEdition));
         return;
       }
       n.setMode(ReadingMode.text);

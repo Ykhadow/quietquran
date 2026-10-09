@@ -939,43 +939,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get showLess => 'عرض أقل';
 
   @override
-  String get printedDownloadTitle => 'تنزيل الصفحات المطبوعة؟';
+  String get printedDownloadTitle => 'حفظ الصفحات المطبوعة للقراءة دون اتصال؟';
 
   @override
   String printedDownloadBody(int pages, int mb) {
-    return 'تُنزَّل الصفحات المطبوعة مرة واحدة، ثم تعمل دون اتصال تمامًا. $pages صفحة، نحو $mb ميغابايت. يُفضَّل استخدام Wi-Fi.';
+    return '$pages صفحة، نحو $mb ميغابايت. نزّلها كلها الآن في الخلفية أثناء قراءتك، أو دع كل صفحة تُحمَّل حين تقرؤها (يحتاج ذلك اتصالًا).';
   }
 
   @override
-  String get printedDownloadStart => 'تنزيل';
+  String get printedDownloadAll => 'تنزيل الكل';
 
   @override
-  String get printedDownloading => 'جارٍ تنزيل الصفحات المطبوعة';
+  String get printedLoadAsRead => 'تحميل أثناء القراءة';
 
   @override
-  String get printedDownloadStopped => 'توقف التنزيل';
-
-  @override
-  String printedDownloadProgress(int done, int total) {
-    return '$done من $total صفحة';
+  String printedDownloadingBar(int done, int total) {
+    return 'جارٍ حفظ الصفحات المطبوعة: $done من $total';
   }
-
-  @override
-  String get printedDownloadKeepOpen =>
-      'أبقِ التطبيق مفتوحًا حتى ينتهي. بعدها تكون كل الصفحات على جهازك، وتقرأ دون اتصال.';
-
-  @override
-  String get printedDownloadStoppedHint =>
-      'انقطع الاتصال. تبقى الصفحات المحفوظة: حاول مرة أخرى لتكمل من حيث توقفت.';
-
-  @override
-  String get pageNotSaved => 'هذه الصفحة غير محفوظة';
-
-  @override
-  String pageNotSavedDetail(int page) {
-    return 'الصفحة $page من هذه الطبعة ليست على هذا الجهاز. نزّل الطبعة مرة أخرى لقراءتها.';
-  }
-
-  @override
-  String get downloadPrinted => 'تنزيل الصفحات المطبوعة';
 }

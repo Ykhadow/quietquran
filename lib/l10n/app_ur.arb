@@ -275,15 +275,9 @@
   "switchToNight": "رات کے رنگ",
   "showAll": "سب دکھائیں ({count})",
   "showLess": "کم دکھائیں",
-  "printedDownloadTitle": "چھپے صفحات ڈاؤن لوڈ کریں؟",
-  "printedDownloadBody": "چھپے صفحات ایک بار ڈاؤن لوڈ ہوتے ہیں، پھر مکمل طور پر بغیر انٹرنیٹ کے چلتے ہیں۔ {pages} صفحات، تقریباً {mb} MB۔ وائی فائی بہتر ہے۔",
-  "printedDownloadStart": "ڈاؤن لوڈ کریں",
-  "printedDownloading": "چھپے صفحات ڈاؤن لوڈ ہو رہے ہیں",
-  "printedDownloadStopped": "ڈاؤن لوڈ رک گیا",
-  "printedDownloadProgress": "{total} میں سے {done} صفحات",
-  "printedDownloadKeepOpen": "مکمل ہونے تک ایپ کھلی رکھیں۔ پھر ہر صفحہ آپ کے آلے پر ہوگا اور آپ بغیر انٹرنیٹ کے پڑھ سکیں گے۔",
-  "printedDownloadStoppedHint": "کنکشن ٹوٹ گیا۔ محفوظ ہو چکے صفحات برقرار ہیں: یہیں سے جاری رکھنے کے لیے دوبارہ کوشش کریں۔",
-  "pageNotSaved": "یہ صفحہ محفوظ نہیں",
-  "pageNotSavedDetail": "اس چھپے نسخے کا صفحہ {page} اس آلے پر موجود نہیں۔ اسے پڑھنے کے لیے نسخہ دوبارہ ڈاؤن لوڈ کریں۔",
-  "downloadPrinted": "چھپے صفحات ڈاؤن لوڈ کریں"
+  "printedDownloadTitle": "آف لائن پڑھنے کے لیے چھپے صفحات محفوظ کریں؟",
+  "printedDownloadBody": "{pages} صفحات، تقریباً {mb} MB۔ ابھی سب ڈاؤن لوڈ کریں، پڑھتے ہوئے پس منظر میں، یا ہر صفحہ پڑھتے وقت لوڈ ہونے دیں (اس کے لیے انٹرنیٹ چاہیے)۔",
+  "printedDownloadAll": "سب ڈاؤن لوڈ کریں",
+  "printedLoadAsRead": "پڑھتے ہوئے لوڈ کریں",
+  "printedDownloadingBar": "چھپے صفحات محفوظ ہو رہے ہیں: {total} میں سے {done}"
 }

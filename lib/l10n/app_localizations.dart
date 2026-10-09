@@ -1747,68 +1747,32 @@ abstract class AppLocalizations {
   /// No description provided for @printedDownloadTitle.
   ///
   /// In en, this message translates to:
-  /// **'Download printed pages?'**
+  /// **'Save printed pages for offline reading?'**
   String get printedDownloadTitle;
 
   /// No description provided for @printedDownloadBody.
   ///
   /// In en, this message translates to:
-  /// **'Printed pages are downloaded once, then work fully offline. {pages} pages, about {mb} MB. Wi-Fi is recommended.'**
+  /// **'{pages} pages, about {mb} MB. Download them all now, in the background while you read, or let each page load as you read it (that needs a connection).'**
   String printedDownloadBody(int pages, int mb);
 
-  /// No description provided for @printedDownloadStart.
+  /// No description provided for @printedDownloadAll.
   ///
   /// In en, this message translates to:
-  /// **'Download'**
-  String get printedDownloadStart;
+  /// **'Download all'**
+  String get printedDownloadAll;
 
-  /// No description provided for @printedDownloading.
+  /// No description provided for @printedLoadAsRead.
   ///
   /// In en, this message translates to:
-  /// **'Downloading printed pages'**
-  String get printedDownloading;
+  /// **'Load as I read'**
+  String get printedLoadAsRead;
 
-  /// No description provided for @printedDownloadStopped.
+  /// No description provided for @printedDownloadingBar.
   ///
   /// In en, this message translates to:
-  /// **'Download paused'**
-  String get printedDownloadStopped;
-
-  /// No description provided for @printedDownloadProgress.
-  ///
-  /// In en, this message translates to:
-  /// **'{done} of {total} pages'**
-  String printedDownloadProgress(int done, int total);
-
-  /// No description provided for @printedDownloadKeepOpen.
-  ///
-  /// In en, this message translates to:
-  /// **'Keep the app open until it finishes. Then every page is on your device, and you can read without a connection.'**
-  String get printedDownloadKeepOpen;
-
-  /// No description provided for @printedDownloadStoppedHint.
-  ///
-  /// In en, this message translates to:
-  /// **'The connection was lost. Pages already saved are kept: try again to carry on from here.'**
-  String get printedDownloadStoppedHint;
-
-  /// No description provided for @pageNotSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'This page isn\'t saved'**
-  String get pageNotSaved;
-
-  /// No description provided for @pageNotSavedDetail.
-  ///
-  /// In en, this message translates to:
-  /// **'Page {page} of this printed set isn\'t on this device. Download the set again to read it.'**
-  String pageNotSavedDetail(int page);
-
-  /// No description provided for @downloadPrinted.
-  ///
-  /// In en, this message translates to:
-  /// **'Download printed pages'**
-  String get downloadPrinted;
+  /// **'Saving printed pages: {done} of {total}'**
+  String printedDownloadingBar(int done, int total);
 }
 
 class _AppLocalizationsDelegate

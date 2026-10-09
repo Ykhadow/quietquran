@@ -948,43 +948,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showLess => 'Show less';
 
   @override
-  String get printedDownloadTitle => 'Download printed pages?';
+  String get printedDownloadTitle => 'Save printed pages for offline reading?';
 
   @override
   String printedDownloadBody(int pages, int mb) {
-    return 'Printed pages are downloaded once, then work fully offline. $pages pages, about $mb MB. Wi-Fi is recommended.';
+    return '$pages pages, about $mb MB. Download them all now, in the background while you read, or let each page load as you read it (that needs a connection).';
   }
 
   @override
-  String get printedDownloadStart => 'Download';
+  String get printedDownloadAll => 'Download all';
 
   @override
-  String get printedDownloading => 'Downloading printed pages';
+  String get printedLoadAsRead => 'Load as I read';
 
   @override
-  String get printedDownloadStopped => 'Download paused';
-
-  @override
-  String printedDownloadProgress(int done, int total) {
-    return '$done of $total pages';
+  String printedDownloadingBar(int done, int total) {
+    return 'Saving printed pages: $done of $total';
   }
-
-  @override
-  String get printedDownloadKeepOpen =>
-      'Keep the app open until it finishes. Then every page is on your device, and you can read without a connection.';
-
-  @override
-  String get printedDownloadStoppedHint =>
-      'The connection was lost. Pages already saved are kept: try again to carry on from here.';
-
-  @override
-  String get pageNotSaved => 'This page isn\'t saved';
-
-  @override
-  String pageNotSavedDetail(int page) {
-    return 'Page $page of this printed set isn\'t on this device. Download the set again to read it.';
-  }
-
-  @override
-  String get downloadPrinted => 'Download printed pages';
 }

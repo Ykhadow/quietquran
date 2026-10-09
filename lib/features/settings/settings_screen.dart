@@ -83,19 +83,16 @@ class SettingsScreen extends ConsumerWidget {
                           ? l.indopakTagline
                           : l.madaniTagline,
                       selected: s.script == v,
-                      onTap: () async {
-                        // On printed pages, the other script's set must be
-                        // downloaded too; without it, read its text pages.
-                        final toText =
-                            s.mode == ReadingMode.pages &&
-                            v != s.script &&
-                            !await ensurePagesDownloaded(
-                              context,
-                              ref,
-                              ImageEdition.byId(v.defaultImageEdition),
-                            );
+                      onTap: () {
                         n.setScript(v);
-                        if (toText) n.setMode(ReadingMode.text);
+                        // On printed pages: the other script's set too.
+                        if (s.mode == ReadingMode.pages && v != s.script) {
+                          askToSavePrinted(
+                            context,
+                            ref,
+                            ImageEdition.byId(v.defaultImageEdition),
+                          );
+                        }
                       },
                       preview: Text(
                         _sample(db, QuranTypeface.forScript(v).first),
@@ -119,17 +116,15 @@ class SettingsScreen extends ConsumerWidget {
                   child: ReadingModeChoice(
                     script: s.script,
                     selected: s.mode,
-                    onSelect: (m) async {
-                      // Printed pages download in full before they're shown.
-                      if (m == ReadingMode.pages &&
-                          !await ensurePagesDownloaded(
-                            context,
-                            ref,
-                            ImageEdition.byId(s.imageEdition),
-                          )) {
-                        return;
-                      }
+                    onSelect: (m) {
                       n.setMode(m);
+                      if (m == ReadingMode.pages) {
+                        askToSavePrinted(
+                          context,
+                          ref,
+                          ImageEdition.byId(s.imageEdition),
+                        );
+                      }
                     },
                     maxWidth: 440,
                   ),
@@ -153,14 +148,9 @@ class SettingsScreen extends ConsumerWidget {
                             title: l.imageTitle(e),
                             subtitle: l.imageDescription(e),
                             selected: e.id == s.imageEdition,
-                            onTap: () async {
-                              if (await ensurePagesDownloaded(
-                                context,
-                                ref,
-                                e,
-                              )) {
-                                n.setImageEdition(e.id);
-                              }
+                            onTap: () {
+                              n.setImageEdition(e.id);
+                              askToSavePrinted(context, ref, e);
                             },
                           ),
                       ],
@@ -582,16 +572,7 @@ class _DownloadRow extends ConsumerWidget {
             IconButton(
               tooltip: context.l10n.deleteSaved,
               icon: const Icon(LucideIcons.trash2),
-              onPressed: () {
-                store.deleteAll(edition);
-                // Printed pages show only when saved: reading them, go
-                // back to text.
-                final s = ref.read(settingsProvider);
-                if (s.mode == ReadingMode.pages &&
-                    s.imageEdition == edition.id) {
-                  ref.read(settingsProvider.notifier).setMode(ReadingMode.text);
-                }
-              },
+              onPressed: () => store.deleteAll(edition),
             ),
         ],
       ),
