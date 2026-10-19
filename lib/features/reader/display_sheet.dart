@@ -140,7 +140,7 @@ class _DisplaySheet extends ConsumerWidget {
             // the page (recite first, then read the meanings).
             if (view == _View.reflow && translationValue != 'none')
               _Section(
-                label: l.translationPlacement,
+                label: l.translationPlacementShort,
                 child: Segmented<bool>(
                   value: s.translationAfterPage,
                   onChanged: n.setTranslationAfterPage,
@@ -234,8 +234,18 @@ class _Section extends StatelessWidget {
             child: Row(
               mainAxisSize: compact ? MainAxisSize.min : MainAxisSize.max,
               children: [
-                Text(label.toUpperCase(), style: AppType.eyebrow(t.mut)),
-                if (trailing != null) ...[const Spacer(), trailing!],
+                // Wraps rather than overflows (long labels, other
+                // languages); a compact section keeps its natural width.
+                if (compact)
+                  Text(label.toUpperCase(), style: AppType.eyebrow(t.mut))
+                else
+                  Expanded(
+                    child: Text(
+                      label.toUpperCase(),
+                      style: AppType.eyebrow(t.mut),
+                    ),
+                  ),
+                if (trailing != null) ...[const SizedBox(width: 8), trailing!],
               ],
             ),
           ),

@@ -551,5 +551,6 @@
   "translationPlacement": "In Easy read, the translation goes",
   "translationUnderAyah": "Under each ayah",
   "translationAfterPage": "After the page",
-  "translationPlacementHint": "After the page: recite the page first, then read its meanings together. The recitation follows the same order."
+  "translationPlacementHint": "After the page: recite the page first, then read its meanings together. The recitation follows the same order.",
+  "translationPlacementShort": "Translation goes"
 }

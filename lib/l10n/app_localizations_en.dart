@@ -1032,4 +1032,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get translationPlacementHint =>
       'After the page: recite the page first, then read its meanings together. The recitation follows the same order.';
+
+  @override
+  String get translationPlacementShort => 'Translation goes';
 }

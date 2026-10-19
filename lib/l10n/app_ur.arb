@@ -298,5 +298,6 @@
   "translationPlacement": "آسان مطالعہ میں ترجمہ",
   "translationUnderAyah": "ہر آیت کے نیچے",
   "translationAfterPage": "صفحے کے بعد",
-  "translationPlacementHint": "صفحے کے بعد: پہلے صفحہ تلاوت کریں، پھر اس کے معانی ایک ساتھ پڑھیں۔ تلاوت بھی اسی ترتیب سے ہوتی ہے۔"
+  "translationPlacementHint": "صفحے کے بعد: پہلے صفحہ تلاوت کریں، پھر اس کے معانی ایک ساتھ پڑھیں۔ تلاوت بھی اسی ترتیب سے ہوتی ہے۔",
+  "translationPlacementShort": "ترجمہ کہاں"
 }

@@ -1033,4 +1033,7 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get translationPlacementHint =>
       'صفحے کے بعد: پہلے صفحہ تلاوت کریں، پھر اس کے معانی ایک ساتھ پڑھیں۔ تلاوت بھی اسی ترتیب سے ہوتی ہے۔';
+
+  @override
+  String get translationPlacementShort => 'ترجمہ کہاں';
 }

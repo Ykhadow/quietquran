@@ -298,5 +298,6 @@
   "translationPlacement": "في القراءة الميسّرة، الترجمة",
   "translationUnderAyah": "تحت كل آية",
   "translationAfterPage": "بعد الصفحة",
-  "translationPlacementHint": "بعد الصفحة: اقرأ الصفحة أولًا، ثم اقرأ معانيها معًا. وتسير التلاوة بالترتيب نفسه."
+  "translationPlacementHint": "بعد الصفحة: اقرأ الصفحة أولًا، ثم اقرأ معانيها معًا. وتسير التلاوة بالترتيب نفسه.",
+  "translationPlacementShort": "موضع الترجمة"
 }

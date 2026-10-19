@@ -1887,6 +1887,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'After the page: recite the page first, then read its meanings together. The recitation follows the same order.'**
   String get translationPlacementHint;
+
+  /// No description provided for @translationPlacementShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation goes'**
+  String get translationPlacementShort;
 }
 
 class _AppLocalizationsDelegate

@@ -1022,4 +1022,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get translationPlacementHint =>
       'بعد الصفحة: اقرأ الصفحة أولًا، ثم اقرأ معانيها معًا. وتسير التلاوة بالترتيب نفسه.';
+
+  @override
+  String get translationPlacementShort => 'موضع الترجمة';
 }
