@@ -299,5 +299,8 @@
   "translationUnderAyah": "تحت كل آية",
   "translationAfterPage": "بعد الصفحة",
   "translationPlacementHint": "بعد الصفحة: اقرأ الصفحة أولًا، ثم اقرأ معانيها معًا. وتسير التلاوة بالترتيب نفسه.",
-  "translationPlacementShort": "موضع الترجمة"
+  "translationPlacementShort": "موضع الترجمة",
+  "shareCustomise": "تخصيص",
+  "shareShowBrand": "إظهار Quiet Quran",
+  "shareShowBrandHint": "يبقى مرجع الآية واسم المترجم على البطاقة دائمًا."
 }

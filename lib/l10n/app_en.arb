@@ -552,5 +552,8 @@
   "translationUnderAyah": "Under each ayah",
   "translationAfterPage": "After the page",
   "translationPlacementHint": "After the page: recite the page first, then read its meanings together. The recitation follows the same order.",
-  "translationPlacementShort": "Translation goes"
+  "translationPlacementShort": "Translation goes",
+  "shareCustomise": "Customise",
+  "shareShowBrand": "Show Quiet Quran",
+  "shareShowBrandHint": "The ayah's reference and the translator always stay on the card."
 }

@@ -78,6 +78,49 @@ void main() {
     });
   }
 
+  test('every card colour reads clearly', () {
+    for (final p in cardColours) {
+      expect(p.contrast, greaterThanOrEqualTo(7), reason: '${p.name} text');
+      final accent = Palette(
+        id: p.id,
+        name: p.name,
+        bg: p.bg,
+        ink: p.acc,
+        acc: p.acc,
+      ).contrast;
+      expect(accent, greaterThanOrEqualTo(4.5), reason: '${p.name} accent');
+    }
+  });
+
+  testWidgets('without the mark, the reference and translator stay', (
+    tester,
+  ) async {
+    Future<void> show({required bool brand}) => tester.pumpWidget(
+      MaterialApp(
+        theme: buildTheme(cardColours[7]),
+        home: SingleChildScrollView(
+          child: ShareCard(
+            words: db.ayahTail(67, 2, QuranTypeface.qpcHafs, count: 1000),
+            typeface: QuranTypeface.qpcHafs,
+            quranSize: 30,
+            surah: db.surah(67),
+            reference: 'Al-Mulk 67:2',
+            brand: 'Quiet Quran',
+            translation: db.translation('en-sahih'),
+            translated: db.translationText('en-sahih', 67, 2),
+            showBrand: brand,
+          ),
+        ),
+      ),
+    );
+    await show(brand: true);
+    expect(find.text('Quiet Quran'), findsOneWidget);
+    await show(brand: false);
+    expect(find.text('Quiet Quran'), findsNothing);
+    expect(find.text('Al-Mulk 67:2'), findsOneWidget);
+    expect(find.text('— Saheeh International'), findsOneWidget);
+  });
+
   testWidgets('a short ayah fits the post and story shapes', (tester) async {
     for (final format in CardFormat.values) {
       final image = card(

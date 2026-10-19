@@ -299,5 +299,8 @@
   "translationUnderAyah": "ہر آیت کے نیچے",
   "translationAfterPage": "صفحے کے بعد",
   "translationPlacementHint": "صفحے کے بعد: پہلے صفحہ تلاوت کریں، پھر اس کے معانی ایک ساتھ پڑھیں۔ تلاوت بھی اسی ترتیب سے ہوتی ہے۔",
-  "translationPlacementShort": "ترجمہ کہاں"
+  "translationPlacementShort": "ترجمہ کہاں",
+  "shareCustomise": "اپنی پسند کے مطابق",
+  "shareShowBrand": "Quiet Quran دکھائیں",
+  "shareShowBrandHint": "آیت کا حوالہ اور مترجم کا نام ہمیشہ کارڈ پر رہتے ہیں۔"
 }

@@ -1036,4 +1036,14 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get translationPlacementShort => 'ترجمہ کہاں';
+
+  @override
+  String get shareCustomise => 'اپنی پسند کے مطابق';
+
+  @override
+  String get shareShowBrand => 'Quiet Quran دکھائیں';
+
+  @override
+  String get shareShowBrandHint =>
+      'آیت کا حوالہ اور مترجم کا نام ہمیشہ کارڈ پر رہتے ہیں۔';
 }

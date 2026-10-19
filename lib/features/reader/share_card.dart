@@ -42,8 +42,13 @@ class ShareCard extends StatelessWidget {
     this.translation,
     this.translated,
     this.logo,
+    this.showBrand = true,
     this.fill = false,
   });
+
+  /// The Quiet Quran mark and name at the foot; the ayah's reference and
+  /// any translator's credit stay either way.
+  final bool showBrand;
 
   final List<Word> words;
   final QuranTypeface typeface;
@@ -143,13 +148,15 @@ class ShareCard extends StatelessWidget {
             ? Column(
                 children: [
                   Expanded(child: Center(child: content)),
-                  const SizedBox(height: 20),
-                  mark,
+                  if (showBrand) ...[const SizedBox(height: 20), mark],
                 ],
               )
             : Column(
                 mainAxisSize: MainAxisSize.min,
-                children: [content, const SizedBox(height: 28), mark],
+                children: [
+                  content,
+                  if (showBrand) ...[const SizedBox(height: 28), mark],
+                ],
               ),
       ),
     );
@@ -280,8 +287,115 @@ abstract final class ShareCards {
   }
 }
 
+/// Colours a shared card can take when customised: a curated set, calm and
+/// dignified, every pair with strong contrast (text at least 7:1, the
+/// strictest accessibility level, and accent 4.5:1; see
+/// test/share_card_test.dart). No free colour choice:
+/// a card is public.
+const cardColours = [
+  Palette(
+    id: 'paper',
+    name: 'Paper',
+    bg: Color(0xFFF4F0E8),
+    ink: Color(0xFF211F1B),
+    acc: Color(0xFFA9532F),
+  ),
+  Palette(
+    id: 'white',
+    name: 'White',
+    bg: Color(0xFFFFFFFF),
+    ink: Color(0xFF1F1F1F),
+    acc: Color(0xFF9B1C1C),
+  ),
+  Palette(
+    id: 'sand',
+    name: 'Sand',
+    bg: Color(0xFFEFE3CB),
+    ink: Color(0xFF3A2E22),
+    acc: Color(0xFF8C5A2B),
+  ),
+  Palette(
+    id: 'sage',
+    name: 'Sage',
+    bg: Color(0xFFE4ECE2),
+    ink: Color(0xFF1E2D23),
+    acc: Color(0xFF3F6B4C),
+  ),
+  Palette(
+    id: 'sky',
+    name: 'Sky',
+    bg: Color(0xFFE5EEF6),
+    ink: Color(0xFF17293A),
+    acc: Color(0xFF2F6690),
+  ),
+  Palette(
+    id: 'stone',
+    name: 'Stone',
+    bg: Color(0xFFE6E5E1),
+    ink: Color(0xFF252523),
+    acc: Color(0xFF5E5C55),
+  ),
+  Palette(
+    id: 'night',
+    name: 'Night',
+    bg: Color(0xFF151614),
+    ink: Color(0xFFE4DDD0),
+    acc: Color(0xFFD98E70),
+  ),
+  Palette(
+    id: 'midnight',
+    name: 'Midnight',
+    bg: Color(0xFF0E1626),
+    ink: Color(0xFFE6E9F0),
+    acc: Color(0xFFC9A85C),
+  ),
+  Palette(
+    id: 'forest',
+    name: 'Forest',
+    bg: Color(0xFF17291F),
+    ink: Color(0xFFE3EDE5),
+    acc: Color(0xFF9CC9A8),
+  ),
+  Palette(
+    id: 'teal',
+    name: 'Teal',
+    bg: Color(0xFF0F3533),
+    ink: Color(0xFFE2F0EE),
+    acc: Color(0xFF7FC4BC),
+  ),
+  Palette(
+    id: 'ink',
+    name: 'Ink blue',
+    bg: Color(0xFF1B2838),
+    ink: Color(0xFFE7EDF3),
+    acc: Color(0xFF9CC3E0),
+  ),
+  Palette(
+    id: 'olive',
+    name: 'Olive',
+    bg: Color(0xFF2E3322),
+    ink: Color(0xFFECEBDD),
+    acc: Color(0xFFC9C08A),
+  ),
+  Palette(
+    id: 'clay',
+    name: 'Clay',
+    bg: Color(0xFF5A2A20),
+    ink: Color(0xFFF6EAE3),
+    acc: Color(0xFFF0BFA0),
+  ),
+  Palette(
+    id: 'plum',
+    name: 'Plum',
+    bg: Color(0xFF2B2230),
+    ink: Color(0xFFEDE6F1),
+    acc: Color(0xFFC7A9D6),
+  ),
+];
+
 /// Share one ayah: a preview of its card, a choice of post or story, and
-/// sharing it as an image or as text.
+/// sharing it as an image or as text. "Customise" picks the card's colours
+/// and whether it carries the Quiet Quran mark; those choices are kept.
 Future<void> showShareSheet(BuildContext context, int surah, int ayah) =>
     showModalBottomSheet<void>(
       context: context,
@@ -302,8 +416,17 @@ class _ShareSheet extends ConsumerStatefulWidget {
 class _ShareSheetState extends ConsumerState<_ShareSheet> {
   CardFormat _format = CardFormat.post;
   ui.Image? _image;
-  ui.Picture? _logo;
+  ui.Picture? _logoDay;
+  ui.Picture? _logoNight;
   bool _drawn = false;
+
+  // Customising, kept between shares.
+  static const _customiseKey = 'shareCustomise';
+  static const _coloursKey = 'shareColours';
+  static const _brandKey = 'shareBrand';
+  late bool _customise;
+  late String _colours;
+  late bool _showBrand;
 
   /// The translation on this card ('none' for the ayah alone): starts as
   /// the reader's own and changes for this share only.
@@ -319,20 +442,25 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
       _translation =
           ref.read(settingsProvider).translationFor(context.l10n.localeName) ??
           'none';
+      final prefs = ref.read(prefsProvider);
+      _customise = prefs.getBool(_customiseKey) ?? false;
+      _colours = prefs.getString(_coloursKey) ?? cardColours.first.id;
+      _showBrand = prefs.getBool(_brandKey) ?? true;
       _loadLogo();
     }
   }
 
+  /// Both marks, so a card can switch between light and dark colours.
   Future<void> _loadLogo() async {
-    final dark = Theme.of(context).brightness == Brightness.dark;
     try {
-      final info = await vg.loadPicture(
-        SvgAssetLoader(
-          dark ? 'assets/brand/mark_night.svg' : 'assets/brand/mark_day.svg',
-        ),
+      _logoDay = (await vg.loadPicture(
+        const SvgAssetLoader('assets/brand/mark_day.svg'),
         null,
-      );
-      _logo = info.picture;
+      )).picture;
+      _logoNight = (await vg.loadPicture(
+        const SvgAssetLoader('assets/brand/mark_night.svg'),
+        null,
+      )).picture;
     } on Object {
       // Without the logo the card still carries the app's name.
     }
@@ -342,8 +470,36 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
   @override
   void dispose() {
     _image?.dispose();
-    _logo?.dispose();
+    _logoDay?.dispose();
+    _logoNight?.dispose();
     super.dispose();
+  }
+
+  /// The card's look: the reader's own theme, or the chosen card colours.
+  ThemeData _cardTheme() => _customise
+      ? buildTheme(
+          cardColours.firstWhere(
+            (p) => p.id == _colours,
+            orElse: () => cardColours.first,
+          ),
+        )
+      : Theme.of(context);
+
+  void _setCustom({bool? customise, String? colours, bool? showBrand}) {
+    final prefs = ref.read(prefsProvider);
+    if (customise != null) {
+      _customise = customise;
+      prefs.setBool(_customiseKey, customise);
+    }
+    if (colours != null) {
+      _colours = colours;
+      prefs.setString(_coloursKey, colours);
+    }
+    if (showBrand != null) {
+      _showBrand = showBrand;
+      prefs.setBool(_brandKey, showBrand);
+    }
+    _draw();
   }
 
   /// The surah's name and the ayah's number, under the Arabic name at the
@@ -362,6 +518,8 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
         ? null
         : db.translationText(translation.id, widget.surah, widget.ayah);
     final words = db.ayahTail(widget.surah, widget.ayah, typeface, count: 1000);
+    final theme = _cardTheme();
+    final dark = theme.brightness == Brightness.dark;
     final image = ShareCards.draw(
       card: (size, {fill = false}) => ShareCard(
         words: words,
@@ -372,11 +530,12 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
         brand: appName,
         translation: translated == null ? null : translation,
         translated: translated,
-        logo: _logo,
+        logo: dark ? _logoNight : _logoDay,
+        showBrand: !_customise || _showBrand,
         fill: fill,
       ),
       format: _format,
-      theme: Theme.of(context),
+      theme: theme,
     );
     setState(() {
       _image?.dispose();
@@ -521,6 +680,43 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
                 ),
               ],
             ),
+            // Customise: the card's colours, and whether it carries our
+            // mark. Off, the card simply follows the reader's theme.
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              dense: true,
+              title: Text(l.shareCustomise, style: AppType.body(t.ink)),
+              value: _customise,
+              activeThumbColor: t.acc,
+              onChanged: (v) => _setCustom(customise: v),
+            ),
+            if (_customise) ...[
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final p in cardColours)
+                    _CardColour(
+                      palette: p,
+                      selected: p.id == _colours,
+                      ring: t.ink,
+                      onTap: () => _setCustom(colours: p.id),
+                    ),
+                ],
+              ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                title: Text(l.shareShowBrand, style: AppType.body(t.ink)),
+                subtitle: Text(
+                  l.shareShowBrandHint,
+                  style: AppType.caption(t.mut),
+                ),
+                value: _showBrand,
+                activeThumbColor: t.acc,
+                onChanged: (v) => _setCustom(showBrand: v),
+              ),
+            ],
             const SizedBox(height: 16),
             FilledButton.icon(
               onPressed: image == null ? null : _shareImage,
@@ -566,4 +762,62 @@ String shareText({
       '$translated\n— ${translation.translator}',
     '$reference · $brand',
   ].join('\n\n');
+}
+
+/// One card colour: its background with an "ب" in its text colour and an
+/// accent dot, as a small round swatch.
+class _CardColour extends StatelessWidget {
+  const _CardColour({
+    required this.palette,
+    required this.selected,
+    required this.ring,
+    required this.onTap,
+  });
+
+  final Palette palette;
+  final bool selected;
+  final Color ring;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    button: true,
+    selected: selected,
+    label: palette.name,
+    child: Tooltip(
+      message: palette.name,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 40,
+          height: 40,
+          padding: const EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: selected ? ring : Colors.transparent,
+              width: 2,
+            ),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: palette.bg,
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0x22000000)),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              'ب',
+              style: TextStyle(
+                fontFamily: AppType.arabicUi,
+                fontSize: 16,
+                height: 1.1,
+                color: palette.ink,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }

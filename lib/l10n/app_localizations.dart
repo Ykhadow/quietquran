@@ -1893,6 +1893,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translation goes'**
   String get translationPlacementShort;
+
+  /// No description provided for @shareCustomise.
+  ///
+  /// In en, this message translates to:
+  /// **'Customise'**
+  String get shareCustomise;
+
+  /// No description provided for @shareShowBrand.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Quiet Quran'**
+  String get shareShowBrand;
+
+  /// No description provided for @shareShowBrandHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The ayah\'s reference and the translator always stay on the card.'**
+  String get shareShowBrandHint;
 }
 
 class _AppLocalizationsDelegate

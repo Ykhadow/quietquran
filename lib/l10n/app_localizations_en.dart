@@ -1035,4 +1035,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationPlacementShort => 'Translation goes';
+
+  @override
+  String get shareCustomise => 'Customise';
+
+  @override
+  String get shareShowBrand => 'Show Quiet Quran';
+
+  @override
+  String get shareShowBrandHint =>
+      'The ayah\'s reference and the translator always stay on the card.';
 }

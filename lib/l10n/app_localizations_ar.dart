@@ -1025,4 +1025,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get translationPlacementShort => 'موضع الترجمة';
+
+  @override
+  String get shareCustomise => 'تخصيص';
+
+  @override
+  String get shareShowBrand => 'إظهار Quiet Quran';
+
+  @override
+  String get shareShowBrandHint =>
+      'يبقى مرجع الآية واسم المترجم على البطاقة دائمًا.';
 }
