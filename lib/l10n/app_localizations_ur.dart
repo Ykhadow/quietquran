@@ -1046,4 +1046,7 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get shareShowBrandHint =>
       'آیت کا حوالہ اور مترجم کا نام ہمیشہ کارڈ پر رہتے ہیں۔';
+
+  @override
+  String get moreColours => 'مزید رنگ';
 }

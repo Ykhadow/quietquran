@@ -1911,6 +1911,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The ayah\'s reference and the translator always stay on the card.'**
   String get shareShowBrandHint;
+
+  /// No description provided for @moreColours.
+  ///
+  /// In en, this message translates to:
+  /// **'More colours'**
+  String get moreColours;
 }
 
 class _AppLocalizationsDelegate

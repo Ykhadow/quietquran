@@ -1045,4 +1045,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get shareShowBrandHint =>
       'The ayah\'s reference and the translator always stay on the card.';
+
+  @override
+  String get moreColours => 'More colours';
 }

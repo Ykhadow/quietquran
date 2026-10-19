@@ -1035,4 +1035,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get shareShowBrandHint =>
       'يبقى مرجع الآية واسم المترجم على البطاقة دائمًا.';
+
+  @override
+  String get moreColours => 'ألوان أخرى';
 }

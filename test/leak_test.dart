@@ -123,6 +123,9 @@ void main() {
         MaterialPageRoute<void>(builder: (_) => const PaletteEditor()),
       );
       await settle(tester);
+      // The honeycomb opens under "More colours".
+      await tester.tap(find.text('More colours'));
+      await settle(tester);
       await tester.drag(find.byType(Slider).first, const Offset(40, 0));
       await settle(tester);
       nav().pop();

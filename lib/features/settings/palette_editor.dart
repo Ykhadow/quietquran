@@ -24,38 +24,57 @@ class PaletteEditor extends ConsumerStatefulWidget {
 class _PaletteEditorState extends ConsumerState<PaletteEditor> {
   _Target _target = _Target.bg;
 
+  /// Opens the honeycomb, for colours beyond the suggestions.
+  bool _more = false;
+
+  // Suggestions first: a wide but calm range, light and dark. The honeycomb
+  // ("More colours") is there for anyone who needs something else, such as
+  // a particular tint for reading comfort.
   static const _backgrounds = [
+    Color(0xFFFFFFFF),
+    Color(0xFFF4F0E8),
+    Color(0xFFF5EFE0),
+    Color(0xFFEFE3CB),
+    Color(0xFFE6E5E1),
+    Color(0xFFE8F0EA),
+    Color(0xFFE5EEF6),
     Color(0xFF151614),
     Color(0xFF0A0A0A),
     Color(0xFF12201B),
+    Color(0xFF17291F),
+    Color(0xFF0F3533),
     Color(0xFF1B1D26),
+    Color(0xFF0E1626),
     Color(0xFF2A2320),
-    Color(0xFFF4F0E8),
-    Color(0xFFEFE3CB),
-    Color(0xFFFFFFFF),
-    Color(0xFFE8F0EA),
-    Color(0xFFF3ECF3),
+    Color(0xFF2E3322),
   ];
   static const _inks = [
-    Color(0xFFE4DDD0),
-    Color(0xFFFFFFFF),
-    Color(0xFFDCE6DD),
-    Color(0xFFD8DCEB),
+    Color(0xFF000000),
+    Color(0xFF1F1F1F),
     Color(0xFF211F1B),
     Color(0xFF3A2E22),
-    Color(0xFF000000),
     Color(0xFF1E3326),
+    Color(0xFF17293A),
+    Color(0xFFFFFFFF),
+    Color(0xFFE4DDD0),
+    Color(0xFFECEBDD),
+    Color(0xFFDCE6DD),
+    Color(0xFFD8DCEB),
   ];
   static const _accents = [
-    Color(0xFFD98E70),
+    Color(0xFF9B1C1C),
     Color(0xFFA9532F),
     Color(0xFF8C5A2B),
-    Color(0xFF8CC0A2),
-    Color(0xFF2E7D6B),
-    Color(0xFFFFC266),
-    Color(0xFF7AA2E3),
     Color(0xFFB8860B),
-    Color(0xFFC0506B),
+    Color(0xFF3F6B4C),
+    Color(0xFF2E7D6B),
+    Color(0xFF2F6690),
+    Color(0xFFD98E70),
+    Color(0xFFC9A85C),
+    Color(0xFFFFC266),
+    Color(0xFF8CC0A2),
+    Color(0xFF7FC4BC),
+    Color(0xFF7AA2E3),
   ];
 
   @override
@@ -192,21 +211,6 @@ class _PaletteEditorState extends ConsumerState<PaletteEditor> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 0),
-                child: ColourPicker(
-                  color: switch (_target) {
-                    _Target.bg => p.bg,
-                    _Target.ink => p.ink,
-                    _Target.acc => p.acc,
-                  },
-                  onChanged: (c) => switch (_target) {
-                    _Target.bg => set(bg: c),
-                    _Target.ink => set(ink: c),
-                    _Target.acc => set(acc: c),
-                  },
-                ),
-              ),
               Eyebrow(context.l10n.suggestions),
               _Swatches(
                 colours: switch (_target) {
@@ -225,6 +229,36 @@ class _PaletteEditorState extends ConsumerState<PaletteEditor> {
                   _Target.acc => set(acc: c),
                 },
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TextButton.icon(
+                    onPressed: () => setState(() => _more = !_more),
+                    icon: Icon(
+                      _more ? LucideIcons.chevronUp : LucideIcons.chevronDown,
+                      size: 18,
+                    ),
+                    label: Text(context.l10n.moreColours),
+                  ),
+                ),
+              ),
+              if (_more)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 6, 20, 0),
+                  child: ColourPicker(
+                    color: switch (_target) {
+                      _Target.bg => p.bg,
+                      _Target.ink => p.ink,
+                      _Target.acc => p.acc,
+                    },
+                    onChanged: (c) => switch (_target) {
+                      _Target.bg => set(bg: c),
+                      _Target.ink => set(ink: c),
+                      _Target.acc => set(acc: c),
+                    },
+                  ),
+                ),
             ],
           ),
         ),
