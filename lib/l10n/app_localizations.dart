@@ -1785,6 +1785,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Printed pages saved for offline reading'**
   String get printedSavedNotice;
+
+  /// No description provided for @updateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet Quran {version} is available'**
+  String updateAvailable(String version);
+
+  /// No description provided for @updateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get updateNow;
+
+  /// No description provided for @updateDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get updateDownload;
+
+  /// No description provided for @updateLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get updateLater;
+
+  /// No description provided for @updateDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading the update… {percent}%'**
+  String updateDownloading(int percent);
+
+  /// No description provided for @updateReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The update is ready to install'**
+  String get updateReady;
+
+  /// No description provided for @updateInstall.
+  ///
+  /// In en, this message translates to:
+  /// **'Install'**
+  String get updateInstall;
+
+  /// No description provided for @updateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The update didn\'t download. It will be offered again.'**
+  String get updateFailed;
+
+  /// No description provided for @updateDownloadingNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading the Quiet Quran update'**
+  String get updateDownloadingNotice;
+
+  /// No description provided for @updateReadyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Update downloaded. Tap to install.'**
+  String get updateReadyNotice;
+
+  /// No description provided for @checkUpdatesSetting.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get checkUpdatesSetting;
+
+  /// No description provided for @checkUpdatesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Once a day, the app reads a public file on quietquran.com to see whether a newer version exists. Nothing about you or your reading is sent.'**
+  String get checkUpdatesHint;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String appVersion(String version);
 }
 
 class _AppLocalizationsDelegate

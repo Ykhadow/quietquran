@@ -971,4 +971,53 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get printedSavedNotice =>
       'چھپے صفحات آف لائن پڑھنے کے لیے محفوظ ہو گئے';
+
+  @override
+  String updateAvailable(String version) {
+    return 'Quiet Quran $version دستیاب ہے';
+  }
+
+  @override
+  String get updateNow => 'اپ ڈیٹ کریں';
+
+  @override
+  String get updateDownload => 'ڈاؤن لوڈ کریں';
+
+  @override
+  String get updateLater => 'بعد میں';
+
+  @override
+  String updateDownloading(int percent) {
+    return 'اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے… $percent%';
+  }
+
+  @override
+  String get updateReady => 'اپ ڈیٹ انسٹال کے لیے تیار ہے';
+
+  @override
+  String get updateInstall => 'انسٹال کریں';
+
+  @override
+  String get updateFailed =>
+      'اپ ڈیٹ ڈاؤن لوڈ نہیں ہو سکی۔ یہ دوبارہ پیش کی جائے گی۔';
+
+  @override
+  String get updateDownloadingNotice =>
+      'Quiet Quran کی اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے';
+
+  @override
+  String get updateReadyNotice =>
+      'اپ ڈیٹ ڈاؤن لوڈ ہو گئی۔ انسٹال کے لیے ٹیپ کریں۔';
+
+  @override
+  String get checkUpdatesSetting => 'اپ ڈیٹس دیکھیں';
+
+  @override
+  String get checkUpdatesHint =>
+      'دن میں ایک بار ایپ quietquran.com پر ایک عوامی فائل پڑھتی ہے تاکہ دیکھے کہ نیا ورژن موجود ہے یا نہیں۔ آپ یا آپ کے مطالعے کے بارے میں کچھ نہیں بھیجا جاتا۔';
+
+  @override
+  String appVersion(String version) {
+    return 'ورژن $version';
+  }
 }

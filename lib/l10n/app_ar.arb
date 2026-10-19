@@ -281,5 +281,18 @@
   "printedLoadAsRead": "تحميل أثناء القراءة",
   "printedDownloadingBar": "جارٍ حفظ الصفحات المطبوعة: {done} من {total}",
   "printedSavingNotice": "جارٍ حفظ الصفحات المطبوعة: {done} من {total}",
-  "printedSavedNotice": "حُفظت الصفحات المطبوعة للقراءة دون اتصال"
+  "printedSavedNotice": "حُفظت الصفحات المطبوعة للقراءة دون اتصال",
+  "updateAvailable": "الإصدار {version} من Quiet Quran متاح",
+  "updateNow": "تحديث",
+  "updateDownload": "تنزيل",
+  "updateLater": "لاحقًا",
+  "updateDownloading": "جارٍ تنزيل التحديث… {percent}٪",
+  "updateReady": "التحديث جاهز للتثبيت",
+  "updateInstall": "تثبيت",
+  "updateFailed": "لم يكتمل تنزيل التحديث. سيُعرض مرة أخرى.",
+  "updateDownloadingNotice": "جارٍ تنزيل تحديث Quiet Quran",
+  "updateReadyNotice": "اكتمل تنزيل التحديث. انقر للتثبيت.",
+  "checkUpdatesSetting": "البحث عن تحديثات",
+  "checkUpdatesHint": "مرة في اليوم يقرأ التطبيق ملفًا عامًا على quietquran.com ليعرف إن كان هناك إصدار أحدث. لا يُرسل شيء عنك أو عن قراءتك.",
+  "appVersion": "الإصدار {version}"
 }

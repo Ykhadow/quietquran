@@ -9,10 +9,12 @@ import '../../data/library.dart';
 import '../../data/models.dart';
 import '../../data/quran_db.dart';
 import '../../data/reminders.dart';
+import '../../data/updates.dart';
 import '../../widgets/night.dart';
 import 'library_sheets.dart';
 import 'new_session_sheet.dart';
 import 'surah_search.dart';
+import 'update_card.dart';
 import '../reader/quran_word.dart';
 import '../reader/reader_screen.dart';
 import '../settings/settings_screen.dart';
@@ -57,7 +59,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     ReminderService.tappedSession.addListener(_openTapped);
     // Opened from a reminder: open its session once home is on screen.
-    WidgetsBinding.instance.addPostFrameCallback((_) => _openTapped());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _openTapped();
+      // Website/GitHub builds: is there a newer version? (At most daily.)
+      ref.read(updateProvider.notifier).checkDaily();
+    });
   }
 
   @override
@@ -185,6 +191,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                 ),
+                const SliverToBoxAdapter(child: UpdateCard()),
                 SliverToBoxAdapter(
                   child: _SessionCard(
                     session: featured,

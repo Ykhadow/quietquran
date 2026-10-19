@@ -963,4 +963,50 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get printedSavedNotice => 'حُفظت الصفحات المطبوعة للقراءة دون اتصال';
+
+  @override
+  String updateAvailable(String version) {
+    return 'الإصدار $version من Quiet Quran متاح';
+  }
+
+  @override
+  String get updateNow => 'تحديث';
+
+  @override
+  String get updateDownload => 'تنزيل';
+
+  @override
+  String get updateLater => 'لاحقًا';
+
+  @override
+  String updateDownloading(int percent) {
+    return 'جارٍ تنزيل التحديث… $percent٪';
+  }
+
+  @override
+  String get updateReady => 'التحديث جاهز للتثبيت';
+
+  @override
+  String get updateInstall => 'تثبيت';
+
+  @override
+  String get updateFailed => 'لم يكتمل تنزيل التحديث. سيُعرض مرة أخرى.';
+
+  @override
+  String get updateDownloadingNotice => 'جارٍ تنزيل تحديث Quiet Quran';
+
+  @override
+  String get updateReadyNotice => 'اكتمل تنزيل التحديث. انقر للتثبيت.';
+
+  @override
+  String get checkUpdatesSetting => 'البحث عن تحديثات';
+
+  @override
+  String get checkUpdatesHint =>
+      'مرة في اليوم يقرأ التطبيق ملفًا عامًا على quietquran.com ليعرف إن كان هناك إصدار أحدث. لا يُرسل شيء عنك أو عن قراءتك.';
+
+  @override
+  String appVersion(String version) {
+    return 'الإصدار $version';
+  }
 }

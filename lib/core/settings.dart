@@ -109,6 +109,7 @@ class Settings {
     required this.translation,
     required this.reflowTranslation,
     required this.twoPages,
+    required this.checkUpdates,
     required this.verticalScroll,
     required this.printedFollowTheme,
     required this.reciter,
@@ -138,6 +139,7 @@ class Settings {
     translation: 'auto',
     reflowTranslation: false,
     twoPages: true,
+    checkUpdates: true,
     verticalScroll: false,
     printedFollowTheme: false,
     reciter: 'alafasy',
@@ -190,6 +192,10 @@ class Settings {
   /// On wide screens (tablets, desktop, phones held sideways), show two
   /// Mushaf pages side by side like an open book; otherwise one.
   final bool twoPages;
+
+  /// The website/GitHub build looks once a day for a newer version (see
+  /// lib/data/updates.dart). Nothing about the reader is sent.
+  final bool checkUpdates;
 
   /// Pages follow one another in one continuous vertical scroll, instead of
   /// turning sideways. One page at a time, never two side by side.
@@ -258,6 +264,7 @@ class Settings {
     String? translation,
     bool? reflowTranslation,
     bool? twoPages,
+    bool? checkUpdates,
     bool? verticalScroll,
     bool? printedFollowTheme,
     String? reciter,
@@ -279,6 +286,7 @@ class Settings {
     translation: translation ?? this.translation,
     reflowTranslation: reflowTranslation ?? this.reflowTranslation,
     twoPages: twoPages ?? this.twoPages,
+    checkUpdates: checkUpdates ?? this.checkUpdates,
     verticalScroll: verticalScroll ?? this.verticalScroll,
     printedFollowTheme: printedFollowTheme ?? this.printedFollowTheme,
     reciter: reciter ?? this.reciter,
@@ -330,6 +338,7 @@ class SettingsNotifier extends Notifier<Settings> {
       translation: p.getString('translation') ?? d.translation,
       reflowTranslation: p.getBool('reflowTranslation') ?? d.reflowTranslation,
       twoPages: p.getBool('twoPages') ?? d.twoPages,
+      checkUpdates: p.getBool('checkUpdates') ?? d.checkUpdates,
       verticalScroll: p.getBool('verticalScroll') ?? d.verticalScroll,
       printedFollowTheme:
           p.getBool('printedFollowTheme') ?? d.printedFollowTheme,
@@ -477,6 +486,11 @@ class SettingsNotifier extends Notifier<Settings> {
   void setTwoPages(bool v) {
     state = state.copyWith(twoPages: v);
     _prefs.setBool('twoPages', v);
+  }
+
+  void setCheckUpdates(bool v) {
+    state = state.copyWith(checkUpdates: v);
+    _prefs.setBool('checkUpdates', v);
   }
 
   void setVerticalScroll(bool v) {

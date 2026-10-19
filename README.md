@@ -77,9 +77,17 @@ Release builds are signed with the key in `android/upload-keystore.jks`, whose p
 
 ### Releasing
 
-1. Set `version:` in `pubspec.yaml`, commit, and push a tag: `git tag v1.2.3 && git push origin v1.2.3`.
+Android has two builds of the same app (same id and key, so either updates the other):
+
+- `play`, for Google Play: `flutter build appbundle --flavor play`. Play updates it.
+- `direct`, for the website and GitHub: `flutter build apk --release --split-per-abi --flavor direct`. It checks `quietquran.com/version.json` once a day (nothing about the reader is sent) and offers to download and install a newer version. Only this build asks for the install permission (`android/app/src/direct/AndroidManifest.xml`).
+
+To release:
+
+1. Set `version:` in `pubspec.yaml` (raise the build number after `+`), commit, and push a tag: `git tag v1.2.3 && git push origin v1.2.3`.
 2. `.github/workflows/release.yml` builds Windows and Linux and puts them on a draft GitHub Release, after checking that the IndoPak font is exactly the permitted file.
-3. Build the Android APKs locally (`flutter build apk --release --split-per-abi`), name them `QuietQuran-android-arm64.apk` and `QuietQuran-android-arm32.apk`, add them and a `SHA256SUMS` file to the draft, and publish it. The website's download buttons always point at the latest release.
+3. Build the `direct` APKs, name them `QuietQuran-android-arm64.apk` and `QuietQuran-android-arm32.apk`, add them and a `SHA256SUMS` file to the draft, and publish it. The website's download buttons always point at the latest release.
+4. Then update `website/version.json` (version, build number, links to the new release's APKs) and deploy the website. Installed copies offer the update from then on.
 
 ## Tests
 

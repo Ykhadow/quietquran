@@ -531,5 +531,21 @@
   "@printedDownloadingBar": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
   "printedSavingNotice": "Saving printed pages: {done} of {total}",
   "@printedSavingNotice": {"placeholders": {"done": {"type": "String"}, "total": {"type": "String"}}},
-  "printedSavedNotice": "Printed pages saved for offline reading"
+  "printedSavedNotice": "Printed pages saved for offline reading",
+  "updateAvailable": "Quiet Quran {version} is available",
+  "@updateAvailable": {"placeholders": {"version": {"type": "String"}}},
+  "updateNow": "Update",
+  "updateDownload": "Download",
+  "updateLater": "Later",
+  "updateDownloading": "Downloading the update… {percent}%",
+  "@updateDownloading": {"placeholders": {"percent": {"type": "int"}}},
+  "updateReady": "The update is ready to install",
+  "updateInstall": "Install",
+  "updateFailed": "The update didn't download. It will be offered again.",
+  "updateDownloadingNotice": "Downloading the Quiet Quran update",
+  "updateReadyNotice": "Update downloaded. Tap to install.",
+  "checkUpdatesSetting": "Check for updates",
+  "checkUpdatesHint": "Once a day, the app reads a public file on quietquran.com to see whether a newer version exists. Nothing about you or your reading is sent.",
+  "appVersion": "Version {version}",
+  "@appVersion": {"placeholders": {"version": {"type": "String"}}}
 }

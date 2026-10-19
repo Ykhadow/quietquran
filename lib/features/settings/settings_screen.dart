@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/settings.dart';
@@ -8,6 +9,7 @@ import '../../data/image_editions.dart';
 import '../../data/models.dart';
 import '../../data/page_images.dart';
 import '../../data/quran_db.dart';
+import '../../data/updates.dart';
 import '../audio/recitation_widgets.dart';
 import '../reader/reflow_page.dart';
 import '../../widgets/night.dart';
@@ -321,6 +323,23 @@ class SettingsScreen extends ConsumerWidget {
                   style: AppType.caption(t.mut).copyWith(height: 1.5),
                 ),
               ),
+              const _Version(),
+              // Website/GitHub builds look for new versions themselves.
+              if (UpdateChecker.supported)
+                SwitchListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  title: Text(
+                    l.checkUpdatesSetting,
+                    style: AppType.body(t.ink),
+                  ),
+                  subtitle: Text(
+                    l.checkUpdatesHint,
+                    style: AppType.caption(t.mut),
+                  ),
+                  value: s.checkUpdates,
+                  activeThumbColor: t.acc,
+                  onChanged: n.setCheckUpdates,
+                ),
               const SizedBox(height: 12),
               GroupedCard(
                 children: [
@@ -627,6 +646,30 @@ class _EasyReadPreview extends StatelessWidget {
           wordGap: settings.reflowWordSpacing,
         ),
       ),
+    );
+  }
+}
+
+/// The app's version, under About.
+class _Version extends StatelessWidget {
+  const _Version();
+
+  @override
+  Widget build(BuildContext context) {
+    final t = context.tokens;
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snap) {
+        final v = snap.data?.version;
+        if (v == null) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+          child: Text(
+            context.l10n.appVersion(v),
+            style: AppType.caption(t.mut),
+          ),
+        );
+      },
     );
   }
 }

@@ -39,6 +39,17 @@ android {
         versionName = flutter.versionName
     }
 
+    // Two builds of the same app (same id, same key, so either updates the
+    // other): "play" for Google Play, which updates it; "direct" for the
+    // website and GitHub, which checks for new versions itself and may
+    // install them (REQUEST_INSTALL_PACKAGES, in src/direct only, as Play
+    // doesn't allow apps to update themselves).
+    flavorDimensions += "store"
+    productFlavors {
+        create("play") { dimension = "store" }
+        create("direct") { dimension = "store" }
+    }
+
     signingConfigs {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String?

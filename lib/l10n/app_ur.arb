@@ -281,5 +281,18 @@
   "printedLoadAsRead": "پڑھتے ہوئے لوڈ کریں",
   "printedDownloadingBar": "چھپے صفحات محفوظ ہو رہے ہیں: {total} میں سے {done}",
   "printedSavingNotice": "چھپے صفحات محفوظ ہو رہے ہیں: {total} میں سے {done}",
-  "printedSavedNotice": "چھپے صفحات آف لائن پڑھنے کے لیے محفوظ ہو گئے"
+  "printedSavedNotice": "چھپے صفحات آف لائن پڑھنے کے لیے محفوظ ہو گئے",
+  "updateAvailable": "Quiet Quran {version} دستیاب ہے",
+  "updateNow": "اپ ڈیٹ کریں",
+  "updateDownload": "ڈاؤن لوڈ کریں",
+  "updateLater": "بعد میں",
+  "updateDownloading": "اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے… {percent}%",
+  "updateReady": "اپ ڈیٹ انسٹال کے لیے تیار ہے",
+  "updateInstall": "انسٹال کریں",
+  "updateFailed": "اپ ڈیٹ ڈاؤن لوڈ نہیں ہو سکی۔ یہ دوبارہ پیش کی جائے گی۔",
+  "updateDownloadingNotice": "Quiet Quran کی اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے",
+  "updateReadyNotice": "اپ ڈیٹ ڈاؤن لوڈ ہو گئی۔ انسٹال کے لیے ٹیپ کریں۔",
+  "checkUpdatesSetting": "اپ ڈیٹس دیکھیں",
+  "checkUpdatesHint": "دن میں ایک بار ایپ quietquran.com پر ایک عوامی فائل پڑھتی ہے تاکہ دیکھے کہ نیا ورژن موجود ہے یا نہیں۔ آپ یا آپ کے مطالعے کے بارے میں کچھ نہیں بھیجا جاتا۔",
+  "appVersion": "ورژن {version}"
 }
