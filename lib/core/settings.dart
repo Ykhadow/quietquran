@@ -108,6 +108,8 @@ class Settings {
     required this.language,
     required this.translation,
     required this.reflowTranslation,
+    required this.translationAfterPage,
+    required this.translationReturn,
     required this.twoPages,
     required this.checkUpdates,
     required this.verticalScroll,
@@ -138,6 +140,8 @@ class Settings {
     language: 'system',
     translation: 'auto',
     reflowTranslation: false,
+    translationAfterPage: false,
+    translationReturn: '',
     twoPages: true,
     checkUpdates: true,
     verticalScroll: false,
@@ -188,6 +192,16 @@ class Settings {
 
   /// Show each ayah's translation under it in Reflow.
   final bool reflowTranslation;
+
+  /// In Easy read, the page's translations come together after the page
+  /// (recite first, then read the meanings) instead of under each ayah; the
+  /// recitation follows the same order.
+  final bool translationAfterPage;
+
+  /// The view the reader came from when the translation button switched to
+  /// Easy read ('mushaf' or 'printed'), to go back to when it's tapped
+  /// again; '' if they came some other way.
+  final String translationReturn;
 
   /// On wide screens (tablets, desktop, phones held sideways), show two
   /// Mushaf pages side by side like an open book; otherwise one.
@@ -263,6 +277,8 @@ class Settings {
     String? language,
     String? translation,
     bool? reflowTranslation,
+    bool? translationAfterPage,
+    String? translationReturn,
     bool? twoPages,
     bool? checkUpdates,
     bool? verticalScroll,
@@ -285,6 +301,8 @@ class Settings {
     language: language ?? this.language,
     translation: translation ?? this.translation,
     reflowTranslation: reflowTranslation ?? this.reflowTranslation,
+    translationAfterPage: translationAfterPage ?? this.translationAfterPage,
+    translationReturn: translationReturn ?? this.translationReturn,
     twoPages: twoPages ?? this.twoPages,
     checkUpdates: checkUpdates ?? this.checkUpdates,
     verticalScroll: verticalScroll ?? this.verticalScroll,
@@ -337,6 +355,10 @@ class SettingsNotifier extends Notifier<Settings> {
       language: p.getString('language') ?? d.language,
       translation: p.getString('translation') ?? d.translation,
       reflowTranslation: p.getBool('reflowTranslation') ?? d.reflowTranslation,
+      translationAfterPage:
+          p.getBool('translationAfterPage') ?? d.translationAfterPage,
+      translationReturn:
+          p.getString('translationReturn') ?? d.translationReturn,
       twoPages: p.getBool('twoPages') ?? d.twoPages,
       checkUpdates: p.getBool('checkUpdates') ?? d.checkUpdates,
       verticalScroll: p.getBool('verticalScroll') ?? d.verticalScroll,
@@ -376,8 +398,10 @@ class SettingsNotifier extends Notifier<Settings> {
   }
 
   void setMode(ReadingMode v) {
-    state = state.copyWith(mode: v);
-    _prefs.setString('mode', v.name);
+    state = state.copyWith(mode: v, translationReturn: '');
+    _prefs
+      ..setString('mode', v.name)
+      ..setString('translationReturn', '');
   }
 
   void setTextEdition(String id) {
@@ -391,8 +415,10 @@ class SettingsNotifier extends Notifier<Settings> {
   }
 
   void setTextLayout(TextLayout v) {
-    state = state.copyWith(textLayout: v);
-    _prefs.setString('textLayout', v.name);
+    state = state.copyWith(textLayout: v, translationReturn: '');
+    _prefs
+      ..setString('textLayout', v.name)
+      ..setString('translationReturn', '');
   }
 
   void setScrubber(ScrubberMode v) {
@@ -482,6 +508,47 @@ class SettingsNotifier extends Notifier<Settings> {
     state = state.copyWith(reflowTranslation: v);
     _prefs.setBool('reflowTranslation', v);
   }
+
+  void setTranslationAfterPage(bool v) {
+    state = state.copyWith(translationAfterPage: v);
+    _prefs.setBool('translationAfterPage', v);
+  }
+
+  /// The translation button on a Mushaf or printed page: Easy read with the
+  /// translation, remembering where the reader came from.
+  void showTranslationView() {
+    final from = state.mode == ReadingMode.pages
+        ? 'printed'
+        : state.textLayout == TextLayout.mushaf
+        ? 'mushaf'
+        : '';
+    state = state.copyWith(
+      mode: ReadingMode.text,
+      textLayout: TextLayout.reflow,
+      reflowTranslation: true,
+      translationReturn: from,
+    );
+    _saveView();
+  }
+
+  /// The translation button again: hides the translation and goes back to
+  /// the Mushaf or printed page it was opened from, if any.
+  void hideTranslationView() {
+    final back = state.translationReturn;
+    state = state.copyWith(
+      reflowTranslation: false,
+      mode: back == 'printed' ? ReadingMode.pages : state.mode,
+      textLayout: back == 'mushaf' ? TextLayout.mushaf : state.textLayout,
+      translationReturn: '',
+    );
+    _saveView();
+  }
+
+  void _saveView() => _prefs
+    ..setString('mode', state.mode.name)
+    ..setString('textLayout', state.textLayout.name)
+    ..setBool('reflowTranslation', state.reflowTranslation)
+    ..setString('translationReturn', state.translationReturn);
 
   void setTwoPages(bool v) {
     state = state.copyWith(twoPages: v);

@@ -314,22 +314,30 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
   /// Bookmarks the page (its first ayah), or clears every bookmark on it.
   /// The translation button: shows or hides the translation under each
-  /// ayah. With none chosen yet (or none for the app's language), it turns
-  /// on the one for the app's language, or English; the Aa sheet changes
-  /// which.
+  /// ayah. On a Mushaf or printed page it opens Easy read with the
+  /// translation, and tapping it again goes back. With no translation
+  /// chosen yet (or none for the app's language), it turns on the one for
+  /// the app's language, or English; the Aa sheet changes which.
   void _toggleTranslation(Settings settings) {
     final n = ref.read(settingsProvider.notifier);
     final locale = context.l10n.localeName;
     final chosen = settings.translationFor(locale);
-    if (settings.reflowTranslation && chosen != null) {
-      n.setReflowTranslation(false);
+    if (_translationOn(settings, locale)) {
+      n.hideTranslationView();
       return;
     }
     if (chosen == null) {
       n.setTranslation(locale == 'ur' ? 'ur-jalandhari' : 'en-sahih');
     }
-    n.setReflowTranslation(true);
+    n.showTranslationView();
   }
+
+  /// Whether the translation shows under the page's ayahs (Easy read only).
+  bool _translationOn(Settings s, String locale) =>
+      s.mode == ReadingMode.text &&
+      s.textLayout == TextLayout.reflow &&
+      s.reflowTranslation &&
+      s.translationFor(locale) != null;
 
   void _toggleBookmark() {
     final library = ref.read(libraryProvider);
@@ -784,12 +792,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
                     onDisplay: () =>
                         _withSheet(() => showDisplaySheet(context)),
                     // Translations sit under each ayah in Easy read only.
-                    translationOn:
-                        settings.mode == ReadingMode.text &&
-                            settings.textLayout == TextLayout.reflow
-                        ? settings.reflowTranslation &&
-                              settings.translationFor(l.localeName) != null
-                        : null,
+                    translationOn: _translationOn(settings, l.localeName),
                     onTranslation: () => _toggleTranslation(settings),
                   ),
                 ),
@@ -1221,9 +1224,8 @@ class _BottomSheet extends StatelessWidget {
     required this.onTranslation,
   });
 
-  /// Whether the translation shows under each ayah, or null where it can't
-  /// (Mushaf and printed pages), which hides its button.
-  final bool? translationOn;
+  /// Whether the translation shows under each ayah (in Easy read).
+  final bool translationOn;
   final VoidCallback onTranslation;
 
   final String surah;
@@ -1290,22 +1292,22 @@ class _BottomSheet extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (translationOn case final on?) ...[
-                    Semantics(
-                      toggled: on,
-                      child: round(
-                        tooltip: on ? l.hideTranslation : l.showTranslation,
-                        onTap: onTranslation,
-                        selected: on,
-                        child: Icon(
-                          LucideIcons.languages,
-                          size: 20,
-                          color: on ? t.bg : t.ink,
-                        ),
+                  Semantics(
+                    toggled: translationOn,
+                    child: round(
+                      tooltip: translationOn
+                          ? l.hideTranslation
+                          : l.showTranslation,
+                      onTap: onTranslation,
+                      selected: translationOn,
+                      child: Icon(
+                        LucideIcons.languages,
+                        size: 20,
+                        color: translationOn ? t.bg : t.ink,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                  ],
+                  ),
+                  const SizedBox(width: 8),
                   listen,
                   const SizedBox(width: 8),
                   round(
