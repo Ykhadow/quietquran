@@ -130,12 +130,22 @@ void main() {
       await settle(tester);
       nav().pop();
       await settle(tester);
+      // Sources is under About, a page of its own.
       await tester.scrollUntilVisible(
-        find.text('Sources'),
+        find.text('About'),
         300,
         scrollable: find.byType(Scrollable).first,
       );
+      await tester.tap(find.text('About'));
+      await settle(tester);
+      await tester.scrollUntilVisible(
+        find.text('Sources'),
+        300,
+        scrollable: find.byType(Scrollable).last,
+      );
       await tester.tap(find.text('Sources'));
+      await settle(tester);
+      nav().pop();
       await settle(tester);
       nav().pop();
       await settle(tester);

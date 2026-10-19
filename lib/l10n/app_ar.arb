@@ -303,5 +303,10 @@
   "shareCustomise": "تخصيص",
   "shareShowBrand": "إظهار Quiet Quran",
   "shareShowBrandHint": "يبقى مرجع الآية واسم المترجم على البطاقة دائمًا.",
-  "moreColours": "ألوان أخرى"
+  "moreColours": "ألوان أخرى",
+  "settingsReading": "القراءة",
+  "settingsPrinted": "الصفحات المطبوعة",
+  "settingsPrintedSummary": "الحفظ للقراءة دون اتصال، وألوانها",
+  "settingsPlacesSummary": "احفظ جلساتك وعلاماتك أو افتحها",
+  "settingsAboutSummary": "الإصدار والتحديثات والمصادر"
 }

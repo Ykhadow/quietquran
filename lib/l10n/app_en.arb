@@ -556,5 +556,10 @@
   "shareCustomise": "Customise",
   "shareShowBrand": "Show Quiet Quran",
   "shareShowBrandHint": "The ayah's reference and the translator always stay on the card.",
-  "moreColours": "More colours"
+  "moreColours": "More colours",
+  "settingsReading": "Reading",
+  "settingsPrinted": "Printed pages",
+  "settingsPrintedSummary": "Save for offline reading, and their colours",
+  "settingsPlacesSummary": "Save or open your sessions and bookmarks",
+  "settingsAboutSummary": "Version, updates and sources"
 }

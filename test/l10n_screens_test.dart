@@ -66,6 +66,9 @@ void main() {
     'aa-sheet': (true, () => const ReaderScreen(initialPage: 562)),
     'home': (true, () => const HomeScreen()),
     'settings': (true, () => const SettingsScreen()),
+    // Each group of settings on its own page.
+    for (final p in SettingsPage.values)
+      'settings-${p.name}': (true, () => SettingsScreen(page: p)),
     'reader': (true, () => const ReaderScreen(initialPage: 562)),
     'sources': (true, () => const SourcesScreen()),
     'palette': (true, () => const PaletteEditor()),

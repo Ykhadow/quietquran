@@ -1038,4 +1038,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get moreColours => 'ألوان أخرى';
+
+  @override
+  String get settingsReading => 'القراءة';
+
+  @override
+  String get settingsPrinted => 'الصفحات المطبوعة';
+
+  @override
+  String get settingsPrintedSummary => 'الحفظ للقراءة دون اتصال، وألوانها';
+
+  @override
+  String get settingsPlacesSummary => 'احفظ جلساتك وعلاماتك أو افتحها';
+
+  @override
+  String get settingsAboutSummary => 'الإصدار والتحديثات والمصادر';
 }

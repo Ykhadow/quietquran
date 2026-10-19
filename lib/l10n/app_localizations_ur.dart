@@ -1049,4 +1049,21 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get moreColours => 'مزید رنگ';
+
+  @override
+  String get settingsReading => 'مطالعہ';
+
+  @override
+  String get settingsPrinted => 'چھپے صفحات';
+
+  @override
+  String get settingsPrintedSummary =>
+      'آف لائن پڑھنے کے لیے محفوظ کریں، اور ان کے رنگ';
+
+  @override
+  String get settingsPlacesSummary =>
+      'اپنے سیشن اور بک مارکس محفوظ کریں یا کھولیں';
+
+  @override
+  String get settingsAboutSummary => 'ورژن، اپ ڈیٹس اور ماخذ';
 }

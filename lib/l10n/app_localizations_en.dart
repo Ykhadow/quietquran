@@ -1048,4 +1048,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moreColours => 'More colours';
+
+  @override
+  String get settingsReading => 'Reading';
+
+  @override
+  String get settingsPrinted => 'Printed pages';
+
+  @override
+  String get settingsPrintedSummary =>
+      'Save for offline reading, and their colours';
+
+  @override
+  String get settingsPlacesSummary =>
+      'Save or open your sessions and bookmarks';
+
+  @override
+  String get settingsAboutSummary => 'Version, updates and sources';
 }

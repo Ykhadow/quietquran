@@ -1917,6 +1917,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'More colours'**
   String get moreColours;
+
+  /// No description provided for @settingsReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get settingsReading;
+
+  /// No description provided for @settingsPrinted.
+  ///
+  /// In en, this message translates to:
+  /// **'Printed pages'**
+  String get settingsPrinted;
+
+  /// No description provided for @settingsPrintedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Save for offline reading, and their colours'**
+  String get settingsPrintedSummary;
+
+  /// No description provided for @settingsPlacesSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Save or open your sessions and bookmarks'**
+  String get settingsPlacesSummary;
+
+  /// No description provided for @settingsAboutSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Version, updates and sources'**
+  String get settingsAboutSummary;
 }
 
 class _AppLocalizationsDelegate

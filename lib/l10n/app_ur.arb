@@ -303,5 +303,10 @@
   "shareCustomise": "اپنی پسند کے مطابق",
   "shareShowBrand": "Quiet Quran دکھائیں",
   "shareShowBrandHint": "آیت کا حوالہ اور مترجم کا نام ہمیشہ کارڈ پر رہتے ہیں۔",
-  "moreColours": "مزید رنگ"
+  "moreColours": "مزید رنگ",
+  "settingsReading": "مطالعہ",
+  "settingsPrinted": "چھپے صفحات",
+  "settingsPrintedSummary": "آف لائن پڑھنے کے لیے محفوظ کریں، اور ان کے رنگ",
+  "settingsPlacesSummary": "اپنے سیشن اور بک مارکس محفوظ کریں یا کھولیں",
+  "settingsAboutSummary": "ورژن، اپ ڈیٹس اور ماخذ"
 }
