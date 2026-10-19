@@ -682,15 +682,16 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
             ),
             // Customise: the card's colours, and whether it carries our
             // mark. Off, the card simply follows the reader's theme.
+            const SizedBox(height: 14),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              dense: true,
               title: Text(l.shareCustomise, style: AppType.body(t.ink)),
               value: _customise,
               activeThumbColor: t.acc,
               onChanged: (v) => _setCustom(customise: v),
             ),
             if (_customise) ...[
+              const SizedBox(height: 6),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
