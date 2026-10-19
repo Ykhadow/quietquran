@@ -136,6 +136,20 @@ class _DisplaySheet extends ConsumerWidget {
                   ],
                 ),
               ),
+            // In Easy read with a translation: under each ayah, or after
+            // the page (recite first, then read the meanings).
+            if (view == _View.reflow && translationValue != 'none')
+              _Section(
+                label: l.translationPlacement,
+                child: Segmented<bool>(
+                  value: s.translationAfterPage,
+                  onChanged: n.setTranslationAfterPage,
+                  options: [
+                    (false, l.translationUnderAyah),
+                    (true, l.translationAfterPage),
+                  ],
+                ),
+              ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

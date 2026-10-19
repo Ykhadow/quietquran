@@ -32,7 +32,13 @@ class ReflowPage extends StatelessWidget {
     this.juzLabel,
     this.wordSpacing = 0.08,
     this.scrolls = true,
+    this.translationAfterPage = false,
   });
+
+  /// The [translation] of the page's ayahs together after the page (each
+  /// numbered), instead of under each ayah: recite first, then read the
+  /// meanings.
+  final bool translationAfterPage;
 
   /// Scrolls its own text (a page of its own); false when the page sits in
   /// a longer scroll (vertical reading), taking the height its text needs.
@@ -101,6 +107,8 @@ class ReflowPage extends StatelessWidget {
     // A unit is a group of words that must stay on one line: an ayah's last
     // word travels with its end marker.
     var units = <List<Word>>[];
+    // With the translation after the page: each ayah's meaning, in order.
+    final meanings = <(int, int, String)>[];
     void flush({bool center = false}) {
       if (units.isEmpty) return;
       blocks.add(paragraph(units, center: center));
@@ -157,7 +165,11 @@ class ReflowPage extends StatelessWidget {
             // With a translation, each ayah is its own paragraph, followed
             // by its meaning.
             final tr = translation;
-            if (tr != null && w.isAyahEnd) {
+            if (tr != null && w.isAyahEnd && translationAfterPage) {
+              if (db.translationText(tr.id, w.surah, w.ayah) case final t?) {
+                meanings.add((w.surah, w.ayah, t));
+              }
+            } else if (tr != null && w.isAyahEnd) {
               flush(center: opening);
               final text = db.translationText(tr.id, w.surah, w.ayah);
               if (text != null) {
@@ -181,6 +193,46 @@ class ReflowPage extends StatelessWidget {
       }
     }
     flush(center: units.isNotEmpty && _opens(units.first));
+    // Translations after the page: a rule, then each ayah's meaning with
+    // its reference.
+    if (translation case final tr? when meanings.isNotEmpty) {
+      blocks.add(const SizedBox(height: 8));
+      blocks.add(pairRule);
+      for (final (surah, ayah, text) in meanings) {
+        blocks.add(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(4, 0, 4, 14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              textDirection: tr.rtl ? TextDirection.rtl : TextDirection.ltr,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 3),
+                  child: Text(
+                    '$surah:$ayah',
+                    textDirection: TextDirection.ltr,
+                    style: TextStyle(
+                      fontFamily: AppType.sans,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: colors.acc,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TranslationText(
+                    translation: tr,
+                    text: text,
+                    fontSize: (fontSize * 0.55).clamp(15.0, 26.0),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    }
     // The page's own rule follows the last pair.
     if (blocks.isNotEmpty && identical(blocks.last, pairRule)) {
       blocks.removeLast();

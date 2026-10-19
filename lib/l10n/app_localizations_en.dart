@@ -1019,4 +1019,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String appVersion(String version) {
     return 'Version $version';
   }
+
+  @override
+  String get translationPlacement => 'In Easy read, the translation goes';
+
+  @override
+  String get translationUnderAyah => 'Under each ayah';
+
+  @override
+  String get translationAfterPage => 'After the page';
+
+  @override
+  String get translationPlacementHint =>
+      'After the page: recite the page first, then read its meanings together. The recitation follows the same order.';
 }

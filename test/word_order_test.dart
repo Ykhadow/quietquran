@@ -179,6 +179,31 @@ void main() {
           );
         }
 
+        // With the translation after the page: the Quran text stays one
+        // flowing paragraph, the meanings follow it.
+        testWidgets('${dir.name} reflow+after-page ${typeface.name} p$pageNo', (
+          tester,
+        ) async {
+          ambient = dir;
+          final p = page();
+          await pump(
+            tester,
+            const Size(411, 30000),
+            ReflowPage(
+              page: p,
+              db: db,
+              fontSize: 30,
+              translation: db.translation('en-sahih'),
+              translationAfterPage: true,
+            ),
+          );
+          expect(find.byType(TranslationText), findsWidgets);
+          _expectInOrder(
+            _visualOrder(tester, p),
+            'reflow+after-page page ${p.number}',
+          );
+        });
+
         // With a translation under each ayah (the Quran text becomes one
         // paragraph per ayah, with translation text in between).
         for (final tid in ['en-sahih', 'ur-jalandhari']) {

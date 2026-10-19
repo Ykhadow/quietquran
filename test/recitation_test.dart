@@ -113,6 +113,31 @@ void main() {
       expect(q.length, 31);
     });
 
+    test('translations after the page: a page recited, then its meanings', () {
+      // Al-Mulk's 30 ayahs over three pages: 1-12, 13-26, 27-30.
+      int pageOf(int a) => a <= 12 ? 1 : (a <= 26 ? 2 : 3);
+      final q = surahQueue(
+        reciter: alafasy,
+        surah: 67,
+        fromAyah: 1,
+        ayahCount: 30,
+        voice: TranslationVoice.all.first,
+        pageOf: pageOf,
+      );
+      String label(AudioItem i) =>
+          '${i.part == AudioPart.recitation ? 'r' : 't'}${i.ayah}';
+      final order = q.map(label).toList();
+      // Bismillah and ayahs 1-12, then their translations, then page 2...
+      expect(order.take(13), ['r0', for (var a = 1; a <= 12; a++) 'r$a']);
+      expect(order.skip(13).take(13), [
+        't0',
+        for (var a = 1; a <= 12; a++) 't$a',
+      ]);
+      expect(order.skip(26).take(14), [for (var a = 13; a <= 26; a++) 'r$a']);
+      expect(order.last, 't30');
+      expect(q.length, 2 * 31);
+    });
+
     test('but not Al-Fatihah (its first ayah) or At-Tawbah (none)', () {
       for (final (surah, count) in [(1, 7), (9, 129)]) {
         final q = surahQueue(

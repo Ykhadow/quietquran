@@ -275,6 +275,27 @@ class SettingsScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
                 child: Text(l.translationHint, style: AppType.caption(t.mut)),
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 14, 24, 8),
+                child: Text(l.translationPlacement, style: AppType.body(t.ink)),
+              ),
+              pad(
+                Segmented<bool>(
+                  value: s.translationAfterPage,
+                  onChanged: n.setTranslationAfterPage,
+                  options: [
+                    (false, l.translationUnderAyah),
+                    (true, l.translationAfterPage),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 8, 24, 0),
+                child: Text(
+                  l.translationPlacementHint,
+                  style: AppType.caption(t.mut),
+                ),
+              ),
               const RecitationOptions(),
               Eyebrow(l.reader),
               SwitchListTile(

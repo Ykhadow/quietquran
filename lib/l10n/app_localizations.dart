@@ -1863,6 +1863,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version {version}'**
   String appVersion(String version);
+
+  /// No description provided for @translationPlacement.
+  ///
+  /// In en, this message translates to:
+  /// **'In Easy read, the translation goes'**
+  String get translationPlacement;
+
+  /// No description provided for @translationUnderAyah.
+  ///
+  /// In en, this message translates to:
+  /// **'Under each ayah'**
+  String get translationUnderAyah;
+
+  /// No description provided for @translationAfterPage.
+  ///
+  /// In en, this message translates to:
+  /// **'After the page'**
+  String get translationAfterPage;
+
+  /// No description provided for @translationPlacementHint.
+  ///
+  /// In en, this message translates to:
+  /// **'After the page: recite the page first, then read its meanings together. The recitation follows the same order.'**
+  String get translationPlacementHint;
 }
 
 class _AppLocalizationsDelegate

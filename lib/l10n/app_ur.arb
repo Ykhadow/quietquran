@@ -294,5 +294,9 @@
   "updateReadyNotice": "اپ ڈیٹ ڈاؤن لوڈ ہو گئی۔ انسٹال کے لیے ٹیپ کریں۔",
   "checkUpdatesSetting": "اپ ڈیٹس دیکھیں",
   "checkUpdatesHint": "دن میں ایک بار ایپ quietquran.com پر ایک عوامی فائل پڑھتی ہے تاکہ دیکھے کہ نیا ورژن موجود ہے یا نہیں۔ آپ یا آپ کے مطالعے کے بارے میں کچھ نہیں بھیجا جاتا۔",
-  "appVersion": "ورژن {version}"
+  "appVersion": "ورژن {version}",
+  "translationPlacement": "آسان مطالعہ میں ترجمہ",
+  "translationUnderAyah": "ہر آیت کے نیچے",
+  "translationAfterPage": "صفحے کے بعد",
+  "translationPlacementHint": "صفحے کے بعد: پہلے صفحہ تلاوت کریں، پھر اس کے معانی ایک ساتھ پڑھیں۔ تلاوت بھی اسی ترتیب سے ہوتی ہے۔"
 }

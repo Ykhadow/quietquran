@@ -140,7 +140,13 @@ class RecitationController extends Notifier<RecitationState> {
     // A new reciter, voice or repeat count carries on from the same ayah.
     ref.listen(
       settingsProvider.select(
-        (s) => (s.reciter, s.translationShown, s.ayahRepeat, s.translation),
+        (s) => (
+          s.reciter,
+          s.translationShown,
+          s.ayahRepeat,
+          s.translation,
+          s.translationAfterPage,
+        ),
       ),
       (_, _) {
         if (state.active) {
@@ -204,6 +210,10 @@ class RecitationController extends Notifier<RecitationState> {
       ayahCount: db.surah(surah).versesCount,
       voice: voice,
       repeat: settings.ayahRepeat,
+      // Translations after the page: recite the page, then its meanings.
+      pageOf: settings.translationAfterPage
+          ? (a) => db.pageOfAyahEnd(settings.layoutEdition, surah, a)
+          : null,
     );
     final generation = ++_generation;
     _queue = queue;

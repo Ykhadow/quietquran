@@ -573,6 +573,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     settings.reflowFontSize,
     settings.reflowWordSpacing,
     settings.reflowTranslation,
+    settings.translationAfterPage,
     settings.translation,
     context.l10n.localeName,
     // Colours: a page (and its prepared picture) must be rebuilt when the
@@ -634,6 +635,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
           s.reflowFontSize,
           s.reflowWordSpacing,
           s.reflowTranslation,
+          s.translationAfterPage,
           s.twoPages,
           s.verticalScroll,
           s.translation,
@@ -980,6 +982,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         translation: settings.reflowTranslation
             ? db.translation(settings.translationFor(context.l10n.localeName))
             : null,
+        translationAfterPage: settings.translationAfterPage,
         onAyahLongPress: _onAyahLongPress,
         scrolls: scrolls,
       );

@@ -1009,4 +1009,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String appVersion(String version) {
     return 'الإصدار $version';
   }
+
+  @override
+  String get translationPlacement => 'في القراءة الميسّرة، الترجمة';
+
+  @override
+  String get translationUnderAyah => 'تحت كل آية';
+
+  @override
+  String get translationAfterPage => 'بعد الصفحة';
+
+  @override
+  String get translationPlacementHint =>
+      'بعد الصفحة: اقرأ الصفحة أولًا، ثم اقرأ معانيها معًا. وتسير التلاوة بالترتيب نفسه.';
 }

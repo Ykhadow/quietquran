@@ -1020,4 +1020,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String appVersion(String version) {
     return 'ورژن $version';
   }
+
+  @override
+  String get translationPlacement => 'آسان مطالعہ میں ترجمہ';
+
+  @override
+  String get translationUnderAyah => 'ہر آیت کے نیچے';
+
+  @override
+  String get translationAfterPage => 'صفحے کے بعد';
+
+  @override
+  String get translationPlacementHint =>
+      'صفحے کے بعد: پہلے صفحہ تلاوت کریں، پھر اس کے معانی ایک ساتھ پڑھیں۔ تلاوت بھی اسی ترتیب سے ہوتی ہے۔';
 }

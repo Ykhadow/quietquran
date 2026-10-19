@@ -142,6 +142,17 @@ class QuranDb {
     return pageOfWord(edition, rows.first['first_word'] as int);
   }
 
+  /// The page where [surah]:[ayah] ends (its end marker), which is where
+  /// Easy read shows its translation.
+  int pageOfAyahEnd(String edition, int surah, int ayah) {
+    final rows = _db.select(
+      'SELECT last_word FROM ayahs WHERE surah = ? AND ayah = ?',
+      [surah, ayah],
+    );
+    if (rows.isEmpty) return 1;
+    return pageOfWord(edition, rows.first['last_word'] as int);
+  }
+
   /// Natural width (words and gaps, at a 100px font) that 99% of the
   /// edition's justified lines fit in, for [typeface]'s text. Sizing text so
   /// this fills the page gives one font size for the whole edition.

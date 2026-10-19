@@ -215,7 +215,10 @@ class AudioItem {
 /// What plays for [surah] from [fromAyah] to its end: the Bismillah first
 /// when starting at ayah 1 (not for Al-Fatihah, whose first ayah it is, nor
 /// At-Tawbah, which has none), then each ayah recited [repeat] times and,
-/// with a [voice], its translation once.
+/// with a [voice], its translation once: straight after the ayah, or, with
+/// [pageOf] (the page each ayah ends on), all of a page's translations
+/// after its recitation, as Easy read shows them with the translation after
+/// the page.
 List<AudioItem> surahQueue({
   required Reciter reciter,
   required int surah,
@@ -223,6 +226,7 @@ List<AudioItem> surahQueue({
   required int ayahCount,
   TranslationVoice? voice,
   int repeat = 1,
+  int Function(int ayah)? pageOf,
 }) {
   List<AudioItem> ayah(int a, {bool bismillah = false}) => [
     AudioItem(
@@ -242,8 +246,28 @@ List<AudioItem> surahQueue({
         bismillah: bismillah,
       ),
   ];
-  return [
-    if (fromAyah == 1 && surah != 1 && surah != 9) ...ayah(0, bismillah: true),
-    for (var a = fromAyah; a <= ayahCount; a++) ...ayah(a),
+  final order = [
+    if (fromAyah == 1 && surah != 1 && surah != 9) 0,
+    for (var a = fromAyah; a <= ayahCount; a++) a,
   ];
+  if (voice == null || pageOf == null) {
+    return [for (final a in order) ...ayah(a, bismillah: a == 0)];
+  }
+  // A page's ayahs, then their translations, then the next page. The
+  // Bismillah goes with the surah's first ayah.
+  final queue = <AudioItem>[];
+  final meanings = <AudioItem>[];
+  int? page;
+  for (final a in order) {
+    final p = pageOf(a == 0 ? 1 : a);
+    if (page != null && p != page) {
+      queue.addAll(meanings);
+      meanings.clear();
+    }
+    page = p;
+    final [recited, meaning] = ayah(a, bismillah: a == 0);
+    queue.add(recited);
+    meanings.add(meaning);
+  }
+  return queue..addAll(meanings);
 }
