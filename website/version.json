@@ -1,9 +1,9 @@
 {
-  "version": "1.0.0",
-  "build": 1,
-  "page": "https://github.com/Ykhadow/quietquran/releases/tag/v1.0.0",
+  "version": "1.0.1",
+  "build": 2,
+  "page": "https://github.com/Ykhadow/quietquran/releases/tag/v1.0.1",
   "android": {
-    "arm64": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.0/QuietQuran-android-arm64.apk",
-    "arm32": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.0/QuietQuran-android-arm32.apk"
+    "arm64": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.1/QuietQuran-android-arm64.apk",
+    "arm32": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.1/QuietQuran-android-arm32.apk"
   }
 }
