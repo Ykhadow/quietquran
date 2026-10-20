@@ -1965,6 +1965,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t check for updates. Try again later.'**
   String get checkFailed;
+
+  /// No description provided for @updateEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'New version'**
+  String get updateEyebrow;
+
+  /// No description provided for @updateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet Quran {version}'**
+  String updateTitle(String version);
 }
 
 class _AppLocalizationsDelegate

@@ -5,5 +5,10 @@
   "android": {
     "arm64": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.1/QuietQuran-android-arm64.apk",
     "arm32": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.1/QuietQuran-android-arm32.apk"
+  },
+  "notes": {
+    "en": "Translation after the page, share cards your way, a Classic theme, and printed pages saved in the background.",
+    "ur": "صفحے کے بعد ترجمہ، اپنی پسند کے شیئر کارڈ، کلاسیک تھیم، اور پس منظر میں محفوظ ہونے والے چھپے صفحات۔",
+    "ar": "الترجمة بعد الصفحة، وبطاقات مشاركة كما تحب، وسمة كلاسيكية، وحفظ الصفحات المطبوعة في الخلفية."
   }
 }

@@ -311,5 +311,7 @@
   "settingsAboutSummary": "الإصدار والتحديثات والمصادر",
   "checkNow": "تحقق الآن",
   "upToDate": "لديك أحدث إصدار",
-  "checkFailed": "تعذّر البحث عن تحديثات. حاول لاحقًا."
+  "checkFailed": "تعذّر البحث عن تحديثات. حاول لاحقًا.",
+  "updateEyebrow": "إصدار جديد",
+  "updateTitle": "Quiet Quran {version}"
 }

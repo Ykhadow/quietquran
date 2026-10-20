@@ -564,5 +564,8 @@
   "settingsAboutSummary": "Version, updates and sources",
   "checkNow": "Check now",
   "upToDate": "You have the latest version",
-  "checkFailed": "Couldn't check for updates. Try again later."
+  "checkFailed": "Couldn't check for updates. Try again later.",
+  "updateEyebrow": "New version",
+  "updateTitle": "Quiet Quran {version}",
+  "@updateTitle": {"placeholders": {"version": {"type": "String"}}}
 }

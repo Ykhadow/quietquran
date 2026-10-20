@@ -1076,4 +1076,12 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get checkFailed =>
       'اپ ڈیٹس نہیں دیکھی جا سکیں۔ بعد میں دوبارہ کوشش کریں۔';
+
+  @override
+  String get updateEyebrow => 'نیا ورژن';
+
+  @override
+  String updateTitle(String version) {
+    return 'Quiet Quran $version';
+  }
 }

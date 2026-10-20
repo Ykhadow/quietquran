@@ -17,13 +17,15 @@ import '../core/settings.dart';
 ///     {"version": "1.0.1", "build": 2,
 ///      "page": "https://github.com/…/releases/tag/v1.0.1",
 ///      "android": {"arm64": "https://…/QuietQuran-android-arm64.apk",
-///                  "arm32": "https://…/QuietQuran-android-arm32.apk"}}
+///                  "arm32": "https://…/QuietQuran-android-arm32.apk"},
+///      "notes": {"en": "What's new, in a line", "ur": "…", "ar": "…"}}
 class AppUpdate {
   const AppUpdate({
     required this.version,
     required this.build,
     required this.page,
     required this.android,
+    this.notes = const {},
   });
 
   factory AppUpdate.fromJson(Map<String, dynamic> j) => AppUpdate(
@@ -34,7 +36,17 @@ class AppUpdate {
       for (final e in ((j['android'] as Map?) ?? const {}).entries)
         '${e.key}': '${e.value}',
     },
+    notes: {
+      for (final e in ((j['notes'] as Map?) ?? const {}).entries)
+        '${e.key}': '${e.value}',
+    },
   );
+
+  /// What's new, in one line, by language code ("en", "ur", "ar").
+  final Map<String, String> notes;
+
+  /// What's new in [language], or English, or nothing.
+  String? notesFor(String language) => notes[language] ?? notes['en'];
 
   final String version;
   final int build;

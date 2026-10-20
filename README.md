@@ -87,7 +87,7 @@ To release:
 1. Set `version:` in `pubspec.yaml` (raise the build number after `+`), commit, and push a tag: `git tag v1.2.3 && git push origin v1.2.3`.
 2. `.github/workflows/release.yml` builds Windows and Linux and puts them on a draft GitHub Release, after checking that the IndoPak font is exactly the permitted file.
 3. Build the `direct` APKs, name them `QuietQuran-android-arm64.apk` and `QuietQuran-android-arm32.apk`, add them and a `SHA256SUMS` file to the draft, and publish it. The website's download buttons always point at the latest release.
-4. Then update `website/version.json` (version, build number, links to the new release's APKs) and deploy the website. Installed copies offer the update from then on.
+4. Then update `website/version.json` (version, links to the new release's APKs, and a one-line `notes` per language for the update card) and deploy the website. Installed copies offer the update from then on; versions are compared by name (1.0.2 > 1.0.1).
 
 ## Tests
 

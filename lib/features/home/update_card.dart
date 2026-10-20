@@ -8,9 +8,9 @@ import '../../core/theme.dart';
 import '../../data/updates.dart';
 import '../../l10n/l10n.dart';
 
-/// A quiet card at the top of home when a newer version is out (website
-/// and GitHub builds only): Update or Later, then the download's progress,
-/// then Install.
+/// A newer version, on home (website and GitHub builds only), in the same
+/// raised card as the daily reading: what it is and what's new, then
+/// Update or Later; the download's progress; then Install.
 class UpdateCard extends ConsumerWidget {
   const UpdateCard({super.key});
 
@@ -28,8 +28,9 @@ class UpdateCard extends ConsumerWidget {
       downloading: l.updateDownloadingNotice,
       downloaded: l.updateReadyNotice,
     );
+    final notes = u.notesFor(l.localeName);
 
-    final (String text, List<Widget> actions) = switch (s.stage) {
+    final (String? line, List<Widget> actions) = switch (s.stage) {
       UpdateStage.downloading => (
         l.updateDownloading(((s.progress ?? 0) * 100).round()),
         <Widget>[],
@@ -48,7 +49,7 @@ class UpdateCard extends ConsumerWidget {
         [TextButton(onPressed: checker.later, child: Text(l.updateLater))],
       ),
       _ => (
-        l.updateAvailable(u.version),
+        notes,
         [
           TextButton(onPressed: checker.later, child: Text(l.updateLater)),
           FilledButton(
@@ -61,10 +62,10 @@ class UpdateCard extends ConsumerWidget {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-      padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
       decoration: BoxDecoration(
         color: t.surf,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(color: t.line2),
       ),
       child: Column(
@@ -72,20 +73,32 @@ class UpdateCard extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Icon(LucideIcons.download, size: 18, color: t.acc),
-              const SizedBox(width: 10),
-              Expanded(child: Text(text, style: AppType.body(t.ink))),
+              Icon(LucideIcons.sparkles, size: 13, color: t.acc),
+              const SizedBox(width: 6),
+              Text(
+                l.updateEyebrow.toUpperCase(),
+                style: AppType.eyebrow(t.acc),
+              ),
             ],
           ),
+          const SizedBox(height: 10),
+          Text(
+            l.updateTitle(u.version),
+            style: AppType.titleLg(t.ink).copyWith(fontSize: 20),
+          ),
+          if (line != null && line.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(line, style: AppType.caption(t.mut).copyWith(height: 1.45)),
+          ],
           if (s.stage == UpdateStage.downloading) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             ClipRRect(
-              borderRadius: BorderRadius.circular(2),
-              child: LinearProgressIndicator(value: s.progress, minHeight: 3),
+              borderRadius: BorderRadius.circular(3),
+              child: LinearProgressIndicator(value: s.progress, minHeight: 5),
             ),
           ],
           if (actions.isNotEmpty) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

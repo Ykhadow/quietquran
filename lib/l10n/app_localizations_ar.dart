@@ -1062,4 +1062,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get checkFailed => 'تعذّر البحث عن تحديثات. حاول لاحقًا.';
+
+  @override
+  String get updateEyebrow => 'إصدار جديد';
+
+  @override
+  String updateTitle(String version) {
+    return 'Quiet Quran $version';
+  }
 }

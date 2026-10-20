@@ -1074,4 +1074,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checkFailed => 'Couldn\'t check for updates. Try again later.';
+
+  @override
+  String get updateEyebrow => 'New version';
+
+  @override
+  String updateTitle(String version) {
+    return 'Quiet Quran $version';
+  }
 }
