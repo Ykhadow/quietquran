@@ -1068,6 +1068,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String updateTitle(String version) {
-    return 'Quiet Quran $version';
+    return 'الإصدار $version';
   }
+
+  @override
+  String get whatsNew => 'الجديد:';
 }

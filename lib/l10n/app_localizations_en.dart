@@ -1080,6 +1080,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String updateTitle(String version) {
-    return 'Quiet Quran $version';
+    return 'Version $version';
   }
+
+  @override
+  String get whatsNew => 'What\'s new:';
 }

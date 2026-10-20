@@ -30,6 +30,8 @@ class UpdateCard extends ConsumerWidget {
     );
     final notes = u.notesFor(l.localeName);
 
+    // The line under the version: what's new (labelled), or how the
+    // download is going.
     final (String? line, List<Widget> actions) = switch (s.stage) {
       UpdateStage.downloading => (
         l.updateDownloading(((s.progress ?? 0) * 100).round()),
@@ -88,7 +90,22 @@ class UpdateCard extends ConsumerWidget {
           ),
           if (line != null && line.isNotEmpty) ...[
             const SizedBox(height: 4),
-            Text(line, style: AppType.caption(t.mut).copyWith(height: 1.45)),
+            Text.rich(
+              TextSpan(
+                children: [
+                  if (s.stage == UpdateStage.available)
+                    TextSpan(
+                      text: '${l.whatsNew} ',
+                      style: TextStyle(
+                        color: t.ink,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  TextSpan(text: line),
+                ],
+              ),
+              style: AppType.caption(t.mut).copyWith(height: 1.45),
+            ),
           ],
           if (s.stage == UpdateStage.downloading) ...[
             const SizedBox(height: 12),

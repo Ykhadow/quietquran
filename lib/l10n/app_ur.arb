@@ -207,7 +207,6 @@
   "translationNone": "کوئی نہیں",
   "translationAuto": "ایپ کی زبان کے مطابق",
   "translationHint": "کسی آیت کو دبا کر رکھنے پر، اور آسان مطالعہ میں ہر آیت کے نیچے دکھایا جاتا ہے۔ مصحف کا صفحہ صرف قرآن رہتا ہے۔",
-  "showTranslation": "ترجمہ دکھائیں",
   "translationBy": "ترجمہ: {translator}",
   "srcTranslations": "معانی کے تراجم",
   "srcTranslationsNote": "عربی متن کے ساتھ دکھائے جاتے ہیں، کبھی اس کی جگہ نہیں، بالکل ویسے جیسے ہر مترجم نے شائع کیے (حواشی کے بغیر)۔",
@@ -313,5 +312,6 @@
   "upToDate": "آپ کے پاس تازہ ترین ورژن ہے",
   "checkFailed": "اپ ڈیٹس نہیں دیکھی جا سکیں۔ بعد میں دوبارہ کوشش کریں۔",
   "updateEyebrow": "نیا ورژن",
-  "updateTitle": "Quiet Quran {version}"
+  "updateTitle": "ورژن {version}",
+  "whatsNew": "نیا کیا ہے:"
 }

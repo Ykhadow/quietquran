@@ -207,7 +207,6 @@
   "translationNone": "بدون",
   "translationAuto": "حسب لغة التطبيق",
   "translationHint": "تظهر عند الضغط المطوّل على آية، وتحت كل آية في القراءة الميسّرة. صفحة المصحف تبقى للقرآن وحده.",
-  "showTranslation": "إظهار الترجمة",
   "translationBy": "الترجمة: {translator}",
   "srcTranslations": "ترجمات المعاني",
   "srcTranslationsNote": "تُعرض مع النص العربي، لا بدلًا منه، كما نشرها كل مترجم تمامًا (دون الحواشي).",
@@ -313,5 +312,6 @@
   "upToDate": "لديك أحدث إصدار",
   "checkFailed": "تعذّر البحث عن تحديثات. حاول لاحقًا.",
   "updateEyebrow": "إصدار جديد",
-  "updateTitle": "Quiet Quran {version}"
+  "updateTitle": "الإصدار {version}",
+  "whatsNew": "الجديد:"
 }

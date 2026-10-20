@@ -1975,8 +1975,14 @@ abstract class AppLocalizations {
   /// No description provided for @updateTitle.
   ///
   /// In en, this message translates to:
-  /// **'Quiet Quran {version}'**
+  /// **'Version {version}'**
   String updateTitle(String version);
+
+  /// No description provided for @whatsNew.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new:'**
+  String get whatsNew;
 }
 
 class _AppLocalizationsDelegate

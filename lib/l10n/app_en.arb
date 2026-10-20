@@ -566,6 +566,7 @@
   "upToDate": "You have the latest version",
   "checkFailed": "Couldn't check for updates. Try again later.",
   "updateEyebrow": "New version",
-  "updateTitle": "Quiet Quran {version}",
-  "@updateTitle": {"placeholders": {"version": {"type": "String"}}}
+  "updateTitle": "Version {version}",
+  "@updateTitle": {"placeholders": {"version": {"type": "String"}}},
+  "whatsNew": "What's new:"
 }
