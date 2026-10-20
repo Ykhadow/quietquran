@@ -73,7 +73,7 @@ class UpdateChecker extends Notifier<UpdateState> {
   static const _url = 'https://quietquran.com/version.json';
   static const _checkedAtKey = 'updateCheckedAt';
   static const _latestKey = 'updateLatest';
-  static const _laterKey = 'updateLater';
+  static const _laterKey = 'updateLaterVersion';
 
   /// Off in tests.
   static var enabled = true;
@@ -145,13 +145,13 @@ class UpdateChecker extends Notifier<UpdateState> {
     } on Object {
       return;
     }
-    final installed = int.tryParse(
-      (await PackageInfo.fromPlatform()).buildNumber,
-    );
-    final later = ref.read(prefsProvider).getInt(_laterKey) ?? 0;
-    if (installed == null ||
-        update.build <= installed ||
-        (putOff && update.build <= later)) {
+    // By version name: Android's version code isn't comparable, as each
+    // processor's APK gets its own (1.0.1 is 2002 on 64-bit, 1002 on
+    // 32-bit).
+    final installed = (await PackageInfo.fromPlatform()).version;
+    final later = ref.read(prefsProvider).getString(_laterKey) ?? '0';
+    if (!isNewer(update.version, installed) ||
+        (putOff && !isNewer(update.version, later))) {
       return;
     }
     state = UpdateState(stage: UpdateStage.available, update: update);
@@ -160,7 +160,7 @@ class UpdateChecker extends Notifier<UpdateState> {
   /// Hides this version until a newer one comes out.
   void later() {
     final u = state.update;
-    if (u != null) ref.read(prefsProvider).setInt(_laterKey, u.build);
+    if (u != null) ref.read(prefsProvider).setString(_laterKey, u.version);
     state = const UpdateState();
   }
 
@@ -242,3 +242,15 @@ class UpdateChecker extends Notifier<UpdateState> {
 final updateProvider = NotifierProvider<UpdateChecker, UpdateState>(
   UpdateChecker.new,
 );
+
+/// Whether version [a] ("1.0.10") is newer than [b] ("1.0.9"), part by part.
+bool isNewer(String a, String b) {
+  List<int> parts(String v) =>
+      v.split('+').first.split('.').map((x) => int.tryParse(x) ?? 0).toList();
+  final pa = parts(a), pb = parts(b);
+  for (var i = 0; i < 3; i++) {
+    final x = i < pa.length ? pa[i] : 0, y = i < pb.length ? pb[i] : 0;
+    if (x != y) return x > y;
+  }
+  return false;
+}

@@ -11,6 +11,15 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  test('versions compare part by part', () {
+    expect(isNewer('1.0.1', '1.0.0'), isTrue);
+    expect(isNewer('1.0.10', '1.0.9'), isTrue);
+    expect(isNewer('1.1', '1.0.9'), isTrue);
+    expect(isNewer('1.0.0', '1.0.0'), isFalse);
+    expect(isNewer('1.0.0', '1.0.1'), isFalse);
+    expect(isNewer('2.0.0', '0'), isTrue);
+  });
+
   Future<ProviderContainer> start({
     required int latest,
     int installed = 5,
@@ -21,7 +30,8 @@ void main() {
       appName: 'Quiet Quran',
       packageName: 'com.quietquran.app',
       version: '1.0.$installed',
-      buildNumber: '$installed',
+      // Split APKs carry the processor in the version code (2000 + build).
+      buildNumber: '${2000 + installed}',
       buildSignature: '',
     );
     SharedPreferences.setMockInitialValues({
@@ -34,7 +44,7 @@ void main() {
         'page': 'https://example.com/v$latest',
         'android': {'arm64': 'https://example.com/a.apk'},
       }),
-      'updateLater': ?later,
+      'updateLaterVersion': ?(later == null ? null : '1.0.$later'),
     });
     final c = ProviderContainer(
       overrides: [
