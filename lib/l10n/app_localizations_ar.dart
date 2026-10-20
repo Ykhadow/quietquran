@@ -1053,4 +1053,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsAboutSummary => 'الإصدار والتحديثات والمصادر';
+
+  @override
+  String get checkNow => 'تحقق الآن';
+
+  @override
+  String get upToDate => 'لديك أحدث إصدار';
+
+  @override
+  String get checkFailed => 'تعذّر البحث عن تحديثات. حاول لاحقًا.';
 }

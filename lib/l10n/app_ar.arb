@@ -308,5 +308,8 @@
   "settingsPrinted": "الصفحات المطبوعة",
   "settingsPrintedSummary": "الحفظ للقراءة دون اتصال، وألوانها",
   "settingsPlacesSummary": "احفظ جلساتك وعلاماتك أو افتحها",
-  "settingsAboutSummary": "الإصدار والتحديثات والمصادر"
+  "settingsAboutSummary": "الإصدار والتحديثات والمصادر",
+  "checkNow": "تحقق الآن",
+  "upToDate": "لديك أحدث إصدار",
+  "checkFailed": "تعذّر البحث عن تحديثات. حاول لاحقًا."
 }

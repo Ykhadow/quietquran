@@ -308,5 +308,8 @@
   "settingsPrinted": "چھپے صفحات",
   "settingsPrintedSummary": "آف لائن پڑھنے کے لیے محفوظ کریں، اور ان کے رنگ",
   "settingsPlacesSummary": "اپنے سیشن اور بک مارکس محفوظ کریں یا کھولیں",
-  "settingsAboutSummary": "ورژن، اپ ڈیٹس اور ماخذ"
+  "settingsAboutSummary": "ورژن، اپ ڈیٹس اور ماخذ",
+  "checkNow": "ابھی دیکھیں",
+  "upToDate": "آپ کے پاس تازہ ترین ورژن ہے",
+  "checkFailed": "اپ ڈیٹس نہیں دیکھی جا سکیں۔ بعد میں دوبارہ کوشش کریں۔"
 }

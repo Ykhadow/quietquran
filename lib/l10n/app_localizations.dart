@@ -1947,6 +1947,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version, updates and sources'**
   String get settingsAboutSummary;
+
+  /// No description provided for @checkNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Check now'**
+  String get checkNow;
+
+  /// No description provided for @upToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'You have the latest version'**
+  String get upToDate;
+
+  /// No description provided for @checkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t check for updates. Try again later.'**
+  String get checkFailed;
 }
 
 class _AppLocalizationsDelegate

@@ -561,5 +561,8 @@
   "settingsPrinted": "Printed pages",
   "settingsPrintedSummary": "Save for offline reading, and their colours",
   "settingsPlacesSummary": "Save or open your sessions and bookmarks",
-  "settingsAboutSummary": "Version, updates and sources"
+  "settingsAboutSummary": "Version, updates and sources",
+  "checkNow": "Check now",
+  "upToDate": "You have the latest version",
+  "checkFailed": "Couldn't check for updates. Try again later."
 }

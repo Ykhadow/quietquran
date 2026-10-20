@@ -1066,4 +1066,14 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get settingsAboutSummary => 'ورژن، اپ ڈیٹس اور ماخذ';
+
+  @override
+  String get checkNow => 'ابھی دیکھیں';
+
+  @override
+  String get upToDate => 'آپ کے پاس تازہ ترین ورژن ہے';
+
+  @override
+  String get checkFailed =>
+      'اپ ڈیٹس نہیں دیکھی جا سکیں۔ بعد میں دوبارہ کوشش کریں۔';
 }

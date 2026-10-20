@@ -1065,4 +1065,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAboutSummary => 'Version, updates and sources';
+
+  @override
+  String get checkNow => 'Check now';
+
+  @override
+  String get upToDate => 'You have the latest version';
+
+  @override
+  String get checkFailed => 'Couldn\'t check for updates. Try again later.';
 }

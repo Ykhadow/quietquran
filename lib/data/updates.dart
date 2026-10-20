@@ -103,21 +103,41 @@ class UpdateChecker extends Notifier<UpdateState> {
     if (DateTime.now().difference(checked) < const Duration(hours: 20)) {
       return;
     }
+    // Offline, or the site is down: try again next launch.
+    await _offer(await _fetch());
+  }
+
+  /// "Check now" in Settings: asks straight away, and shows a newer version
+  /// even if it was put off. True if there is one, false if this is the
+  /// latest, null if the check couldn't be made.
+  Future<bool?> checkNow() async {
+    if (!enabled || !supported) return null;
+    final json = await _fetch();
+    if (json == null) return null;
+    if (state.stage == UpdateStage.none) await _offer(json, putOff: false);
+    return state.stage != UpdateStage.none;
+  }
+
+  /// The latest version file, saved with the time it was read; null if it
+  /// couldn't be read.
+  Future<String?> _fetch() async {
+    final prefs = ref.read(prefsProvider);
     try {
       final res = await http
           .get(Uri.parse(_url))
           .timeout(const Duration(seconds: 15));
-      if (res.statusCode != 200) return;
+      if (res.statusCode != 200) return null;
       await prefs.setString(_latestKey, res.body);
       await prefs.setInt(_checkedAtKey, DateTime.now().millisecondsSinceEpoch);
-      await _offer(res.body);
+      return res.body;
     } on Object {
-      // Offline, or the site is down: try again next launch.
+      return null;
     }
   }
 
-  /// Shows [json]'s version if it's newer than this one and wasn't put off.
-  Future<void> _offer(String? json) async {
+  /// Shows [json]'s version if it's newer than this one (and, with
+  /// [putOff], wasn't put off with "Later").
+  Future<void> _offer(String? json, {bool putOff = true}) async {
     if (json == null || state.stage != UpdateStage.none) return;
     final AppUpdate update;
     try {
@@ -131,7 +151,7 @@ class UpdateChecker extends Notifier<UpdateState> {
     final later = ref.read(prefsProvider).getInt(_laterKey) ?? 0;
     if (installed == null ||
         update.build <= installed ||
-        update.build <= later) {
+        (putOff && update.build <= later)) {
       return;
     }
     state = UpdateState(stage: UpdateStage.available, update: update);

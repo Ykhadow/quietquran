@@ -412,6 +412,7 @@ class SettingsScreen extends ConsumerWidget {
                     activeThumbColor: t.acc,
                     onChanged: n.setCheckUpdates,
                   ),
+                if (UpdateChecker.supported) const _CheckNow(),
                 const SizedBox(height: 12),
                 GroupedCard(
                   children: [
@@ -853,4 +854,50 @@ class _Categories extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// "Check now": asks for a newer version straight away. If there is one,
+/// home shows it (and goes there); otherwise a short note says so.
+class _CheckNow extends ConsumerStatefulWidget {
+  const _CheckNow();
+
+  @override
+  ConsumerState<_CheckNow> createState() => _CheckNowState();
+}
+
+class _CheckNowState extends ConsumerState<_CheckNow> {
+  bool _busy = false;
+
+  Future<void> _check() async {
+    setState(() => _busy = true);
+    final found = await ref.read(updateProvider.notifier).checkNow();
+    if (!mounted) return;
+    setState(() => _busy = false);
+    final l = context.l10n;
+    if (found ?? false) {
+      Navigator.of(context).popUntil((r) => r.isFirst);
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(found == null ? l.checkFailed : l.upToDate)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 4),
+    child: Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: TextButton.icon(
+        onPressed: _busy ? null : _check,
+        icon: _busy
+            ? const SizedBox.square(
+                dimension: 16,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Icon(LucideIcons.refreshCw, size: 16),
+        label: Text(context.l10n.checkNow),
+      ),
+    ),
+  );
 }
