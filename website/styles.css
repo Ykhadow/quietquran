@@ -1279,8 +1279,14 @@ section {
    line for what's coming. */
 .get-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+}
+
+@media (max-width: 1000px) {
+  .get-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .get-row {
@@ -1415,6 +1421,57 @@ section {
 
 .get-all:hover {
   text-decoration: underline;
+}
+
+/* iPhone and iPad: how to add the web app to the Home Screen (Safari has
+   no install button to press for them). */
+.ios-install {
+  width: min(440px, calc(100% - 32px));
+  padding: 28px;
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--line2);
+  border-radius: 22px;
+}
+
+.ios-install::backdrop {
+  background: rgb(0 0 0 / 0.45);
+}
+
+.ios-install h3 {
+  margin: 0 0 14px;
+  font: 400 1.5rem/1.2 var(--serif);
+}
+
+.ios-install ol {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.7;
+}
+
+.ios-install p {
+  color: var(--mut);
+  font-size: 0.95rem;
+}
+
+.ios-install a {
+  color: var(--acc);
+}
+
+.ios-install form {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.share-glyph {
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  fill: none;
+  stroke: var(--acc);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* Install help: the details most people never need, folded away. */

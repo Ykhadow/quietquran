@@ -12,12 +12,20 @@
       var t = localStorage.getItem("theme");
       if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
     } catch (e) {}
+    // The browser's offer to install the web app can come before site.js
+    // runs: keep it for the Web app tile.
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      window.installPrompt = e;
+    });
   </script>
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="img/mark-day.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="canonical" href="https://quietquran.com/">
-  <link rel="manifest" href="site.webmanifest">
+  <!-- The web app's manifest (its scope is the whole site), so the Web app
+       tile can install it from here. -->
+  <link rel="manifest" href="/reader/manifest.json">
   <meta name="robots" content="index, follow">
   <meta property="og:site_name" content="Quiet Quran">
   <meta property="og:title" content="Quiet Quran — a calm Quran reader for IndoPak and Madani readers">
@@ -405,7 +413,7 @@
         <div class="section-head">
           <p class="eyebrow">Download</p>
           <h2>On every screen you read on.</h2>
-          <p>Free for Android, Windows and Linux. No sign-up, nothing to buy.</p>
+          <p>Free for Android, iPhone, Windows and Linux. No sign-up, nothing to buy.</p>
         </div>
         <div class="get-list">
           <a class="get-row" href="https://github.com/Ykhadow/quietquran/releases/latest/download/QuietQuran-android-arm64.apk">
@@ -423,7 +431,22 @@
             <span class="get-text"><strong>Linux</strong><span>64-bit</span></span>
             <span class="get-cta">Download <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12M6.5 10.5 12 16l5.5-5.5M5 20h14"/></svg></span>
           </a>
+          <a class="get-row" id="web-app" href="/reader/">
+            <span class="get-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4.5"/><path d="M12 7.5v7M8.5 11.5 12 15l3.5-3.5"/></svg></span>
+            <span class="get-text"><strong>Web app</strong><span>iPhone, iPad, Android or a browser</span></span>
+            <span class="get-cta"><span class="web-app-cta">Open</span> <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
         </div>
+        <dialog class="ios-install" id="ios-install" aria-labelledby="ios-install-title">
+          <h3 id="ios-install-title">Add Quiet Quran to your Home Screen</h3>
+          <ol>
+            <li><a href="/reader/">Open the web app</a> in Safari.</li>
+            <li>Tap <strong>Share</strong> <svg class="share-glyph" viewBox="0 0 24 24" aria-label="the Share button"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M7 11H5.5v9.5h13V11H17"/></svg> at the bottom of the screen (at the top on iPad).</li>
+            <li>Choose <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li>
+          </ol>
+          <p>It opens from your Home Screen like any app, and works offline.</p>
+          <form method="dialog"><button class="button primary">Done</button></form>
+        </dialog>
         <div class="get-foot">
           <p class="get-soon"><span>Coming soon</span> Google Play · App Store · macOS</p>
           <a class="get-all" href="https://github.com/Ykhadow/quietquran/releases">All releases on GitHub →</a>
@@ -431,6 +454,7 @@
         <details class="get-help">
           <summary>Install help</summary>
           <ul>
+            <li>Web app: on iPhone and iPad, open it in Safari, tap <em>Share</em>, then <em>Add to Home Screen</em>. On Android, Chrome offers <em>Install app</em> in its menu. Your sessions stay in that browser on that device.</li>
             <li>Older 32-bit Android phone? <a href="https://github.com/Ykhadow/quietquran/releases/latest/download/QuietQuran-android-arm32.apk">Get this APK instead</a>.</li>
             <li>Windows may say the app is from an unknown publisher: choose <em>More info</em>, then <em>Run anyway</em>.</li>
             <li>Linux: recitation needs libmpv (<code>sudo apt install libmpv2</code>, or <code>libmpv1</code> on Ubuntu 22.04).</li>

@@ -1,4 +1,5 @@
-// The light/dark switch, the scripts on the tablet, and the recitation demo.
+// The light/dark switch, the recitation demo, the web app's install tile,
+// and the scripts on the tablet.
 (function () {
   var root = document.documentElement;
   var dark = window.matchMedia("(prefers-color-scheme: dark)");
@@ -45,6 +46,40 @@
       var next = demo.dataset.ayah === "2" ? "3" : "2";
       demo.dataset.ayah = next;
       label.textContent = "Al-Mulk 67:" + next;
+    });
+  }
+
+  // ---- Web app: installs in one tap where the browser offers it
+  // (Chrome, Edge, Samsung Internet); on iPhone and iPad, shows how to add
+  // it to the Home Screen; anywhere else, opens it. ----
+  var webApp = document.getElementById("web-app");
+  if (webApp) {
+    var cta = webApp.querySelector(".web-app-cta");
+    var iosSheet = document.getElementById("ios-install");
+    var ios = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+      (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+    var offerInstall = function () { cta.textContent = "Install"; };
+    if (window.installPrompt) offerInstall();
+    window.addEventListener("beforeinstallprompt", offerInstall);
+    window.addEventListener("appinstalled", function () {
+      window.installPrompt = null;
+      cta.textContent = "Open";
+    });
+    if (ios && iosSheet && iosSheet.showModal) cta.textContent = "Add";
+    webApp.addEventListener("click", function (e) {
+      var prompt = window.installPrompt;
+      if (prompt) {
+        e.preventDefault();
+        prompt.prompt();
+        prompt.userChoice.then(function (choice) {
+          // Chrome offers it only once: afterwards the tile opens the app.
+          window.installPrompt = null;
+          if (choice.outcome !== "accepted") cta.textContent = "Open";
+        });
+      } else if (ios && iosSheet && iosSheet.showModal) {
+        e.preventDefault();
+        iosSheet.showModal();
+      }
     });
   }
 

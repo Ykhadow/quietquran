@@ -9,3 +9,5 @@
 *.db binary
 *.jar binary
 *.ico binary
+# The built web version is served exactly as built (sw.js lists hashes).
+website/reader/** -text

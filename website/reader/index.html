@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Replaced by `flutter build web --base-href` (tool/build_web.py sets /reader/). -->
+  <base href="/reader/">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="A calm, free Quran reader for IndoPak and Madani readers.">
+  <meta name="theme-color" content="#F4F0E8" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151614" media="(prefers-color-scheme: dark)">
+
+  <!-- iPhone and iPad: Add to Home Screen opens it as an app. -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Quiet Quran">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <title>Quiet Quran</title>
+
+  <style>
+    /* The app's own background while it loads, so it doesn't flash white
+       at night. */
+    html, body { margin: 0; height: 100%; background: #F4F0E8; }
+    @media (prefers-color-scheme: dark) {
+      html, body { background: #151614; }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Keeps the app working offline: see sw.js. Registered here rather than
+    // by Flutter, whose own service worker only removes itself.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+      // On the first visit the app loads before the worker is running:
+      // once it has started, tell the worker which files it used.
+      window.addEventListener('load', () => setTimeout(async () => {
+        const reg = await navigator.serviceWorker.ready;
+        const urls = performance.getEntriesByType('resource').map((e) => e.name);
+        reg.active?.postMessage({ type: 'cache', urls });
+      }, 10000));
+    }
+    // Asks the browser not to clear this site's data (sessions, bookmarks,
+    // saved pages) when the device runs short of space.
+    if (navigator.storage && navigator.storage.persist) {
+      navigator.storage.persist();
+    }
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
