@@ -38,4 +38,7 @@ _flutter.buildConfig = {"engineRevision":"a4ce257c68517c1410f4b48ac9852ab5642a3f
 
 // No serviceWorkerSettings: Flutter's service worker only unregisters
 // itself, and would take ours (sw.js) with it.
-_flutter.loader.load();
+// `?renderer=canvaskit` (or skwasm) picks the renderer, for comparing them on
+// a phone; otherwise Flutter picks the best the browser supports.
+const renderer = new URLSearchParams(location.search).get('renderer');
+_flutter.loader.load(renderer ? { config: { renderer } } : {});
