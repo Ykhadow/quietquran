@@ -67,10 +67,10 @@ const FILES = {
  "icons/Icon-maskable-192.png": "7ea0a1a4c7eb6fce",
  "icons/Icon-maskable-512.png": "f456caa0d392e3e3",
  "index.html": "18b9cd5ac98dc01f",
- "main.dart.js": "ebb47db46b54745d",
- "main.dart.mjs": "e63d4a5588cf21f6",
- "main.dart.wasm": "f0738b249d890910",
- "manifest.json": "360e56e7b0331e30",
+ "main.dart.js": "9861fb951450a383",
+ "main.dart.mjs": "2e879c714a7dde40",
+ "main.dart.wasm": "28470ec12d9b7197",
+ "manifest.json": "e6e624ea428b4d59",
  "sqlite3.wasm": "13d3f11d05b39ba0",
  "version.json": "88222a1a845233df"
 };

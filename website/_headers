@@ -1,0 +1,7 @@
+# The web version (/reader/): cross-origin isolated, so Flutter can draw on
+# a second thread instead of the one that handles taps and scrolling.
+# "credentialless" still lets recitation (everyayah.com) play: requests to
+# other sites simply go without cookies.
+/reader/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: credentialless
