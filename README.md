@@ -139,6 +139,8 @@ The design system ("Night", with a Day mode) is described in `design_handoff_mus
 
 `website/` is quietquran.com: plain HTML and CSS, a little JavaScript for the theme switch and the layout switcher, and nothing loaded from other servers. It is deployed as a Cloudflare Pages project with `website` as the output folder and no build step. Its screenshots are drawn from the app itself: `SITE_SHOTS=website/img flutter test test/site_screenshots_test.dart`.
 
+`website/reader/` is the web version of the app, which can be installed from the browser (a PWA) on Android, iPhone and iPad. Rebuild it with `python tool/build_web.py` for each release. It is the same app with three differences: SQLite runs as WebAssembly (`web/sqlite3.wasm`, from the sqlite3 package's release), printed sets save into the browser's storage while the app is open, and there are no reading reminders. `web/sw.js` keeps it working offline. The Web app tile on the home page installs it.
+
 ## Licence
 
 The code is licensed under the **GNU General Public License v3.0** ([LICENSE](LICENSE)). Anyone may use, study, change and share it, and anything built from it must stay open under the same licence.

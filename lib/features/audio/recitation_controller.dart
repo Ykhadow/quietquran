@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
@@ -433,6 +434,7 @@ class JustAudioBackend implements RecitationBackend {
 
   @override
   Future<void> load(List<AudioItem> items, List<NowPlaying> labels) async {
+    if (kIsWeb) return _loadStreams(items);
     final root = await (_dir ??= audioDirectory());
     final art = await (_art ??= _artwork());
     for (final folder in {for (final i in items) i.folder}) {
@@ -460,6 +462,15 @@ class JustAudioBackend implements RecitationBackend {
             : AudioSource.uri(item.url, tag: tag),
       );
     }
+    await _start(items, sources);
+  }
+
+  /// In a browser the ayahs stream from the reciter's host, and the browser
+  /// keeps its own copy of what it has played.
+  Future<void> _loadStreams(List<AudioItem> items) =>
+      _start(items, [for (final item in items) AudioSource.uri(item.url)]);
+
+  Future<void> _start(List<AudioItem> items, List<AudioSource> sources) async {
     _items = items;
     _setPlays(1);
     await _player.setAudioSources(sources, initialIndex: 0);

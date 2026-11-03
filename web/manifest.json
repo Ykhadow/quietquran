@@ -1,0 +1,36 @@
+{
+  "id": "/reader/",
+  "name": "Quiet Quran",
+  "short_name": "Quiet Quran",
+  "description": "A calm, free Quran reader for IndoPak and Madani readers.",
+  "start_url": "/reader/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F4F0E8",
+  "theme_color": "#F4F0E8",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/reader/icons/Icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/reader/icons/Icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/reader/icons/Icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/reader/icons/Icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

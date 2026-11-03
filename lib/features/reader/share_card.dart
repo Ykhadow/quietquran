@@ -567,12 +567,24 @@ class _ShareSheetState extends ConsumerState<_ShareSheet> {
       messenger?.showSnackBar(SnackBar(content: Text(l.imageSaved(file.path))));
       return;
     }
-    final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}${Platform.pathSeparator}$name');
-    await file.writeAsBytes(data.buffer.asUint8List());
+    final XFile file;
+    if (kIsWeb) {
+      // No files in a browser: the share menu takes the bytes.
+      file = XFile.fromData(
+        data.buffer.asUint8List(),
+        name: name,
+        mimeType: 'image/png',
+      );
+    } else {
+      final dir = await getTemporaryDirectory();
+      final saved = File('${dir.path}${Platform.pathSeparator}$name');
+      await saved.writeAsBytes(data.buffer.asUint8List());
+      file = XFile(saved.path, mimeType: 'image/png');
+    }
     await SharePlus.instance.share(
       ShareParams(
-        files: [XFile(file.path, mimeType: 'image/png')],
+        files: [file],
+        fileNameOverrides: kIsWeb ? [name] : null,
         sharePositionOrigin: origin,
       ),
     );

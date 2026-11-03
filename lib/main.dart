@@ -45,6 +45,7 @@ Future<void> main() async {
 /// six pages at a time, polite to the host and quick on a phone. Starting
 /// it picks up sets still saving from before the app last closed.
 Future<void> _initDownloads() async {
+  if (kIsWeb) return; // No background downloader: sets save while open.
   await FileDownloader().configure(
     globalConfig: (Config.holdingQueue, (6, null, null)),
   );
