@@ -6,6 +6,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/browser_bar.dart';
 import 'core/settings.dart';
 import 'core/theme.dart';
 import 'data/quran_db.dart';
@@ -153,7 +154,11 @@ class _MushafAppState extends ConsumerState<MushafApp> {
       // Switch colours at once: a blended transition would redraw every page
       // (and prepare page pictures) for each in-between colour.
       themeAnimationDuration: Duration.zero,
-      builder: (context, child) => _PrivacyCover(child: child!),
+      builder: (context, child) {
+        // The web version's status bar in the app's background colour.
+        setBrowserBarColour(context.tokens.bg);
+        return _PrivacyCover(child: child!);
+      },
       home: onboarded ? const HomeScreen() : const OnboardingScreen(),
     );
   }
