@@ -19,6 +19,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILD = os.path.join(ROOT, 'build', 'web')
@@ -26,9 +27,13 @@ OUT = os.path.join(ROOT, 'website', 'reader')
 
 
 def main():
+    # Each build is stamped, so word widths the app kept from an earlier
+    # build (lib/features/reader/word_widths.dart) are measured again.
+    stamp = time.strftime('%Y%m%d%H%M%S', time.gmtime())
     subprocess.run(
         ['flutter', 'build', 'web', '--release', '--wasm',
-         '--base-href', '/reader/', '--no-web-resources-cdn'],
+         '--base-href', '/reader/', '--no-web-resources-cdn',
+         f'--dart-define=WEB_BUILD={stamp}'],
         cwd=ROOT, check=True, shell=sys.platform == 'win32')
     shutil.rmtree(OUT, ignore_errors=True)
     shutil.copytree(BUILD, OUT)

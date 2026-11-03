@@ -7,6 +7,7 @@ import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/browser_bar.dart';
+import 'core/frame_stats.dart';
 import 'core/settings.dart';
 import 'core/theme.dart';
 import 'data/quran_db.dart';
@@ -16,6 +17,7 @@ import 'data/reminders.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/reader/page_snapshot.dart';
 import 'features/reader/quran_line.dart';
+import 'features/reader/word_widths.dart';
 import 'l10n/l10n.dart';
 
 Future<void> main() async {
@@ -31,6 +33,8 @@ Future<void> main() async {
     _initAudio(),
     _initDownloads(),
   ).wait;
+  WordWidths.restore(prefs);
+  if (kIsWeb) WidgetsBinding.instance.addObserver(_KeepWidths());
   runApp(
     ProviderScope(
       overrides: [
@@ -83,6 +87,14 @@ class _MemoryPressure with WidgetsBindingObserver {
   }
 }
 
+/// Keeps the web version's measured word widths when the app is put away.
+class _KeepWidths with WidgetsBindingObserver {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.hidden) WordWidths.save();
+  }
+}
+
 /// The notifications for every session's reading reminder, in the app's
 /// language (recomputed when sessions, reminders or the language change).
 final reminderPlanProvider = Provider<List<PlannedReminder>>((ref) {
@@ -126,6 +138,28 @@ class _MushafAppState extends ConsumerState<MushafApp> {
       (_, plan) => ReminderService.schedule(plan),
       fireImmediately: true,
     );
+    // The web version measures Easy read's words ahead of time, from the
+    // reader's place outwards (see WordWidths).
+    if (kIsWeb) {
+      ref.listenManual(
+        settingsProvider.select(
+          (s) => s.mode == ReadingMode.text && s.textLayout == TextLayout.reflow
+              ? s.typeface
+              : null,
+        ),
+        (_, typeface) {
+          if (typeface == null) return WordWidths.stop();
+          final place = ref.read(libraryProvider).current;
+          final db = ref.read(quranDbProvider);
+          WordWidths.warm(
+            db,
+            typeface,
+            db.firstWordOf(place.surah, place.ayah),
+          );
+        },
+        fireImmediately: true,
+      );
+    }
   }
 
   @override
@@ -157,7 +191,7 @@ class _MushafAppState extends ConsumerState<MushafApp> {
       builder: (context, child) {
         // The web version's status bar in the app's background colour.
         setBrowserBarColour(context.tokens.bg);
-        return _PrivacyCover(child: child!);
+        return FrameStats(child: _PrivacyCover(child: child!));
       },
       home: onboarded ? const HomeScreen() : const OnboardingScreen(),
     );

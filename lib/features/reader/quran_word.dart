@@ -45,6 +45,10 @@ class QuranWord extends StatelessWidget {
   static const _refSize = 100.0;
   static final _widths = <(String?, String), double>{};
 
+  /// Widths measured so far, at the reference size, by font family and text
+  /// (the web version keeps them between visits: see WordWidths).
+  static Map<(String?, String), double> get measured => _widths;
+
   /// Width of [text] set in [style] (only family and size are considered).
   static double textWidth(String text, TextStyle style) {
     final ref = _widths.putIfAbsent((style.fontFamily, text), () {

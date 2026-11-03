@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// The few colours a reader chooses; every other token is derived from them
@@ -342,7 +343,9 @@ ThemeData buildTheme(Palette palette) {
     fontFamilyFallback: AppType.fallback,
     scaffoldBackgroundColor: t.bg,
     canvasColor: t.bg,
-    splashFactory: InkSparkle.splashFactory,
+    // The sparkle is a GPU shader, which the browser compiles on the first
+    // tap (a long pause on phones); Flutter itself uses the ripple there.
+    splashFactory: kIsWeb ? InkRipple.splashFactory : InkSparkle.splashFactory,
     extensions: [t],
   );
   final text = base.textTheme.apply(bodyColor: t.ink, displayColor: t.ink);

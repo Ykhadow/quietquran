@@ -188,6 +188,30 @@ class QuranDb {
     return (rows.first['first_word'] as int, rows.first['last_word'] as int);
   }
 
+  /// Id of an ayah's first word (1 if there is no such ayah).
+  int firstWordOf(int surah, int ayah) => _wordRange(surah, ayah)?.$1 ?? 1;
+
+  /// Number of words in the Quran (ids run from 1).
+  late final int wordCount =
+      _db.select('SELECT MAX(id) AS n FROM words').first['n'] as int;
+
+  /// Words [from] to [to] (by id) as [typeface] writes them: their text and
+  /// whether each ends an ayah, without the page's spacing data.
+  List<Word> wordsBetween(int from, int to, QuranTypeface typeface) => [
+    for (final r in _db.select(
+      'SELECT id, surah, ayah, is_end, ${typeface.column} AS text FROM words '
+      'WHERE id BETWEEN ? AND ? ORDER BY id',
+      [from, to],
+    ))
+      Word(
+        r['id'] as int,
+        r['surah'] as int,
+        r['ayah'] as int,
+        r['is_end'] == 1,
+        r['text'] as String,
+      ),
+  ];
+
   late final _wordRangeQuery = _db.prepare(
     'SELECT first_word, last_word FROM ayahs WHERE surah = ? AND ayah = ?',
   );
