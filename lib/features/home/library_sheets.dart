@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/theme.dart';
 import '../../data/library.dart';
@@ -64,6 +65,13 @@ class _EditSessionSheetState extends ConsumerState<_EditSessionSheet> {
     Navigator.pop(context);
   }
 
+  /// Where [s] began: its surah, and the ayah when it isn't the first.
+  String _startPlace(Session s) {
+    final (surah, ayah) = s.start;
+    final name = context.surahName(ref.read(quranDbProvider).surah(surah));
+    return ayah == 1 ? name : '$name $surah:$ayah';
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = context.tokens;
@@ -107,6 +115,20 @@ class _EditSessionSheetState extends ConsumerState<_EditSessionSheet> {
                 ),
               const SizedBox(height: 20),
               FilledButton(onPressed: _save, child: Text(l.save)),
+              // Daily reading runs on through the whole Quran; a session
+              // that resumes (Al-Kahf on Fridays, Al-Mulk at night) can be
+              // started again once it's done.
+              if (!s.isDaily && _kind == SessionKind.resume) ...[
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    ref.read(libraryProvider.notifier).startAgain(s.id);
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(LucideIcons.rotateCcw, size: 16),
+                  label: Text(l.startAgainFrom(_startPlace(s))),
+                ),
+              ],
               if (!s.isDaily) ...[
                 const SizedBox(height: 8),
                 TextButton(

@@ -143,6 +143,15 @@
   "eachTimeOpen": "Each time you open it",
   "startOfSurah": "Start of surah",
   "deleteSession": "Delete session",
+  "startAgainFrom": "Start again from {place}",
+  "@startAgainFrom": {
+    "description": "Moves a session's reading position back to where it began; place is a surah name, or a surah name and ayah",
+    "placeholders": {
+      "place": {
+        "type": "String"
+      }
+    }
+  },
   "tapAgainDelete": "Tap again to delete \"{name}\"",
   "@tapAgainDelete": {
     "placeholders": {

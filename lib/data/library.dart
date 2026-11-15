@@ -69,6 +69,8 @@ class Session {
     required this.ayah,
     this.kind = SessionKind.resume,
     this.anchorSurah,
+    this.startSurah,
+    this.startAyah,
     this.updatedAt = 0,
     this.reminder,
   });
@@ -83,6 +85,11 @@ class Session {
 
   /// For [SessionKind.restart]: the surah it always opens at.
   final int? anchorSurah;
+
+  /// Where the session began, to start it again from (null for sessions
+  /// made before this was kept; see [start]).
+  final int? startSurah;
+  final int? startAyah;
   final int updatedAt;
 
   /// A reading reminder, or null for none.
@@ -94,6 +101,12 @@ class Session {
   static const dailyDefaultName = 'Daily reading';
 
   bool get isDaily => id == dailyId;
+
+  /// Where the session began. Sessions made before that was kept start from
+  /// their anchor surah, or the beginning of the surah they're in.
+  (int, int) get start => startSurah != null
+      ? (startSurah!, startAyah ?? 1)
+      : (anchorSurah ?? surah, 1);
 
   /// Where opening the session lands.
   (int, int) get openAt => kind == SessionKind.restart && anchorSurah != null
@@ -116,6 +129,8 @@ class Session {
     ayah: ayah ?? this.ayah,
     kind: kind ?? this.kind,
     anchorSurah: anchorSurah ?? this.anchorSurah,
+    startSurah: startSurah,
+    startAyah: startAyah,
     updatedAt: updatedAt ?? this.updatedAt,
     reminder: noReminder ? null : reminder ?? this.reminder,
   );
@@ -127,6 +142,8 @@ class Session {
     'ayah': ayah,
     'kind': kind.name,
     'anchorSurah': anchorSurah,
+    'startSurah': startSurah,
+    'startAyah': startAyah,
     'updatedAt': updatedAt,
     'reminder': reminder?.toJson(),
   };
@@ -138,6 +155,8 @@ class Session {
     ayah: j['ayah'] as int,
     kind: SessionKind.values.asNameMap()[j['kind']] ?? SessionKind.resume,
     anchorSurah: j['anchorSurah'] as int?,
+    startSurah: j['startSurah'] as int?,
+    startAyah: j['startAyah'] as int?,
     updatedAt: j['updatedAt'] as int? ?? 0,
     reminder: j['reminder'] == null
         ? null
@@ -270,6 +289,12 @@ class LibraryNotifier extends Notifier<Library> {
     _replace(s.copyWith(surah: surah, ayah: ayah, updatedAt: _now));
   }
 
+  /// Moves a session back to where it began (see [Session.start]).
+  void startAgain(String sessionId) {
+    final (surah, ayah) = state.session(sessionId).start;
+    setPosition(sessionId, surah, ayah);
+  }
+
   void setCurrent(String id) => _save(
     Library(
       sessions: state.sessions,
@@ -298,6 +323,8 @@ class LibraryNotifier extends Notifier<Library> {
             ayah: ayah,
             kind: kind,
             anchorSurah: kind == SessionKind.restart ? surah : null,
+            startSurah: surah,
+            startAyah: ayah,
             updatedAt: _now,
             reminder: reminder,
           ),

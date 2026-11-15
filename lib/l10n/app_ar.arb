@@ -61,6 +61,7 @@
   "eachTimeOpen": "في كل مرة تفتحه",
   "startOfSurah": "بداية السورة",
   "deleteSession": "حذف الورد",
+  "startAgainFrom": "ابدأ من جديد من {place}",
   "tapAgainDelete": "اضغط مرة أخرى لحذف \"{name}\"",
   "note": "ملاحظة",
   "optional": "اختياري",

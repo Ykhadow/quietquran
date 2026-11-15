@@ -466,6 +466,12 @@ abstract class AppLocalizations {
   /// **'Delete session'**
   String get deleteSession;
 
+  /// Moves a session's reading position back to where it began; place is a surah name, or a surah name and ayah
+  ///
+  /// In en, this message translates to:
+  /// **'Start again from {place}'**
+  String startAgainFrom(String place);
+
   /// No description provided for @tapAgainDelete.
   ///
   /// In en, this message translates to:

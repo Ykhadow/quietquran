@@ -222,6 +222,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String get deleteSession => 'معمول حذف کریں';
 
   @override
+  String startAgainFrom(String place) {
+    return '$place سے دوبارہ شروع کریں';
+  }
+
+  @override
   String tapAgainDelete(String name) {
     return '\"$name\" حذف کرنے کے لیے دوبارہ دبائیں';
   }

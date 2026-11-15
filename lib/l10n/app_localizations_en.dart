@@ -223,6 +223,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deleteSession => 'Delete session';
 
   @override
+  String startAgainFrom(String place) {
+    return 'Start again from $place';
+  }
+
+  @override
   String tapAgainDelete(String name) {
     return 'Tap again to delete \"$name\"';
   }

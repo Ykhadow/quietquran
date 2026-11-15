@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -33,7 +35,12 @@ class ReflowPage extends StatelessWidget {
     this.wordSpacing = 0.08,
     this.scrolls = true,
     this.translationAfterPage = false,
+    this.reveal,
   });
+
+  /// A place on this page brought to the top of the view when the page
+  /// first shows, or null.
+  final AyahReveal? reveal;
 
   /// The [translation] of the page's ayahs together after the page (each
   /// numbered), instead of under each ayah: recite first, then read the
@@ -80,6 +87,15 @@ class ReflowPage extends StatelessWidget {
       color: colors.ink,
     );
     final markerStyle = style.copyWith(color: colors.acc);
+    // An ayah 1 is revealed with its surah's header above it, when the page
+    // has it; any other place at the line its ayah starts on.
+    final r = reveal;
+    final revealHeader =
+        r != null &&
+        r.ayah == 1 &&
+        page.lines.any(
+          (l) => l.kind == LineKind.surahHeader && l.surah == r.surah,
+        );
 
     Widget paragraph(
       List<List<Word>> units, {
@@ -96,6 +112,7 @@ class ReflowPage extends StatelessWidget {
       // recitation can mean.
       marked: ayahs ? marked : const {},
       highlight: ayahs ? highlight : null,
+      reveal: ayahs && !revealHeader ? r : null,
     );
 
     final blocks = <Widget>[];
@@ -129,20 +146,23 @@ class ReflowPage extends StatelessWidget {
       switch (line.kind) {
         case LineKind.surahHeader:
           flush();
-          blocks.add(
-            Padding(
-              padding: const EdgeInsets.only(top: 18, bottom: 10),
-              child: LayoutBuilder(
-                builder: (context, box) => SurahHeader(
-                  surah: db.surah(line.surah),
-                  script: typeface.script,
-                  style: style.copyWith(height: 1.6),
-                  // Its labels are sized from the width; kept to what a
-                  // phone shows, so they don't grow huge on a desktop.
-                  width: box.maxWidth.clamp(0, 560).toDouble(),
-                ),
+          final header = Padding(
+            padding: const EdgeInsets.only(top: 18, bottom: 10),
+            child: LayoutBuilder(
+              builder: (context, box) => SurahHeader(
+                surah: db.surah(line.surah),
+                script: typeface.script,
+                style: style.copyWith(height: 1.6),
+                // Its labels are sized from the width; kept to what a
+                // phone shows, so they don't grow huge on a desktop.
+                width: box.maxWidth.clamp(0, 560).toDouble(),
               ),
             ),
+          );
+          blocks.add(
+            revealHeader && r.surah == line.surah
+                ? _RevealAtTop(reveal: r, child: header)
+                : header,
           );
           if (line.bismillahInline) addBismillah();
         case LineKind.bismillah:
@@ -174,12 +194,15 @@ class ReflowPage extends StatelessWidget {
               final text = db.translationText(tr.id, w.surah, w.ayah);
               if (text != null) {
                 blocks.add(
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 4, 4, 14),
-                    child: TranslationText(
-                      translation: tr,
-                      text: text,
-                      fontSize: (fontSize * 0.55).clamp(15.0, 26.0),
+                  MetaData(
+                    metaData: _TranslationOf(w.surah, w.ayah),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 4, 4, 14),
+                      child: TranslationText(
+                        translation: tr,
+                        text: text,
+                        fontSize: (fontSize * 0.55).clamp(15.0, 26.0),
+                      ),
                     ),
                   ),
                 );
@@ -200,34 +223,37 @@ class ReflowPage extends StatelessWidget {
       blocks.add(pairRule);
       for (final (surah, ayah, text) in meanings) {
         blocks.add(
-          Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 4, 14),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              textDirection: tr.rtl ? TextDirection.rtl : TextDirection.ltr,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 3),
-                  child: Text(
-                    '$surah:$ayah',
-                    textDirection: TextDirection.ltr,
-                    style: TextStyle(
-                      fontFamily: AppType.sans,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: colors.acc,
+          MetaData(
+            metaData: _TranslationOf(surah, ayah),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 4, 14),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                textDirection: tr.rtl ? TextDirection.rtl : TextDirection.ltr,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: Text(
+                      '$surah:$ayah',
+                      textDirection: TextDirection.ltr,
+                      style: TextStyle(
+                        fontFamily: AppType.sans,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: colors.acc,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: TranslationText(
-                    translation: tr,
-                    text: text,
-                    fontSize: (fontSize * 0.55).clamp(15.0, 26.0),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TranslationText(
+                      translation: tr,
+                      text: text,
+                      fontSize: (fontSize * 0.55).clamp(15.0, 26.0),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -263,6 +289,12 @@ class ReflowPage extends StatelessWidget {
     final list = scrolls
         ? ListView(
             padding: listPadding.copyWith(bottom: 4),
+            // A page with a place to reveal is laid out whole, so a place
+            // far down it can be scrolled to (a ListView otherwise builds
+            // only what's near the view).
+            scrollCacheExtent: reveal != null
+                ? const ScrollCacheExtent.pixels(100000)
+                : null,
             children: [...blocks, const SizedBox(height: 20), footer],
           )
         : Padding(
@@ -320,6 +352,129 @@ class ReflowPage extends StatelessWidget {
   }
 }
 
+/// A request to bring an ayah to the top of the view, once, when [page]
+/// first shows: opening a surah, a bookmark or a session lands on it rather
+/// than on the top of its page. Ayah 1 comes with its surah's header. Shared
+/// by every build of the page, so a page rebuilt later doesn't jump again.
+class AyahReveal {
+  AyahReveal({required this.page, required this.surah, required this.ayah});
+
+  final int page;
+  final int surah;
+  final int ayah;
+  bool done = false;
+}
+
+/// Marks an ayah's translation in the render tree, so [ayahAtTop] can tell
+/// whose translation is at the top of the view.
+class _TranslationOf {
+  const _TranslationOf(this.surah, this.ayah);
+
+  final int surah;
+  final int ayah;
+}
+
+/// The ayah being read at the top of [viewport], a scroll view of Easy read
+/// text, or null if it shows none.
+///
+/// What's at the top is the first Quran line or translation mostly in view:
+/// for a translation, its ayah; for a line, the first ayah that starts on
+/// it, else the ayah it continues. Revealing that ayah ([AyahReveal]) brings
+/// the same line back to the top, so a place saved and opened again doesn't
+/// creep up or down.
+(int, int)? ayahAtTop(RenderBox viewport, QuranDb db) {
+  final items = <(Rect, (int, int) Function())>[];
+  void visit(RenderObject r) {
+    if (r is RenderBox && r.hasSize) {
+      Rect rect() => MatrixUtils.transformRect(
+        r.getTransformTo(viewport),
+        Offset.zero & r.size,
+      );
+      final painter = r is RenderCustomPaint ? r.painter : null;
+      if (painter is QuranLinePainter) {
+        // A surah's opening bismillah is written with Al-Fatihah's first
+        // ayah's words; it isn't an ayah being read.
+        final words = [
+          for (final w in painter.words)
+            if ((w.surah, w.ayah) != (1, 1)) w,
+        ];
+        if (words.isNotEmpty) {
+          items.add((
+            rect(),
+            () {
+              final w = words.firstWhere(
+                (w) => w.id == db.firstWordOf(w.surah, w.ayah),
+                orElse: () => words.first,
+              );
+              return (w.surah, w.ayah);
+            },
+          ));
+        }
+      } else if (r is RenderMetaData && r.metaData is _TranslationOf) {
+        final t = r.metaData as _TranslationOf;
+        items.add((rect(), () => (t.surah, t.ayah)));
+      }
+    }
+    r.visitChildren(visit);
+  }
+
+  visit(viewport);
+  if (items.isEmpty) return null;
+  items.sort((a, b) => a.$1.top.compareTo(b.$1.top));
+  for (final (rect, ayah) in items) {
+    // Mostly in view: at least two thirds of it (or 120px of a tall
+    // translation) below the top. The last line of a translation peeking
+    // out above the next ayah isn't what's being read.
+    if (rect.bottom >= math.min(rect.height * 2 / 3, 120)) return ayah();
+  }
+  return items.last.$2(); // all of it read past
+}
+
+/// Scrolls the nearest scroll view so its child (a surah header, or the line
+/// an ayah starts on) is at the top, the first time it shows, unless it's
+/// already near the top.
+class _RevealAtTop extends StatefulWidget {
+  const _RevealAtTop({required this.reveal, required this.child});
+
+  final AyahReveal reveal;
+  final Widget child;
+
+  @override
+  State<_RevealAtTop> createState() => _RevealAtTopState();
+}
+
+class _RevealAtTopState extends State<_RevealAtTop> {
+  @override
+  void initState() {
+    super.initState();
+    if (!widget.reveal.done) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _reveal());
+    }
+  }
+
+  void _reveal() {
+    if (!mounted || widget.reveal.done) return;
+    final box = context.findRenderObject();
+    final scrollable = Scrollable.maybeOf(context);
+    if (box is! RenderBox || !box.attached || scrollable == null) return;
+    final position = scrollable.position;
+    final viewport = RenderAbstractViewport.maybeOf(box);
+    if (viewport == null || !position.hasContentDimensions) return;
+    widget.reveal.done = true;
+    final atTop = viewport.getOffsetToReveal(box, 0).offset;
+    final top = atTop - position.pixels;
+    // A place near the top of its page is already in view, under the
+    // page's head.
+    if (top >= 0 && top <= position.viewportDimension * 0.25) return;
+    position.jumpTo(
+      atTop.clamp(position.minScrollExtent, position.maxScrollExtent),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
+
 /// Whether [unit] is part of Al-Fatihah's first ayah, its bismillah.
 bool _opens(List<Word> unit) => (unit.first.surah, unit.first.ayah) == (1, 1);
 
@@ -337,8 +492,13 @@ class QuranParagraph extends StatelessWidget {
     this.centerLast = false,
     this.marked = const {},
     this.highlight,
+    this.reveal,
     this.wordGap = 0.3,
   });
+
+  /// A place to bring to the top of the view: the line its ayah starts on,
+  /// if that's in this paragraph.
+  final AyahReveal? reveal;
 
   /// Space between words, as a share of the font size: the least they have
   /// (lines are then justified to the full width). See Word.spaceBefore.
@@ -418,20 +578,30 @@ class QuranParagraph extends StatelessWidget {
             : lines.indexWhere(
                 (l) => l.any((u) => u.any((w) => (w.surah, w.ayah) == h)),
               );
+        final r = reveal;
+        final revealed = r == null
+            ? -1
+            : lines.indexWhere(
+                (l) => l.any(
+                  (u) => u.any((w) => (w.surah, w.ayah) == (r.surah, r.ayah)),
+                ),
+              );
+        Widget line(int i) {
+          final built = _line(
+            lines[i],
+            justify: i < lines.length - 1 && !center,
+          );
+          return i == revealed ? _RevealAtTop(reveal: r!, child: built) : built;
+        }
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (var i = 0; i < lines.length; i++)
               if (i == first)
-                _KeepInView(
-                  key: ValueKey(h),
-                  child: _line(
-                    lines[i],
-                    justify: i < lines.length - 1 && !center,
-                  ),
-                )
+                _KeepInView(key: ValueKey(h), child: line(i))
               else
-                _line(lines[i], justify: i < lines.length - 1 && !center),
+                line(i),
           ],
         );
       },

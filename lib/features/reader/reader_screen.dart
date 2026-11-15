@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -37,10 +38,20 @@ import '../../l10n/l10n.dart';
 /// active layout edition (see [Settings.layoutEdition]); switching edition or
 /// mode keeps the reader on the same ayah.
 class ReaderScreen extends ConsumerStatefulWidget {
-  const ReaderScreen({super.key, required this.initialPage, this.sessionId});
+  const ReaderScreen({
+    super.key,
+    required this.initialPage,
+    this.sessionId,
+    this.at,
+  });
 
   /// Page in the layout edition active when the reader opens.
   final int initialPage;
+
+  /// The ayah (surah, ayah) on [initialPage] to open at: Easy read scrolls
+  /// it to the top (ayah 1 with its surah's header) rather than showing the
+  /// top of the page. Null for the top of the page.
+  final (int, int)? at;
 
   /// The session this reading belongs to, or null for a free read
   /// ("Browsing"), which moves no session.
@@ -71,6 +82,36 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
   /// Session being read; null while browsing. Browsing can be saved into one.
   late String? _sessionId = widget.sessionId;
+
+  /// The place to bring into view on an Easy read page (see [AyahReveal]).
+  late AyahReveal? _reveal = switch (widget.at) {
+    (final surah, final ayah) => AyahReveal(
+      page: widget.initialPage,
+      surah: surah,
+      ayah: ayah,
+    ),
+    null => null,
+  };
+
+  /// Whether the reader is still where [_reveal] brought it: until the
+  /// reader moves (a drag, a page turn, the recitation following along),
+  /// that place is the one being read, whatever else shares the screen. A
+  /// surah ending its page can't scroll to the top, so what's at the top
+  /// would be the surah before it.
+  late bool _atReveal = widget.at != null;
+
+  /// The reading area, searched for the Easy read text in view.
+  final _area = GlobalKey();
+
+  /// Easy read: the ayah at the top of the screen when it last settled, and
+  /// the page being read then. Kept for dispose, when the screen can no
+  /// longer be looked at.
+  ({int page, (int, int) ayah})? _onScreen;
+
+  /// The session's place as last saved (or as opened): kept while the
+  /// reader stays on its page, so a place within a page isn't lost to the
+  /// page's first ayah just by opening it.
+  (int, int)? _saved;
   late String _layout = ref.read(settingsProvider).layoutEdition;
   final _focus = FocusNode();
 
@@ -108,6 +149,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
 
   /// Brings the page of the ayah being recited into view.
   void _follow((int, int) ayah) {
+    _atReveal = false;
     final (surah, number) = ayah;
     final page = _db.pageOfAyah(_layout, surah, number);
     final settings = ref.read(settingsProvider);
@@ -199,6 +241,10 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     WidgetsBinding.instance.addObserver(this);
     _db;
     _library;
+    if (_sessionId case final id?) {
+      final s = ref.read(libraryProvider).session(id);
+      _saved = (s.surah, s.ayah);
+    }
     // Opening a page counts as reading it, even before any page turn.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _savePosition();
@@ -243,7 +289,9 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     _saveTimer = null;
     final id = _sessionId;
     if (id == null) return; // browsing moves no session
-    final (surah, ayah) = _db.page(_layout, _page, _typeface).firstAyah;
+    // While closing, the screen can't be looked at: what was last seen.
+    final (surah, ayah) = _here(look: !later);
+    _saved = (surah, ayah);
     // While the reader is being torn down, providers can't change; save
     // right after instead.
     if (later) {
@@ -252,6 +300,97 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     } else {
       _library.setPosition(id, surah, ayah);
     }
+  }
+
+  /// The place being read: where the reader was brought to, until it moves;
+  /// in Easy read, the ayah at the top of the screen; otherwise the page's
+  /// first ayah, or the session's own place when that is on this page
+  /// (opened there, not yet moved).
+  (int, int) _here({bool look = true}) {
+    if (_reveal case final r? when _atReveal && r.page == _page) {
+      return (r.surah, r.ayah);
+    }
+    if (look) {
+      if (_ayahOnScreen() case final ayah?) {
+        _onScreen = (page: _page, ayah: ayah);
+      }
+    }
+    if (_onScreen case (page: final page, :final ayah) when page == _page) {
+      return ayah;
+    }
+    if (_saved case (
+      final surah,
+      final ayah,
+    ) when _db.pageOfAyah(_layout, surah, ayah) == _page) {
+      return (surah, ayah);
+    }
+    return _db.page(_layout, _page, _typeface).firstAyah;
+  }
+
+  /// Easy read: the ayah at the top of the text in view (the page's first
+  /// ayah while its top is in view), or null when it can't be told: another
+  /// mode, or nothing laid out.
+  (int, int)? _ayahOnScreen() {
+    final s = ref.read(settingsProvider);
+    if (s.mode != ReadingMode.text || s.textLayout != TextLayout.reflow) {
+      return null;
+    }
+    final area = _area.currentContext?.findRenderObject();
+    if (area is! RenderBox || !area.attached || !area.hasSize) return null;
+    final viewport = _textViewport(area);
+    if (viewport == null) return null;
+    final position = viewport.offset;
+    if (position is ScrollPosition &&
+        position.hasPixels &&
+        position.pixels <= position.minScrollExtent + 1) {
+      return _db.page(_layout, _page, _typeface).firstAyah;
+    }
+    return ayahAtTop(viewport, _db);
+  }
+
+  /// The vertical scroll view of text in [area]: the column when reading
+  /// vertically; otherwise the page on screen (its neighbours, built
+  /// ahead, are off to the side), or the right-hand one of two, which is
+  /// [_page].
+  RenderViewportBase? _textViewport(RenderBox area) {
+    RenderViewportBase? found;
+    var foundLeft = double.negativeInfinity;
+    void visit(RenderObject r) {
+      if (r is RenderViewportBase && r.axis == Axis.vertical) {
+        if (r.hasSize) {
+          final rect = MatrixUtils.transformRect(
+            r.getTransformTo(area),
+            Offset.zero & r.size,
+          );
+          if (rect.left >= -1 &&
+              rect.right <= area.size.width + 1 &&
+              rect.left > foundLeft) {
+            found = r;
+            foundLeft = rect.left;
+          }
+        }
+        return; // the text inside has no scroll views of its own
+      }
+      r.visitChildren(visit);
+    }
+
+    visit(area);
+    return found;
+  }
+
+  /// A drag moves the reader on from where it was brought to; in Easy read,
+  /// scrolling within the text moves the place being read.
+  bool _onScroll(ScrollNotification n) {
+    if (n is ScrollStartNotification && n.dragDetails != null) {
+      _atReveal = false;
+    }
+    if (n is ScrollEndNotification && n.metrics.axis == Axis.vertical) {
+      if (_ayahOnScreen() case final ayah?) {
+        _onScreen = (page: _page, ayah: ayah);
+        _savePosition();
+      }
+    }
+    return false;
   }
 
   @override
@@ -266,7 +405,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   Future<void> _saveBrowsing() => _withSheet(() async {
     final library = ref.read(libraryProvider);
     final current = library.current;
-    final (surah, ayah) = _db.page(_layout, _page, _typeface).firstAyah;
+    final (surah, ayah) = _here();
     final choice = await showModalBottomSheet<String>(
       context: context,
       builder: (context) {
@@ -305,10 +444,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
     if (!mounted || choice == null) return;
     if (choice == 'continue') {
       ref.read(libraryProvider.notifier).setPosition(current.id, surah, ayah);
+      _saved = (surah, ayah);
       setState(() => _sessionId = current.id);
     } else {
       final id = await showNewSessionSheet(context, surah: surah, ayah: ayah);
-      if (id != null && mounted) setState(() => _sessionId = id);
+      if (id != null && mounted) {
+        // Its place, unless another surah was chosen for it.
+        final s = ref.read(libraryProvider).session(id);
+        _saved = (s.surah, s.ayah);
+        setState(() => _sessionId = id);
+      }
     }
   });
 
@@ -454,6 +599,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _turn(int delta) {
+    _atReveal = false;
     if (_vertical) {
       // A screen at a time, keeping a little of the last one in view.
       final c = _vController;
@@ -555,11 +701,16 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
   }
 
   void _commitScrub(ScrubberMode mode, int n) {
-    _jumpTo(
-      mode == ScrubberMode.juz
-          ? _db.juzStarts(_layout)[n - 1].page
-          : _db.surahStartPage(_layout, n),
-    );
+    // Lands on the surah or juz itself, not the top of the page it starts on.
+    final juz = mode == ScrubberMode.juz ? _db.juzStarts(_layout)[n - 1] : null;
+    final (page, surah, ayah) = juz != null
+        ? (juz.page, juz.surah, juz.ayah)
+        : (_db.surahStartPage(_layout, n), n, 1);
+    _reveal = AyahReveal(page: page, surah: surah, ayah: ayah);
+    _atReveal = true;
+    // The page may already be built, without the request.
+    _built.clear();
+    _jumpTo(page);
     _scheduleHide();
   }
 
@@ -701,37 +852,41 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
               Positioned.fill(
                 child: SafeArea(
                   child: GestureDetector(
+                    key: _area,
                     onTap: () => _setOverlay(!_overlay),
                     // Pages turn right to left whatever the app's language:
                     // a horizontal PageView would flip under Urdu/Arabic.
-                    child: vertical
-                        ? _verticalColumn(settings, size, appDirection)
-                        : Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: PageView.builder(
-                              // A new controller (new page numbering, or one/two
-                              // pages) needs a new PageView: an existing one would
-                              // carry its old scroll offset over and show the
-                              // wrong page until the next swipe.
-                              key: ObjectKey(controller),
-                              controller: controller,
-                              reverse: true, // right-to-left page turning
-                              // Keep the neighbouring pages built, so a swipe never
-                              // waits for the next page to lay out.
-                              allowImplicitScrolling: true,
-                              itemCount: _lastIndex(spread) + 1,
-                              onPageChanged: _onIndexChanged,
-                              // While a page is zoomed, drags move around it.
-                              physics: _zoomed
-                                  ? const NeverScrollableScrollPhysics()
-                                  : null,
-                              // ...while each page keeps the app's direction.
-                              itemBuilder: (_, index) => Directionality(
-                                textDirection: appDirection,
-                                child: _item(index, spread, settings, size),
+                    child: NotificationListener<ScrollNotification>(
+                      onNotification: _onScroll,
+                      child: vertical
+                          ? _verticalColumn(settings, size, appDirection)
+                          : Directionality(
+                              textDirection: TextDirection.ltr,
+                              child: PageView.builder(
+                                // A new controller (new page numbering, or one/two
+                                // pages) needs a new PageView: an existing one would
+                                // carry its old scroll offset over and show the
+                                // wrong page until the next swipe.
+                                key: ObjectKey(controller),
+                                controller: controller,
+                                reverse: true, // right-to-left page turning
+                                // Keep the neighbouring pages built, so a swipe never
+                                // waits for the next page to lay out.
+                                allowImplicitScrolling: true,
+                                itemCount: _lastIndex(spread) + 1,
+                                onPageChanged: _onIndexChanged,
+                                // While a page is zoomed, drags move around it.
+                                physics: _zoomed
+                                    ? const NeverScrollableScrollPhysics()
+                                    : null,
+                                // ...while each page keeps the app's direction.
+                                itemBuilder: (_, index) => Directionality(
+                                  textDirection: appDirection,
+                                  child: _item(index, spread, settings, size),
+                                ),
                               ),
                             ),
-                          ),
+                    ),
                   ),
                 ),
               ),
@@ -985,6 +1140,7 @@ class _ReaderScreenState extends ConsumerState<ReaderScreen>
         translationAfterPage: settings.translationAfterPage,
         onAyahLongPress: _onAyahLongPress,
         scrolls: scrolls,
+        reveal: _reveal?.page == number ? _reveal : null,
       );
     }
     final juzLabel = context.l10n.runningHeadJuz(page.juz);

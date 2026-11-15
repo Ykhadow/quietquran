@@ -218,6 +218,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deleteSession => 'حذف الورد';
 
   @override
+  String startAgainFrom(String place) {
+    return 'ابدأ من جديد من $place';
+  }
+
+  @override
   String tapAgainDelete(String name) {
     return 'اضغط مرة أخرى لحذف \"$name\"';
   }

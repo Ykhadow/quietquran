@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../core/theme.dart';
 import '../../data/library.dart';
@@ -8,6 +9,7 @@ import '../../data/reminders.dart';
 import '../../widgets/night.dart';
 import '../../l10n/l10n.dart';
 import 'reminder_editor.dart';
+import 'surah_list.dart';
 
 /// Creates a session. [surah]/[ayah] preset the starting point (e.g. when
 /// saving a free read); otherwise the reader picks a surah. Returns the new
@@ -110,21 +112,25 @@ class _NewSessionSheetState extends ConsumerState<_NewSessionSheet> {
                 l.startsAt,
                 padding: const EdgeInsets.only(top: 18, bottom: 8),
               ),
-              DropdownButtonFormField<int>(
-                initialValue: _surah,
-                isExpanded: true,
-                menuMaxHeight: 420,
-                items: [
-                  for (final s in db.surahs)
-                    DropdownMenuItem(
-                      value: s.id,
-                      child: Text(
-                        '${s.id}. ${context.surahName(s)}',
-                        style: AppType.body(t.ink),
-                      ),
-                    ),
-                ],
-                onChanged: (v) => _setSurah(v!),
+              // A list that can be searched, not a dropdown of 114 to scroll.
+              InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () async {
+                  final picked = await showSurahPicker(
+                    context,
+                    selected: _surah,
+                  );
+                  if (picked != null && mounted) _setSurah(picked);
+                },
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    suffixIcon: Icon(LucideIcons.chevronDown, size: 18),
+                  ),
+                  child: Text(
+                    '$_surah. ${context.surahName(db.surah(_surah))}',
+                    style: AppType.body(t.ink),
+                  ),
+                ),
               ),
               Eyebrow(
                 l.eachTimeOpen,

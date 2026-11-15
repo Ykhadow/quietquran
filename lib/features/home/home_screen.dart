@@ -13,6 +13,7 @@ import '../../data/updates.dart';
 import '../../widgets/night.dart';
 import 'library_sheets.dart';
 import 'new_session_sheet.dart';
+import 'surah_list.dart';
 import 'surah_search.dart';
 import 'update_card.dart';
 import '../reader/quran_word.dart';
@@ -40,8 +41,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
   }
 
-  /// A free read ("Browsing"): moves no session.
-  void _open(int page) => _push(ReaderScreen(initialPage: page));
+  /// A free read ("Browsing") at [page], or at the ayah [at] on it; moves no
+  /// session.
+  void _open(int page, {(int, int)? at}) =>
+      _push(ReaderScreen(initialPage: page, at: at));
 
   /// Opens a session where it should open, and makes it the current one.
   void _openSession(Session session) {
@@ -51,7 +54,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final page = session.kind == SessionKind.restart
         ? db.surahStartPage(layout, session.openAt.$1)
         : db.pageOfAyah(layout, session.surah, session.ayah);
-    _push(ReaderScreen(initialPage: page, sessionId: session.id));
+    // At its place, not the top of the page: Easy read scrolls to the ayah
+    // being read (or to the surah, for one that opens at its start).
+    _push(
+      ReaderScreen(
+        initialPage: page,
+        sessionId: session.id,
+        at: session.openAt,
+      ),
+    );
   }
 
   @override
@@ -102,7 +113,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         itemBuilder: (context, i) {
           final surah = surahs[i];
           final page = db.surahStartPage(layout, surah.id);
-          return _SurahRow(surah: surah, page: page, onTap: () => _open(page));
+          return SurahRow(
+            surah: surah,
+            page: page,
+            onTap: () => _open(page, at: (surah.id, 1)),
+          );
         },
       ),
       _Browse.juz => SliverList.builder(
@@ -114,7 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             name: db.juzName(j.juz, s.typeface),
             fontFamily: s.typeface.fontFamily,
             surahName: context.surahName(db.surah(j.surah)),
-            onTap: () => _open(j.page),
+            onTap: () => _open(j.page, at: (j.surah, j.ayah)),
           );
         },
       ),
@@ -129,7 +144,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return _BookmarkRow(
                     bookmark: b,
                     page: page,
-                    onTap: () => _open(page),
+                    onTap: () => _open(page, at: (b.surah, b.ayah)),
                   );
                 },
               ),
@@ -273,36 +288,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                      child: TextField(
+                      child: SurahSearchField(
                         onChanged: (v) => setState(() => _query = v),
-                        onTapOutside: (_) =>
-                            FocusManager.instance.primaryFocus?.unfocus(),
-                        textInputAction: TextInputAction.search,
-                        style: AppType.body(t.ink),
-                        decoration: InputDecoration(
-                          hintText: l.searchHint,
-                          hintStyle: AppType.body(t.mut),
-                          prefixIcon: Icon(
-                            LucideIcons.search,
-                            size: 18,
-                            color: t.mut,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(22),
-                            borderSide: BorderSide(color: t.line2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(22),
-                            borderSide: BorderSide(color: t.line2),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(22),
-                            borderSide: BorderSide(color: t.acc),
-                          ),
-                        ),
                       ),
                     ),
                   ),
@@ -588,71 +575,6 @@ class _BookmarkRow extends ConsumerWidget {
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SurahRow extends StatelessWidget {
-  const _SurahRow({
-    required this.surah,
-    required this.page,
-    required this.onTap,
-  });
-
-  final Surah surah;
-  final int page;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.tokens;
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 64),
-        margin: const EdgeInsets.symmetric(horizontal: 22),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: t.line)),
-        ),
-        child: Row(
-          children: [
-            NumberSquare(surah.id),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      context.surahName(surah),
-                      style: AppType.title(t.ink).copyWith(fontSize: 18),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      context.l10n.versesPage(surah.versesCount, page),
-                      style: AppType.caption(t.mut),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Urdu and Arabic already show the Arabic name as the title.
-            if (!context.arabicNames) ...[
-              const SizedBox(width: 12),
-              Text(
-                surah.nameArabic,
-                textDirection: TextDirection.rtl,
-                style: TextStyle(
-                  fontFamily: AppType.arabicUi,
-                  fontSize: 23,
-                  color: t.ink,
-                ),
-              ),
-            ],
           ],
         ),
       ),

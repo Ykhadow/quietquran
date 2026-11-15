@@ -61,6 +61,7 @@
   "eachTimeOpen": "ہر بار کھولنے پر",
   "startOfSurah": "سورت کا آغاز",
   "deleteSession": "معمول حذف کریں",
+  "startAgainFrom": "{place} سے دوبارہ شروع کریں",
   "tapAgainDelete": "\"{name}\" حذف کرنے کے لیے دوبارہ دبائیں",
   "note": "نوٹ",
   "optional": "اختیاری",
