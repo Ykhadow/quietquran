@@ -1,14 +1,14 @@
 {
-  "version": "1.0.2",
-  "build": 3,
-  "page": "https://github.com/Ykhadow/quietquran/releases/tag/v1.0.2",
+  "version": "1.0.3",
+  "build": 4,
+  "page": "https://github.com/Ykhadow/quietquran/releases/tag/v1.0.3",
   "android": {
-    "arm64": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.2/QuietQuran-android-arm64.apk",
-    "arm32": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.2/QuietQuran-android-arm32.apk"
+    "arm64": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.3/QuietQuran-android-arm64.apk",
+    "arm32": "https://github.com/Ykhadow/quietquran/releases/download/v1.0.3/QuietQuran-android-arm32.apk"
   },
   "notes": {
-    "en": "A clearer notice when a new version is out, in the style of your daily reading.",
-    "ur": "نئے ورژن کی واضح اطلاع، آپ کے روزانہ مطالعے کے انداز میں۔",
-    "ar": "إشعار أوضح عند صدور إصدار جديد، بأسلوب وردك اليومي."
+    "en": "Easy read now remembers the exact ayah you stopped at, and surahs and bookmarks open where they begin. Sessions can be started again, and their surah found by search.",
+    "ur": "آسان مطالعہ اب وہی آیت یاد رکھتا ہے جہاں آپ رکے تھے، اور سورتیں اور بک مارکس وہیں سے کھلتے ہیں جہاں سے شروع ہوتے ہیں۔ معمول دوبارہ شروع کیے جا سکتے ہیں، اور ان کی سورت تلاش سے مل جاتی ہے۔",
+    "ar": "القراءة الميسّرة تتذكّر الآن الآية التي توقفت عندها، وتُفتح السور والعلامات من بدايتها مباشرة. ويمكن بدء الأوراد من جديد، والعثور على سورتها بالبحث."
   }
 }
